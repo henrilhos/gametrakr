@@ -10,6 +10,7 @@ You can check out the use cases, requirements and models in their respective loc
 
 - [Use cases](docs/use-cases.md)
 - [Requirements](docs/requirements.md)
+- [Models](docs/models.md)
 
 ## License
 
