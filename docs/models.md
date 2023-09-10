@@ -7,3 +7,6 @@
 ## Container diagram
 
 ![C4 Architecture - Container](assets/c4-container.jpg)
+## Code diagram
+
+![C4 Architecture - Code](assets/c4-code.png)
