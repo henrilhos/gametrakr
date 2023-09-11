@@ -13,7 +13,7 @@
 1. **Personalized recommendations:** The platform should provide personalized game recommendations based on user preferences and activities.
 1. **Social interaction:** Users can like, comment on, share reviews, and discuss games.
 1. **Badges:** Users can earn badges for completing challenges and activities on the platform.
-1. **Manage wishlist:** Users can add or remove games from their wishlist for future reference.
+1. **Manage library:** Users can add or remove games from their library for future reference.
 1. **Thirdy-party API:** The platform should be able to integrate with third-party APIs to sync game libraries from other platforms such as Steam, Epic Games, and others.
 
 ## Non-Functional Requirements
