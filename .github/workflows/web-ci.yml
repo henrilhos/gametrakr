@@ -1,11 +1,13 @@
 name: Web CI
+
 on:
   push:
-    branches: [main]
+    branches: ["main"]
     paths: ["web/**"]
   pull_request:
-    branches: [main]
+    branches: ["main"]
     paths: ["web/**"]
+
 jobs:
   ci:
     timeout-minutes: 60
