@@ -1,14 +1,14 @@
 /* eslint-disable no-process-env */
 
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-nextjs'
+import { z } from 'zod'
 
 const toggle = z
-  .enum(["true", "false", "0", "1"])
-  .transform((v) => v === "true" || v === "1");
+  .enum(['true', 'false', '0', '1'])
+  .transform((v) => v === 'true' || v === '1')
 
 export const env = createEnv({
-  skipValidation: process.env.CI === "true",
+  skipValidation: process.env.CI === 'true',
   /**
    * Environment variables available on the client (and server).
    *
@@ -20,10 +20,10 @@ export const env = createEnv({
    * Will throw if you access these variables on the client.
    */
   server: {
-    ANALYZE: toggle.default("false"),
+    ANALYZE: toggle.default('false'),
     NODE_ENV: z
-      .enum(["development", "production", "test"])
-      .default("development"),
+      .enum(['development', 'production', 'test'])
+      .default('development'),
   },
   /**
    * Due to how Next.js bundles environment variables on Edge and Client,
@@ -41,4 +41,4 @@ export const env = createEnv({
     ANALYZE: process.env.ANALYZE,
     NODE_ENV: process.env.NODE_ENV,
   },
-});
+})
