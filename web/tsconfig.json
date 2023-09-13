@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    /* Type checking */
+    "noUncheckedIndexedAccess": true, // Increases type-safety
+    "strict": true,
+
+    /* Modules */
+    "module": "esnext",
+    "moduleResolution": "node",
+    "paths": {
+      "@/*": ["./src/*"] // Alias for absolute imports
+    },
+    "resolveJsonModule": true,
+
+    /* Emit */
+    "noEmit": true,
+
+    /* JavaScript support */
+    "allowJs": true,
+
+    /* Editor support */
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+
+    /* Backwards Compatibility */
+
+    /* Language and Environment */
+    "jsx": "preserve",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "es5",
+
+    /* Compiler Diagnostics */
+
+    /* Projects */
+    "incremental": true,
+
+    /* Output Formatting */
+
+    /* Completeness */
+    "skipLibCheck": true
+
+    /* Command Line */
+
+    /* Watch Options */
+  },
+  "include": [
+    "**/*.mjs",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "next-env.d.ts"
+  ],
+  "exclude": ["node_modules"]
+}
