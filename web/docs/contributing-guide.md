@@ -2,14 +2,14 @@
 
 ## Setup
 
-For gametrakr web we use [Bun](https://bun.sh/) as our runtime and package manager, to check out the current version of Bun we're using, please check the [`.tool-version`](../.tool-versions) file.
+For gametrakr web we use [Bun](https://bun.sh/) as our runtime and package manager, to check out the current version of Bun we're using, please check the [`.tool-versions`](../.tool-versions) file.
 
 ### Getting started
 
 Clone the repository and install dependencies:
 
 ```bash
-git clone git@github.com:henrilhos/gametrakr.git
+git clone https://github.com/henrilhos/gametrakr.git
 cd web # since we have a monorepo
 
 bun install
@@ -23,7 +23,7 @@ And then run the development server:
 bun run dev
 ```
 
-## Libraries
+## Useful links
 
 - [Next.js](https://nextjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
