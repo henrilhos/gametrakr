@@ -35,6 +35,6 @@ jobs:
       - name: Pull image from Docker Hub
         run: docker pull gametrakr/api:latest
       - name: Remove Docker container
-        run: docker rm -r gametrakr-api
+        run: docker rm -f gametrakr-api
       - name: Run Docker container
         run: docker run -d -p 8080:8080 --name gametrakr-api gametrakr/api
