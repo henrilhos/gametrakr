@@ -37,4 +37,4 @@ jobs:
       - name: Remove Docker container
         run: docker rm -f gametrakr-api
       - name: Run Docker container
-        run: docker run -d -p 8080:8080 --name gametrakr-api gametrakr/api
+        run: docker run -d -p 80:80 --name gametrakr-api gametrakr/api
