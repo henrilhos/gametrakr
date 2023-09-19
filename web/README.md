@@ -16,4 +16,4 @@ This is the frontend for gametrakr, builted with [Next.js](https://nextjs.org/).
 
 ## Contributing guide
 
-We welcome contributions from the community. If you’d like to contribute to the development of gametrakr, please check out the [contributing guide](docs/contributing-guide.md) to see how to set up the project and the libraries we use.
+We welcome contributions from the community. If you’d like to contribute to the development of gametrakr, please check out the [contributing guide](docs/contributing-guide.md) to see how to set up the project and what libraries we use.
