@@ -31,5 +31,5 @@ services:
 
 volumes:
   gametrakr-pg:
-  redis-db:
-  pgadmin:
+  gametrakr-redis:
+  gametrakr-pgadmin:

@@ -1,11 +1,32 @@
-FROM golang:1.21-alpine as base
-RUN apk update
-WORKDIR /src/gametrakr
-COPY go.mod go.sum ./
-COPY . .
-RUN go build -mod=readonly -o gametrakr .
+# Building the binary
+FROM golang:1.21-alpine as build
 
-FROM alpine:latest as binary
-COPY --from=base /src/gametrakr/gametrakr .
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV GOARCH=amd64
+
+WORKDIR /go/src/gametrakr
+
+COPY go.mod .
+COPY go.sum .
+
+RUN go mod download
+
+COPY . .
+
+RUN go build -a -installsuffix cgo -o main .
+
+# Creating the final Image
+FROM alpine:latest as release
+
+WORKDIR /gametrakr
+
+COPY --from=build /go/src/gametrakr/main .
+
+RUN apk -U upgrade \
+    && apk add --no-cache dumb-init ca-certificates \
+    && chmod +x /gametrakr/main
+
 EXPOSE 80
-CMD [ "./gametrakr" ]
+
+ENTRYPOINT [ "/usr/bin/dumb-init", "--" ]
