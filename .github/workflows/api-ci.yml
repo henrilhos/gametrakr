@@ -62,7 +62,7 @@ jobs:
       - name: Run Gosec
         uses: securego/gosec@master
         with:
-          args: ./...
+          args: ./api/...
 
   linter:
     runs-on: ubuntu-latest
