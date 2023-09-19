@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  postgres-db:
+    image: postgres:latest
+    env_file:
+      - ./.env
+    volumes:
+      - gametrakr-pg:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+  redis-db:
+    image: redis:alpine
+    volumes:
+      - gametrakr-redis:/data
+    ports:
+      - "6379:6379"
+    restart: always
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - ./.env
+    logging:
+      driver: none
+    ports:
+      - "5050:80"
+    volumes:
+      - gametrakr-pgadmin:/var/lib/pgadmin
+    restart: always
+
+volumes:
+  gametrakr-pg:
+  redis-db:
+  pgadmin:

@@ -2,7 +2,7 @@
 
 ## Setup
 
-For gametrakr web we use [Bun](https://bun.sh/) as our runtime and package manager, to check out the current version of Bun we're using, please check the [`.tool-versions`](../.tool-versions) file.
+For gametrakr web we use [Bun](https://bun.sh/) as our runtime and package manager, to check out the current version of Bun we're using, please check the [`.tool-versions`](../web/.tool-versions) file.
 
 ### Getting started
 
