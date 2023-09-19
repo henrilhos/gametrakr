@@ -44,29 +44,13 @@ jobs:
         run: go test ./... -v -race
 
   security:
-    strategy:
-      matrix:
-        go-version: [1.21.x]
     runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
     defaults:
       run:
         working-directory: api
     steps:
-      - name: Install GO
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ matrix.go-version }}
-      - name: Setup Golang caches
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/go/pkg/mod
-            ~/.cache/go-build
-            ~/Library/Caches/go-build
-            ~\AppData\Local\go-build
-          key: security-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            security-go-${{ matrix.go-version }}-
       - name: Fetch repository
         uses: actions/checkout@v3
       - name: Run Gosec
