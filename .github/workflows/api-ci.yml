@@ -23,7 +23,7 @@ jobs:
       run:
         working-directory: api
     steps:
-      - name: Install GO
+      - name: Install Go
         uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go-version }}
@@ -53,6 +53,10 @@ jobs:
     steps:
       - name: Fetch repository
         uses: actions/checkout@v3
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.21.1
       - name: Run go install
         run: go install
       - name: Run Gosec
