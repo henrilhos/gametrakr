@@ -57,12 +57,10 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.21.1
-      - name: Run go install
-        run: go get ./api/...
+      - name: Install Gosec
+        run: go install github.com/securego/gosec/v2/cmd/gosec@latest
       - name: Run Gosec
-        uses: securego/gosec@master
-        with:
-          args: ./api/...
+        run: GO111MODULE=on gosec ./...
 
   linter:
     runs-on: ubuntu-latest
