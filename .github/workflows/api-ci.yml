@@ -53,6 +53,8 @@ jobs:
     steps:
       - name: Fetch repository
         uses: actions/checkout@v3
+      - name: Run go install
+        run: go install
       - name: Run Gosec
         uses: securego/gosec@master
         with:
