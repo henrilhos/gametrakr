@@ -16,12 +16,15 @@ import (
 )
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	env := utils.GetenvString("ENVIRONMENT")
+
+	if env != "production" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
 	}
 
-	// dsn := config.DBConfig()
 	database.DBConnection()
 	database.RedisConnection()
 
