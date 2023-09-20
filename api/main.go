@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -10,6 +11,7 @@ import (
 	"github.com/henrilhos/gametrakr/database"
 	"github.com/henrilhos/gametrakr/migrations"
 	"github.com/henrilhos/gametrakr/routes"
+	"github.com/henrilhos/gametrakr/utils"
 	"github.com/joho/godotenv"
 )
 
@@ -27,6 +29,10 @@ func init() {
 }
 
 func main() {
+	port := utils.GetenvString("SERVER_PORT")
+	addr := fmt.Sprintf(":%s", port)
+	clientAddr := utils.GetenvString("CLIENT_ADDR")
+
 	// Get Timezone
 
 	// Setup app and routes
@@ -35,7 +41,7 @@ func main() {
 	app.Use(logger.New())
 	app.Use(helmet.New())
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:3000",
+		AllowOrigins:     clientAddr,
 		AllowHeaders:     "Origin, Content-Type, Accept",
 		AllowMethods:     "GET, POST, PATCH, DELETE",
 		AllowCredentials: true,
@@ -45,5 +51,5 @@ func main() {
 	routes.RegisterPublicRoutes(app)
 
 	// Runs app
-	log.Fatal(app.Listen(":8000"))
+	log.Fatal(app.Listen(addr))
 }

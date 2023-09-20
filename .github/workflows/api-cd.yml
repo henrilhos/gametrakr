@@ -1,0 +1,38 @@
+name: API - Continuous Deployment
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "api/**"
+      - ".github/workflows/api-cd.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - name: Fetch repository
+        uses: actions/checkout@v3
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.21.1
+      - name: Sign in to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Docker image
+        run: make build-no-cache
+      - name: Push Docker image
+        run: docker push gametrakr:latest
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from Docker Hub
+        run: docker pull gametrakr:latest
+      - name: Remove Docker container
+        run: docker rm -f gametrakr
+      - name: Run Docker container
+        run: docker run -d -p 80:80 --env-file ./.env --name gametrakr gametrakr:latest ./main -prod

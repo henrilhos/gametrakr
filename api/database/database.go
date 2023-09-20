@@ -60,10 +60,15 @@ func getDSN() string {
 	DBName := utils.GetenvString("POSTGRES_DB")
 	DBSslMode := utils.GetenvString("DB_SSL_MODE")
 
-	dsn := fmt.Sprintf(
+	if DBPort == "" {
+		return fmt.Sprintf(
+			"host=%s user=%s password=%s dbname=%s sslmode=%s",
+			DBHost, DBUser, DBPassword, DBName, DBSslMode,
+		)
+	}
+
+	return fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
 		DBHost, DBUser, DBPassword, DBName, DBPort, DBSslMode,
 	)
-
-	return dsn
 }
