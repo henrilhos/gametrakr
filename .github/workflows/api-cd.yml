@@ -25,14 +25,14 @@ jobs:
       - name: Build Docker image
         run: make build-no-cache
       - name: Push Docker image
-        run: docker push gametrakr:latest
+        run: docker push gametrakr/api:latest
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
       - name: Pull image from Docker Hub
-        run: docker pull gametrakr:latest
+        run: docker pull gametrakr/api:latest
       - name: Remove Docker container
         run: docker rm -f gametrakr
       - name: Run Docker container
-        run: docker run -d -p 80:80 --env-file ./.env --name gametrakr gametrakr:latest ./main -prod
+        run: docker run -d -p 80:80 --env-file ./.env --name gametrakr gametrakr/api:latest ./main -prod
