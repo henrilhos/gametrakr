@@ -20,7 +20,7 @@ var (
 func DBConnection() {
 	dsn := getDSN()
 
-	logMode := utils.GetenvBool("DB_LOG_MODE")
+	logMode := utils.GetenvBool("ENABLE_GORM_LOGGER")
 	debug := utils.GetenvBool("DEBUG")
 
 	logLevel := logger.Silent
@@ -37,13 +37,15 @@ func DBConnection() {
 	}
 
 	if !debug {
-		db.Use(dbresolver.Register(dbresolver.Config{
+		err := db.Use(dbresolver.Register(dbresolver.Config{
 			Policy: dbresolver.RandomPolicy{},
 		}))
+		if err != nil {
+			log.Fatal("Failed to add dbresolver\n", err.Error())
+		}
 	}
 
 	fmt.Println("Database connected successfully...")
-
 }
 
 func GetDB() *gorm.DB {
