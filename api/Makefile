@@ -1,5 +1,5 @@
 project_name = gametrakr
-image_name = gametrakr:latest
+image_name = gametrakr/api:latest
 
 help: ## This help dialog
 	@grep -F -h "##" $(MAKEFILE_LIST) | grep -F -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'

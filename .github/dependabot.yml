@@ -12,7 +12,7 @@ updates:
     directory: "/api"
     schedule:
       interval: "daily"
-  - package-ecosystem: "yarn"
+  - package-ecosystem: "npm"
     directory: "/web"
     schedule:
       interval: "daily"
