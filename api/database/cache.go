@@ -16,12 +16,12 @@ var (
 )
 
 func RedisConnection() {
-	redisAddr := utils.GetenvString("REDIS_URL")
+	redisUrl := utils.GetenvString("REDIS_URL")
+	redisOptions, _ := redis.ParseURL(redisUrl)
+
 	c = context.TODO()
 
-	redisClient = redis.NewClient(&redis.Options{
-		Addr: redisAddr,
-	})
+	redisClient = redis.NewClient(redisOptions)
 
 	if _, err := redisClient.Ping(c).Result(); err != nil {
 		log.Fatal("Failed to connect to the Redis\n", err.Error())
