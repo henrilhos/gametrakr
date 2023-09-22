@@ -13,13 +13,15 @@ import (
 )
 
 type User struct {
-	ID        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key"`
-	Username  string    `gorm:"not null;unique" json:"username"`
-	Email     string    `gorm:"not null;unique" json:"email"`
-	Password  string    `gorm:"not null" json:"password"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt `gorm:"index"`
+	ID            uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key"`
+	Username      string    `gorm:"not null;unique" json:"username"`
+	Email         string    `gorm:"not null;unique" json:"email"`
+	Password      string    `gorm:"not null" json:"password"`
+	Verified      bool      `json:"verified"`
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	DeletedAt     gorm.DeletedAt `gorm:"index"`
+	Verifications []Verification `gorm:"foreignKey:Email;references:Email"`
 }
 
 // Hooks
