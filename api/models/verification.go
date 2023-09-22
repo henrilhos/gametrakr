@@ -4,8 +4,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/henrilhos/gametrakr/database"
-	"github.com/sirupsen/logrus"
 )
 
 type VerificationType int
