@@ -1,7 +1,7 @@
 package mail
 
 import (
-	"github.com/henrilhos/gametrakr/utils"
+	"github.com/henrilhos/gametrakr/config"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"github.com/sirupsen/logrus"
@@ -42,12 +42,10 @@ type SGMailService struct {
 }
 
 func NewSGMailService() *SGMailService {
-	apiKey := utils.GetenvString("SENDGRID_API_KEY")
-	fromEmail := utils.GetenvString("SENDGRID_MAIL")
-
+	sgConfig := config.GetConfig().SendGrid
 	return &SGMailService{
-		ApiKey:    apiKey,
-		FromEmail: fromEmail,
+		ApiKey:    sgConfig.ApiKey,
+		FromEmail: sgConfig.FromEmail,
 	}
 }
 

@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/henrilhos/gametrakr/utils"
+	"github.com/henrilhos/gametrakr/config"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -16,7 +16,7 @@ var (
 )
 
 func RedisConnection() {
-	redisUrl := utils.GetenvString("REDIS_URL")
+	redisUrl := config.GetConfig().DB.RedisUrl
 	redisOptions, err := redis.ParseURL(redisUrl)
 	if err != nil {
 		redisOptions = &redis.Options{

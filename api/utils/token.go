@@ -7,6 +7,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/henrilhos/gametrakr/config"
 )
 
 type TokenDetails struct {
@@ -18,26 +19,20 @@ type TokenDetails struct {
 
 // Access token
 func CreateAccessToken(userID string) (*TokenDetails, error) {
-	expiresIn := GetenvDuration("ACCESS_TOKEN_EXPIRED_IN")
-	privateKey := GetenvString("ACCESS_TOKEN_PRIVATE_KEY")
-	return createToken(userID, expiresIn, privateKey)
+	return createToken(userID, jwtConfig().AccessTokenExpiresIn, jwtConfig().AccessTokenPrivateKey)
 }
 
 func ValidateAccessToken(token string) (*TokenDetails, error) {
-	privateKey := GetenvString("ACCESS_TOKEN_PUBLIC_KEY")
-	return validateToken(token, privateKey)
+	return validateToken(token, jwtConfig().AccessTokenPublicKey)
 }
 
 // Refresh token
 func CreateRefreshToken(userID string) (*TokenDetails, error) {
-	expiresIn := GetenvDuration("REFRESH_TOKEN_EXPIRED_IN")
-	privateKey := GetenvString("REFRESH_TOKEN_PRIVATE_KEY")
-	return createToken(userID, expiresIn, privateKey)
+	return createToken(userID, jwtConfig().RefreshTokenExpiresIn, jwtConfig().RefreshTokenPrivateKey)
 }
 
 func ValidateRefreshToken(token string) (*TokenDetails, error) {
-	privateKey := GetenvString("REFRESH_TOKEN_PUBLIC_KEY")
-	return validateToken(token, privateKey)
+	return validateToken(token, jwtConfig().RefreshTokenPublicKey)
 }
 
 // Private
@@ -105,4 +100,8 @@ func validateToken(token, publicKey string) (*TokenDetails, error) {
 		TokenUuid: fmt.Sprint(claims["token_uuid"]),
 		UserID:    fmt.Sprint(claims["sub"]),
 	}, nil
+}
+
+func jwtConfig() config.JWTConfiguration {
+	return config.GetConfig().JWT
 }

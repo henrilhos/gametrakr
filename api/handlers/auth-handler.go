@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/henrilhos/gametrakr/config"
 	"github.com/henrilhos/gametrakr/database"
 	"github.com/henrilhos/gametrakr/models"
 	"github.com/henrilhos/gametrakr/utils"
@@ -59,7 +60,7 @@ func SignUpUser(c *fiber.Ctx) error {
 		logrus.Error("unable to send mail verification", err)
 	}
 
-	expires_at := time.Hour * time.Duration(utils.GetenvInt("MAIL_VERIFICATION_CODE_EXPIRATION"))
+	expires_at := time.Hour * config.GetConfig().SendGrid.MailVerificationCodeExpiration
 	err = storeVerificationCode(userRes.Email, code, mail.MailConfirmation, expires_at)
 	if err != nil {
 		logrus.Error("unable to store mail verification data", err)
@@ -182,7 +183,7 @@ func RefreshAccessToken(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"status": "fail", "message": errAccess.Error()})
 	}
 
-	accessTokenMaxAge := utils.GetenvInt("ACCESS_TOKEN_MAXAGE")
+	accessTokenMaxAge := config.GetConfig().JWT.AccessTokenMaxAge
 
 	c.Cookie(&fiber.Cookie{
 		Name:     "access_token",
@@ -224,12 +225,12 @@ func createUser(body *SignUpBody) (*models.User, error) {
 }
 
 func sendEmailVerification(email, username string) (string, error) {
-	templateID := utils.GetenvString("MAIL_VERIFICATION_TEMPLATE_ID")
+	templateID := config.GetConfig().SendGrid.MailVerificationTemplateId
 	return sendVerification(email, username, templateID, mail.MailConfirmation)
 }
 
 func sendPasswordVerification(email, username string) (string, error) {
-	templateID := utils.GetenvString("PASSWORD_VERIFICATION_TEMPLATE_ID")
+	templateID := config.GetConfig().SendGrid.PasswordResetTemplateId
 	return sendVerification(email, username, templateID, mail.PassReset)
 }
 
@@ -293,8 +294,8 @@ func storeTokenInRedis(c *fiber.Ctx, tokenDetails *utils.TokenDetails, ctx conte
 }
 
 func setCookies(c *fiber.Ctx, accessToken, refreshToken *string) {
-	accessTokenMaxAge := utils.GetenvInt("ACCESS_TOKEN_MAXAGE")
-	refreshTokenMaxAge := utils.GetenvInt("REFRESH_TOKEN_MAXAGE")
+	accessTokenMaxAge := config.GetConfig().JWT.AccessTokenMaxAge
+	refreshTokenMaxAge := config.GetConfig().JWT.RefreshTokenMaxAge
 
 	setCookie(c, "access_token", *accessToken, accessTokenMaxAge)
 	setCookie(c, "refresh_token", *refreshToken, refreshTokenMaxAge)

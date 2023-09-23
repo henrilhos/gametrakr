@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/henrilhos/gametrakr/utils"
+	"github.com/henrilhos/gametrakr/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -18,13 +18,11 @@ var (
 )
 
 func DBConnection() {
-	dsn := getDSN()
-
-	logMode := utils.GetenvBool("ENABLE_GORM_LOGGER")
-	debug := utils.GetenvBool("DEBUG")
+	config := config.GetConfig()
+	dsn := getDSN(config.DB)
 
 	logLevel := logger.Silent
-	if logMode {
+	if config.DB.LogMode {
 		logLevel = logger.Info
 	}
 
@@ -36,7 +34,7 @@ func DBConnection() {
 		os.Exit(1)
 	}
 
-	if !debug {
+	if !config.Server.Debug {
 		err := db.Use(dbresolver.Register(dbresolver.Config{
 			Policy: dbresolver.RandomPolicy{},
 		}))
@@ -52,23 +50,16 @@ func GetDB() *gorm.DB {
 	return db
 }
 
-func getDSN() string {
-	DBHost := utils.GetenvString("POSTGRES_HOST")
-	DBPort := utils.GetenvString("POSTGRES_PORT")
-	DBUser := utils.GetenvString("POSTGRES_USER")
-	DBPassword := utils.GetenvString("POSTGRES_PASSWORD")
-	DBName := utils.GetenvString("POSTGRES_DB")
-	DBSslMode := utils.GetenvString("DB_SSL_MODE")
-
-	if DBPort == "" {
+func getDSN(dbConfig config.DBConfiguration) string {
+	if dbConfig.Port == "" {
 		return fmt.Sprintf(
 			"host=%s user=%s password=%s dbname=%s sslmode=%s",
-			DBHost, DBUser, DBPassword, DBName, DBSslMode,
+			dbConfig.Host, dbConfig.User, dbConfig.Password, dbConfig.Name, dbConfig.SslMode,
 		)
 	}
 
 	return fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
-		DBHost, DBUser, DBPassword, DBName, DBPort, DBSslMode,
+		dbConfig.Host, dbConfig.User, dbConfig.Password, dbConfig.Name, dbConfig.Port, dbConfig.SslMode,
 	)
 }
