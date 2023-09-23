@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/henrilhos/gametrakr/database"
 	"github.com/henrilhos/gametrakr/utils/mail"
 )
 
