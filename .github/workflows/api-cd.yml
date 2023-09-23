@@ -36,7 +36,8 @@ jobs:
         run: docker rm -f gametrakr
       - name: Run Docker container
         run: |
-          docker run -d -e ACCESS_TOKEN_EXPIRED_IN='${{ secrets.ACCESS_TOKEN_EXPIRED_IN }}' \
+          docker run -d \
+          -e ACCESS_TOKEN_EXPIRED_IN='${{ secrets.ACCESS_TOKEN_EXPIRED_IN }}' \
           -e ACCESS_TOKEN_MAXAGE='${{ secrets.ACCESS_TOKEN_MAXAGE }}' \
           -e ACCESS_TOKEN_PRIVATE_KEY='${{ secrets.ACCESS_TOKEN_PRIVATE_KEY }}' \
           -e ACCESS_TOKEN_PUBLIC_KEY='${{ secrets.ACCESS_TOKEN_PUBLIC_KEY }}' \
@@ -45,6 +46,10 @@ jobs:
           -e ENABLE_GORM_LOGGER='${{ secrets.ENABLE_GORM_LOGGER }}' \
           -e ENABLE_LOGGER='${{ secrets.ENABLE_LOGGER }}' \
           -e ENVIRONMENT='${{ secrets.ENVIRONMENT }}' \
+          -e MAIL_VERIFICATION_CODE_EXPIRATION='${{ secrets.MAIL_VERIFICATION_CODE_EXPIRATION }}' \
+          -e MAIL_VERIFICATION_TEMPLATE_ID='${{ secrets.MAIL_VERIFICATION_TEMPLATE_ID }}' \
+          -e PASSWORD_RESET_CODE_EXPIRATION='${{ secrets.PASSWORD_RESET_CODE_EXPIRATION }}' \
+          -e PASSWORD_RESET_TEMPLATE_ID='${{ secrets.PASSWORD_RESET_TEMPLATE_ID }}' \
           -e POSTGRES_DB='${{ secrets.POSTGRES_DB }}' \
           -e POSTGRES_HOST='${{ secrets.POSTGRES_HOST }}' \
           -e POSTGRES_PASSWORD='${{ secrets.POSTGRES_PASSWORD }}' \
@@ -55,6 +60,8 @@ jobs:
           -e REFRESH_TOKEN_MAXAGE='${{ secrets.REFRESH_TOKEN_MAXAGE }}' \
           -e REFRESH_TOKEN_PRIVATE_KEY='${{ secrets.REFRESH_TOKEN_PRIVATE_KEY }}' \
           -e REFRESH_TOKEN_PUBLIC_KEY='${{ secrets.REFRESH_TOKEN_PUBLIC_KEY }}' \
+          -e SENDGRID_API_KEY='${{ secrets.SENDGRID_API_KEY }}' \
+          -e SENDGRID_MAIL='${{ secrets.SENDGRID_MAIL }}' \
           -e SERVER_PORT='${{ secrets.SERVER_PORT }}' \
           -p 80:80 \
           --name gametrakr gametrakr/api:latest ./main -prod
