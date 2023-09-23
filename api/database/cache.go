@@ -17,7 +17,12 @@ var (
 
 func RedisConnection() {
 	redisUrl := utils.GetenvString("REDIS_URL")
-	redisOptions, _ := redis.ParseURL(redisUrl)
+	redisOptions, err := redis.ParseURL(redisUrl)
+	if err != nil {
+		redisOptions = &redis.Options{
+			Addr: redisUrl,
+		}
+	}
 
 	c = context.TODO()
 
@@ -28,7 +33,7 @@ func RedisConnection() {
 		os.Exit(1)
 	}
 
-	err := redisClient.Set(c, "test", "gametrakr", 0).Err()
+	err = redisClient.Set(c, "test", "gametrakr", 0).Err()
 	if err != nil {
 		log.Fatal("Failed to connect to the Redis\n", err.Error())
 		os.Exit(1)

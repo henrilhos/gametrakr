@@ -70,9 +70,9 @@ func FilterUser(u *User) UserResponse {
 	}
 }
 
-func SignIn(usernameOrEmail, password string) (user User, err error) {
+func SignIn(username, password string) (user User, err error) {
 	user = User{}
-	err = database.GetDB().Model(User{}).Where("username = @user OR email = @user", sql.Named("user", usernameOrEmail)).Take(&user).Error
+	err = database.GetDB().Model(User{}).Where("username = @user OR email = @user", sql.Named("user", username)).Take(&user).Error
 	if err != nil {
 		return user, err
 	}
