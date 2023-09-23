@@ -6,6 +6,9 @@ import (
 	"github.com/henrilhos/gametrakr/middlewares"
 )
 
-func RegisterPrivateUserRoutes(r fiber.Router) {
-	r.Get("/me", middlewares.JwtMiddleware, handlers.GetMe)
+func RegisterV1UserRoutes(v1 fiber.Router) {
+	user := v1.Group("/user")
+
+	// private
+	user.Get("/me", middlewares.JwtMiddleware, handlers.GetMe)
 }

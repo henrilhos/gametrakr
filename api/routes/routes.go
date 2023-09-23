@@ -7,14 +7,12 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 )
 
-func RegisterPublicRoutes(r fiber.Router) {
-	RegisterPublicAuthRoutes(r)
-	registerCommonRoutes(r)
-}
+func RegisterV1Routes(app fiber.Router) {
+	v1 := app.Group("/v1")
 
-func RegisterPrivateRoutes(r fiber.Router) {
-	RegisterPrivateAuthRoutes(r)
-	RegisterPrivateUserRoutes(r)
+	RegisterV1AuthRoutes(v1)
+	RegisterV1UserRoutes(v1)
+	registerCommonRoutes(app)
 }
 
 func registerCommonRoutes(r fiber.Router) {
