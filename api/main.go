@@ -41,8 +41,7 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	routes.RegisterPrivateRoutes(app)
-	routes.RegisterPublicRoutes(app)
+	routes.RegisterV1Routes(app)
 
 	// Runs app
 	log.Fatal(app.Listen(addr))

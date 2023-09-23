@@ -59,6 +59,11 @@ type UserResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type UserPrimaryKeys struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+}
+
 func FilterUser(u *User) UserResponse {
 	return UserResponse{
 		ID:        u.ID,
@@ -93,6 +98,25 @@ func FindUserById(userId string) (user User, err error) {
 
 func SetEmailVerified(userId uuid.UUID) error {
 	err := database.GetDB().Model(&User{}).Where("id = ?", userId).Update("verified", true).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func FindPrimaryKeysByUsernameOrEmail(user string) (UserPrimaryKeys, error) {
+	userPrimaryKeys := UserPrimaryKeys{}
+	err := database.GetDB().Model(User{}).Where("username = @user OR email = @user", sql.Named("user", user)).Select("username, email").Take(&userPrimaryKeys).Error
+	return userPrimaryKeys, err
+}
+
+func UpdatePassword(userId, password string) error {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	err = database.GetDB().Model(&User{}).Where("id = ?", userId).Update("password", hashedPassword).Error
 	if err != nil {
 		return err
 	}

@@ -6,12 +6,17 @@ import (
 	"github.com/henrilhos/gametrakr/middlewares"
 )
 
-func RegisterPublicAuthRoutes(r fiber.Router) {
-	r.Post("/register", handlers.SignUpUser)
-	r.Post("/login", handlers.SignInUser)
-}
+func RegisterV1AuthRoutes(v1 fiber.Router) {
+	auth := v1.Group("/auth")
 
-func RegisterPrivateAuthRoutes(r fiber.Router) {
-	r.Get("/logout", middlewares.JwtMiddleware, handlers.SignOutUser)
-	r.Get("/refresh", middlewares.JwtMiddleware, handlers.RefreshAccessToken)
+	auth.Post("/signup", handlers.SignUpUser)
+	auth.Post("/signin", handlers.SignInUser)
+	auth.Post("/forgot-password", handlers.ForgotPassword)
+	auth.Post("/reset-password/:code", handlers.ResetPassword)
+
+	// Private
+	auth.Get("/logout", middlewares.JwtMiddleware, handlers.SignOutUser)
+	auth.Get("/verify-email", middlewares.JwtMiddleware, handlers.SendEmailVerification)
+	auth.Get("/verify-email/:code", middlewares.JwtMiddleware, handlers.VerifyEmail)
+	auth.Get("/refresh", middlewares.JwtMiddleware, handlers.RefreshAccessToken)
 }
