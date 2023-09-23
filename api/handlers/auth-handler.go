@@ -9,13 +9,15 @@ import (
 	"github.com/henrilhos/gametrakr/database"
 	"github.com/henrilhos/gametrakr/models"
 	"github.com/henrilhos/gametrakr/utils"
+	"github.com/henrilhos/gametrakr/utils/mail"
 	"github.com/redis/go-redis/v9"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
 // Structs
 
-type SignUpInput struct {
+type SignUpBody struct {
 	Username        string `json:"username" validate:"required"`
 	Email           string `json:"email" validate:"required"`
 	Password        string `json:"password" validate:"required,min=8"`
@@ -30,30 +32,40 @@ type SignInInput struct {
 // Handlers
 
 func SignUpUser(c *fiber.Ctx) error {
-	var payload *SignUpInput
-	if err := c.BodyParser(&payload); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": err.Error()})
+	body := new(SignUpBody)
+	if err := c.BodyParser(body); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(failResponse(err.Error()))
 	}
 
-	errors := utils.ValidateStruct(payload)
+	errors := utils.ValidateStruct(body)
 	if errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": errors})
+		return c.Status(fiber.StatusBadRequest).JSON(failResponse(errors))
 	}
 
-	if payload.Password != payload.ConfirmPassword {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": "Password do not match"})
+	if body.Password != body.ConfirmPassword {
+		return c.Status(fiber.StatusBadRequest).JSON(failResponse("Passwords do not match"))
 	}
 
-	user := models.User{Username: payload.Username, Email: payload.Email, Password: payload.Password}
-	result, err := user.Create()
+	userRes, err := createUser(body)
 	if err != nil && strings.Contains(err.Error(), "duplicate key value violates unique") {
-		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"status": "fail", "message": "User with that username or email already exists"})
+		return c.Status(fiber.StatusConflict).JSON(failResponse("User with that username or email already exists"))
 	}
 	if err != nil {
-		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{"status": "fail", "message": err.Error()})
+		return c.Status(fiber.StatusBadGateway).JSON(failResponse(err.Error()))
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "data": fiber.Map{"user": models.FilterUser(result)}})
+	code, err := sendEmailVerification(userRes.Email, userRes.Username)
+	if err != nil {
+		logrus.Error("unable to send mail verification", err)
+	}
+
+	expires_at := time.Hour * time.Duration(utils.GetenvInt("MAIL_VERIFICATION_CODE_EXPIRATION"))
+	err = storeVerificationCode(userRes.Email, code, mail.MailConfirmation, expires_at)
+	if err != nil {
+		logrus.Error("unable to store mail verification data", err)
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(successResponse("user created with success"))
 }
 
 func SignInUser(c *fiber.Ctx) error {
@@ -243,4 +255,57 @@ func RefreshAccessToken(c *fiber.Ctx) error {
 	})
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "access_token": accessTokenDetails.Token})
+}
+
+// private
+
+func successResponse(data interface{}) fiber.Map {
+	return fiber.Map{"status": "success", "data": data}
+}
+
+func failResponse(message interface{}) fiber.Map {
+	return fiber.Map{"status": "fail", "message": message}
+}
+
+func createUser(body *SignUpBody) (*models.User, error) {
+	u := models.User{Username: body.Username, Email: body.Email, Password: body.Password}
+	userRes, err := u.Create()
+	return userRes, err
+}
+
+func sendEmailVerification(email, username string) (string, error) {
+	templateID := utils.GetenvString("MAIL_VERIFICATION_TEMPLATE_ID")
+	return sendVerification(email, username, templateID, mail.MailConfirmation)
+}
+
+func sendPasswordVerification(email, username string) (string, error) {
+	templateID := utils.GetenvString("PASSWORD_VERIFICATION_TEMPLATE_ID")
+	return sendVerification(email, username, templateID, mail.PassReset)
+}
+
+func sendVerification(email, username, templateID string, mailType mail.MailType) (string, error) {
+	to := mail.MailTo{
+		Email: email,
+		User:  username,
+	}
+	mailData := &mail.MailData{
+		Username: username,
+		Code:     utils.RandomString(6),
+	}
+
+	mailService := mail.NewSGMailService()
+	mailReq := mailService.NewMail(to, mailType, mailData, templateID)
+	err := mailService.SendMail(mailReq)
+	return mailData.Code, err
+}
+
+func storeVerificationCode(email, code string, mailType mail.MailType, expires_at time.Duration) error {
+	verification := models.Verification{
+		Email:     email,
+		Code:      code,
+		Type:      mailType,
+		ExpiresAt: time.Now().Add(expires_at),
+	}
+	_, err := verification.Create()
+	return err
 }
