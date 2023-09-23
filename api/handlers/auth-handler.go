@@ -104,45 +104,43 @@ func SignInUser(c *fiber.Ctx) error {
 }
 
 func SignOutUser(c *fiber.Ctx) error {
-	message := "Token is invalid or session has expired"
-	refreshToken := c.Cookies("refresh_token")
+	const (
+		message          = "token is invalid or session has expired"
+		accessTokenName  = "access_token"
+		refreshTokenName = "refresh_token"
+		loggedInName     = "logged_in"
+	)
+
+	refreshToken := c.Cookies(refreshTokenName)
 	if refreshToken == "" {
-		print("Error 1")
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": message})
+		return respondWithError(c, fiber.StatusForbidden, message)
 	}
 
 	ctx := context.TODO()
 	tokenClaims, err := utils.ValidateRefreshToken(refreshToken)
 	if err != nil {
-		print("Error 2")
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": err.Error()})
+		return respondWithError(c, fiber.StatusForbidden, err.Error())
 	}
 
 	accessTokenUuid := c.Locals("access_token_uuid").(string)
-	_, err = database.GetRedisClient().Del(ctx, tokenClaims.TokenUuid, accessTokenUuid).Result()
-	if err != nil {
-		print("Error 3")
-		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{"status": "fail", "message": err.Error()})
+	if err := database.GetRedisClient().Del(ctx, tokenClaims.TokenUuid, accessTokenUuid).Err(); err != nil {
+		return respondWithError(c, fiber.StatusBadGateway, err.Error())
 	}
 
 	expired := time.Now().Add(-time.Hour * 24)
+	expireCookie := func(name string) {
 	c.Cookie(&fiber.Cookie{
-		Name:    "access_token",
+			Name:    name,
 		Value:   "",
 		Expires: expired,
 	})
-	c.Cookie(&fiber.Cookie{
-		Name:    "refresh_token",
-		Value:   "",
-		Expires: expired,
-	})
-	c.Cookie(&fiber.Cookie{
-		Name:    "logged_in",
-		Value:   "",
-		Expires: expired,
-	})
+	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success"})
+	expireCookie(accessTokenName)
+	expireCookie(refreshTokenName)
+	expireCookie(loggedInName)
+
+	return respondWithSuccess(c, fiber.StatusOK, "signed out successfully")
 }
 
 func RefreshAccessToken(c *fiber.Ctx) error {
