@@ -25,9 +25,19 @@ type SignUpBody struct {
 	ConfirmPassword string `json:"confirmPassword" validate:"required,min=8"`
 }
 
-type SignInForm struct {
+type SignInBody struct {
 	Username string `json:"username" validate:"required"`
 	Password string `json:"password" validate:"required"`
+}
+
+type ForgotPasswordBody struct {
+	Username string `json:"username" validate:"required"`
+}
+
+type ResetPasswordForm struct {
+	Username        string `json:"username" validate:"required"`
+	Password        string `json:"password" validate:"required,min=8"`
+	ConfirmPassword string `json:"confirmPassword" validate:"required,min=8"`
 }
 
 type VerifyParam struct {
@@ -38,13 +48,8 @@ type VerifyParam struct {
 
 func SignUpUser(c *fiber.Ctx) error {
 	body := new(SignUpBody)
-	if err := c.BodyParser(body); err != nil {
-		return respondWithError(c, fiber.StatusBadRequest, err.Error())
-	}
-
-	errors := utils.ValidateStruct(body)
-	if errors != nil {
-		return respondWithError(c, fiber.StatusBadRequest, errors)
+	if err := parseAndValidateRequestBody(c, body); err != nil {
+		return err
 	}
 
 	if body.Password != body.ConfirmPassword {
@@ -74,14 +79,9 @@ func SignUpUser(c *fiber.Ctx) error {
 }
 
 func SignInUser(c *fiber.Ctx) error {
-	body := new(SignInForm)
-	if err := c.BodyParser(body); err != nil {
-		return respondWithError(c, fiber.StatusBadRequest, err.Error())
-	}
-
-	errors := utils.ValidateStruct(body)
-	if errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": errors})
+	body := new(SignInBody)
+	if err := parseAndValidateRequestBody(c, body); err != nil {
+		return err
 	}
 
 	user, err := models.SignIn(body.Username, body.Password)
@@ -134,11 +134,11 @@ func SignOutUser(c *fiber.Ctx) error {
 
 	expired := time.Now().Add(-time.Hour * 24)
 	expireCookie := func(name string) {
-	c.Cookie(&fiber.Cookie{
+		c.Cookie(&fiber.Cookie{
 			Name:    name,
-		Value:   "",
-		Expires: expired,
-	})
+			Value:   "",
+			Expires: expired,
+		})
 	}
 
 	expireCookie(accessTokenName)
@@ -238,27 +238,83 @@ func VerifyEmail(c *fiber.Ctx) error {
 		return respondWithSuccess(c, fiber.StatusAlreadyReported, "email already verified")
 	}
 
-	query := new(VerifyParam)
-	if err := c.QueryParser(query); err != nil {
-		return respondWithError(c, fiber.StatusBadGateway, err.Error())
+	params := new(VerifyParam)
+	if err := parseAndValidateRequestParam(c, params); err != nil {
+		return err
 	}
 
-	errors := utils.ValidateStruct(query)
-	if errors != nil {
-		return respondWithError(c, fiber.StatusBadRequest, errors)
-	}
-
-	err := models.VerifyEmailCode(user.Email, query.Code)
-	if err != nil {
+	if err := models.VerifyEmailCode(user.Email, params.Code); err != nil {
 		return respondWithError(c, fiber.StatusUnauthorized, "invalid code")
 	}
 
-	err = models.SetEmailVerified(user.ID)
-	if err != nil {
+	if err := models.SetEmailVerified(user.ID); err != nil {
 		return respondWithError(c, fiber.StatusInternalServerError, "error when updating user status")
 	}
 
 	return respondWithSuccess(c, fiber.StatusOK, "email verified successfully")
+}
+
+func ForgotPassword(c *fiber.Ctx) error {
+	body := new(ForgotPasswordBody)
+	if err := parseAndValidateRequestBody(c, body); err != nil {
+		return err
+	}
+
+	userRes, err := models.FindPrimaryKeysByUsernameOrEmail(body.Username)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return respondWithError(c, fiber.StatusForbidden, "Invalid username/email")
+		}
+		return respondWithError(c, fiber.StatusBadGateway, err.Error())
+	}
+
+	code, err := sendPasswordVerification(userRes.Username, userRes.Email)
+	if err != nil {
+		logrus.Error("unable to send mail verification", err)
+	}
+
+	expires_at := time.Minute * config.GetConfig().SendGrid.PasswordResetCodeExpiration
+	if err := storeVerificationCode(userRes.Email, code, mail.PassReset, expires_at); err != nil {
+		logrus.Error("unable to store mail verification data", err)
+	}
+
+	return respondWithSuccess(c, fiber.StatusOK, "code sent successfully")
+}
+
+func ResetPassword(c *fiber.Ctx) error {
+	body := new(ResetPasswordForm)
+	if err := parseAndValidateRequestBody(c, body); err != nil {
+		return err
+	}
+
+	params := new(VerifyParam)
+	if err := parseAndValidateRequestParam(c, params); err != nil {
+		return err
+	}
+
+	userRes, err := models.FindPrimaryKeysByUsernameOrEmail(body.Username)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return respondWithError(c, fiber.StatusForbidden, "Invalid username/email")
+		}
+		return respondWithError(c, fiber.StatusBadGateway, err.Error())
+	}
+
+	userId, err := models.VerifyPasswordCode(userRes.Email, params.Code)
+	if err != nil {
+		return respondWithError(c, fiber.StatusBadRequest, err.Error())
+	}
+
+	if body.Password != body.ConfirmPassword {
+		return respondWithError(c, fiber.StatusBadRequest, "passwords do not match")
+	}
+
+	err = models.UpdatePassword(userId, body.Password)
+	if err != nil {
+		return respondWithError(c, fiber.StatusInternalServerError, err.Error())
+	}
+
+	return respondWithSuccess(c, fiber.StatusOK, "password reset successfully")
 }
 
 // private
@@ -269,6 +325,26 @@ func respondWithError(c *fiber.Ctx, statusCode int, message interface{}) error {
 
 func respondWithSuccess(c *fiber.Ctx, statusCode int, data interface{}) error {
 	return c.Status(statusCode).JSON(fiber.Map{"status": "success", "data": data})
+}
+
+func parseAndValidateRequestBody(c *fiber.Ctx, body interface{}) error {
+	if err := c.BodyParser(body); err != nil {
+		return respondWithError(c, fiber.StatusBadRequest, err.Error())
+	}
+	if errors := utils.ValidateStruct(body); errors != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": errors})
+	}
+	return nil
+}
+
+func parseAndValidateRequestParam(c *fiber.Ctx, params interface{}) error {
+	if err := c.QueryParser(params); err != nil {
+		return respondWithError(c, fiber.StatusBadGateway, err.Error())
+	}
+	if errors := utils.ValidateStruct(params); errors != nil {
+		return respondWithError(c, fiber.StatusBadRequest, errors)
+	}
+	return nil
 }
 
 func createUser(body *SignUpBody) (*models.User, error) {

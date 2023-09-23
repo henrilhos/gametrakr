@@ -38,3 +38,21 @@ func VerifyEmailCode(email, code string) error {
 	}
 	return nil
 }
+
+func VerifyPasswordCode(email, code string) (string, error) {
+	var verification Verification
+	err := database.GetDB().Model(Verification{}).Where("email = ? AND code = ? AND type = ? AND expires_at > ?", email, code, mail.PassReset, time.Now()).Take(&verification).Error
+	if err != nil {
+		logrus.Error("code not found or expired")
+		return "", err
+	}
+
+	var userId string
+	err = database.GetDB().Model(User{}).Where("email = ?", verification.Email).Select("id").Take(&userId).Error
+	if err != nil {
+		logrus.Error("user not found")
+		return "", err
+	}
+
+	return userId, nil
+}
