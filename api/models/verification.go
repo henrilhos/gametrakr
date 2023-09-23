@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/henrilhos/gametrakr/database"
 	"github.com/henrilhos/gametrakr/utils/mail"
+	"github.com/sirupsen/logrus"
 )
 
 type Verification struct {
@@ -24,4 +25,16 @@ func (v *Verification) Create() (*Verification, error) {
 		return &Verification{}, err
 	}
 	return v, nil
+}
+
+// Other
+
+func VerifyEmailCode(email, code string) error {
+	var verification Verification
+	err := database.GetDB().Where("email = ? AND code = ? AND type = ? AND expires_at > ?", email, code, mail.MailConfirmation, time.Now()).First(&verification).Error
+	if err != nil {
+		logrus.Error("code not found or expired")
+		return err
+	}
+	return nil
 }

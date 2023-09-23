@@ -91,6 +91,14 @@ func FindUserById(userId string) (user User, err error) {
 	return user, err
 }
 
+func SetEmailVerified(userId uuid.UUID) error {
+	err := database.GetDB().Model(&User{}).Where("id = ?", userId).Update("verified", true).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func verifyPassword(password, hashedPassword string) (err error) {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }

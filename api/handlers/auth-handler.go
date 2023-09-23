@@ -30,6 +30,10 @@ type SignInForm struct {
 	Password string `json:"password" validate:"required"`
 }
 
+type VerifyParam struct {
+	Code string `params:"code" json:"code"`
+}
+
 // Handlers
 
 func SignUpUser(c *fiber.Ctx) error {
@@ -206,6 +210,55 @@ func RefreshAccessToken(c *fiber.Ctx) error {
 	})
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "access_token": accessTokenDetails.Token})
+}
+
+func SendEmailVerification(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.UserResponse)
+	if user.Verified {
+		return respondWithSuccess(c, fiber.StatusAlreadyReported, "email already verified")
+	}
+
+	code, err := sendEmailVerification(user.Email, user.Username)
+	if err != nil {
+		logrus.Error("unable to send mail verification", err)
+	}
+
+	expires_at := time.Hour * config.GetConfig().SendGrid.MailVerificationCodeExpiration
+	err = storeVerificationCode(user.Email, code, mail.MailConfirmation, expires_at)
+	if err != nil {
+		logrus.Error("unable to store mail verification data", err)
+	}
+
+	return respondWithSuccess(c, fiber.StatusOK, "code sent successfully")
+}
+
+func VerifyEmail(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.UserResponse)
+	if user.Verified {
+		return respondWithSuccess(c, fiber.StatusAlreadyReported, "email already verified")
+	}
+
+	query := new(VerifyParam)
+	if err := c.QueryParser(query); err != nil {
+		return respondWithError(c, fiber.StatusBadGateway, err.Error())
+	}
+
+	errors := utils.ValidateStruct(query)
+	if errors != nil {
+		return respondWithError(c, fiber.StatusBadRequest, errors)
+	}
+
+	err := models.VerifyEmailCode(user.Email, query.Code)
+	if err != nil {
+		return respondWithError(c, fiber.StatusUnauthorized, "invalid code")
+	}
+
+	err = models.SetEmailVerified(user.ID)
+	if err != nil {
+		return respondWithError(c, fiber.StatusInternalServerError, "error when updating user status")
+	}
+
+	return respondWithSuccess(c, fiber.StatusOK, "email verified successfully")
 }
 
 // private
