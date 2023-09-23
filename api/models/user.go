@@ -43,6 +43,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	u.Password = string(hashedPassword)
 	u.Username = html.EscapeString(strings.TrimSpace(u.Username))
 	u.Email = html.EscapeString(strings.ToLower(strings.ToLower(u.Email)))
+	u.Verified = false
 
 	return nil
 }
@@ -53,6 +54,7 @@ type UserResponse struct {
 	ID        uuid.UUID `json:"id,omitempty"`
 	Username  string    `json:"username,omitempty"`
 	Email     string    `json:"email,omitempty"`
+	Verified  bool      `json:"verified"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -62,6 +64,7 @@ func FilterUser(u *User) UserResponse {
 		ID:        u.ID,
 		Username:  u.Username,
 		Email:     u.Email,
+		Verified:  u.Verified,
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,
 	}
