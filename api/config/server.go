@@ -1,7 +1,5 @@
 package config
 
-import "github.com/spf13/viper"
-
 type ServerConfiguration struct {
 	Environment string `mapstructure:"ENVIRONMENT"`
 	Port        string `mapstructure:"SERVER_PORT"`
@@ -10,8 +8,8 @@ type ServerConfiguration struct {
 }
 
 func LoadServerConfig() {
-	viper.BindEnv("ENVIRONMENT")
-	viper.BindEnv("SERVER_PORT")
-	viper.BindEnv("CLIENT_ADDR")
-	viper.BindEnv("DEBUG")
+	BindAndValidateEnv("ENVIRONMENT")
+	BindAndValidateEnv("SERVER_PORT")
+	BindAndValidateEnv("CLIENT_ADDR")
+	BindAndValidateEnv("DEBUG")
 }

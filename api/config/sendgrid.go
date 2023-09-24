@@ -2,8 +2,6 @@ package config
 
 import (
 	"time"
-
-	"github.com/spf13/viper"
 )
 
 type SendGridConfiguration struct {
@@ -16,10 +14,10 @@ type SendGridConfiguration struct {
 }
 
 func LoadSGConfig() {
-	viper.BindEnv("SENDGRID_API_KEY")
-	viper.BindEnv("SENDGRID_MAIL")
-	viper.BindEnv("MAIL_VERIFICATION_TEMPLATE_ID")
-	viper.BindEnv("PASSWORD_VERIFICATION_TEMPLATE_ID")
-	viper.BindEnv("MAIL_VERIFICATION_CODE_EXPIRATION")
-	viper.BindEnv("PASSWORD_RESET_CODE_EXPIRATION")
+	BindAndValidateEnv("SENDGRID_API_KEY")
+	BindAndValidateEnv("SENDGRID_MAIL")
+	BindAndValidateEnv("MAIL_VERIFICATION_TEMPLATE_ID")
+	BindAndValidateEnv("PASSWORD_VERIFICATION_TEMPLATE_ID")
+	BindAndValidateEnv("MAIL_VERIFICATION_CODE_EXPIRATION")
+	BindAndValidateEnv("PASSWORD_RESET_CODE_EXPIRATION")
 }

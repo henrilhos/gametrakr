@@ -2,8 +2,6 @@ package config
 
 import (
 	"time"
-
-	"github.com/spf13/viper"
 )
 
 type JWTConfiguration struct {
@@ -18,12 +16,12 @@ type JWTConfiguration struct {
 }
 
 func LoadJWTConfig() {
-	viper.BindEnv("ACCESS_TOKEN_PUBLIC_KEY")
-	viper.BindEnv("ACCESS_TOKEN_PRIVATE_KEY")
-	viper.BindEnv("ACCESS_TOKEN_MAXAGE")
-	viper.BindEnv("ACCESS_TOKEN_EXPIRED_IN")
-	viper.BindEnv("REFRESH_TOKEN_PUBLIC_KEY")
-	viper.BindEnv("REFRESH_TOKEN_PRIVATE_KEY")
-	viper.BindEnv("REFRESH_TOKEN_MAXAGE")
-	viper.BindEnv("REFRESH_TOKEN_EXPIRED_IN")
+	BindAndValidateEnv("ACCESS_TOKEN_PUBLIC_KEY")
+	BindAndValidateEnv("ACCESS_TOKEN_PRIVATE_KEY")
+	BindAndValidateEnv("ACCESS_TOKEN_MAXAGE")
+	BindAndValidateEnv("ACCESS_TOKEN_EXPIRED_IN")
+	BindAndValidateEnv("REFRESH_TOKEN_PUBLIC_KEY")
+	BindAndValidateEnv("REFRESH_TOKEN_PRIVATE_KEY")
+	BindAndValidateEnv("REFRESH_TOKEN_MAXAGE")
+	BindAndValidateEnv("REFRESH_TOKEN_EXPIRED_IN")
 }

@@ -38,3 +38,9 @@ func LoadConfig() {
 func GetConfig() *Configuration {
 	return config
 }
+
+func BindAndValidateEnv(envName string) {
+	if err := viper.BindEnv(envName); err != nil {
+		logrus.Errorf(err.Error())
+	}
+}

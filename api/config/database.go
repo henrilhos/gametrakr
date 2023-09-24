@@ -1,7 +1,5 @@
 package config
 
-import "github.com/spf13/viper"
-
 type DBConfiguration struct {
 	RedisUrl string `mapstructure:"REDIS_URL"`
 	LogMode  bool   `mapstructure:"ENABLE_GORM_LOGGER"`
@@ -14,12 +12,12 @@ type DBConfiguration struct {
 }
 
 func LoadDBConfig() {
-	viper.BindEnv("REDIS_URL")
-	viper.BindEnv("ENABLE_GORM_LOGGER")
-	viper.BindEnv("POSTGRES_HOST")
-	viper.BindEnv("POSTGRES_PORT")
-	viper.BindEnv("POSTGRES_USER")
-	viper.BindEnv("POSTGRES_PASSWORD")
-	viper.BindEnv("POSTGRES_DB")
-	viper.BindEnv("DB_SSL_MODE")
+	BindAndValidateEnv("REDIS_URL")
+	BindAndValidateEnv("ENABLE_GORM_LOGGER")
+	BindAndValidateEnv("POSTGRES_HOST")
+	BindAndValidateEnv("POSTGRES_PORT")
+	BindAndValidateEnv("POSTGRES_USER")
+	BindAndValidateEnv("POSTGRES_PASSWORD")
+	BindAndValidateEnv("POSTGRES_DB")
+	BindAndValidateEnv("DB_SSL_MODE")
 }
