@@ -19,7 +19,8 @@ type TokenDetails struct {
 
 // Access token
 func CreateAccessToken(userID string) (*TokenDetails, error) {
-	return createToken(userID, jwtConfig().AccessTokenExpiresIn, jwtConfig().AccessTokenPrivateKey)
+	expiresIn := time.Minute * time.Duration(jwtConfig().AccessTokenMaxAge)
+	return createToken(userID, expiresIn, jwtConfig().AccessTokenPrivateKey)
 }
 
 func ValidateAccessToken(token string) (*TokenDetails, error) {
@@ -28,7 +29,8 @@ func ValidateAccessToken(token string) (*TokenDetails, error) {
 
 // Refresh token
 func CreateRefreshToken(userID string) (*TokenDetails, error) {
-	return createToken(userID, jwtConfig().RefreshTokenExpiresIn, jwtConfig().RefreshTokenPrivateKey)
+	expiresIn := time.Minute * time.Duration(jwtConfig().RefreshTokenMaxAge)
+	return createToken(userID, expiresIn, jwtConfig().RefreshTokenPrivateKey)
 }
 
 func ValidateRefreshToken(token string) (*TokenDetails, error) {
@@ -36,13 +38,13 @@ func ValidateRefreshToken(token string) (*TokenDetails, error) {
 }
 
 // Private
-func createToken(userID string, ttl time.Duration, privateKey string) (*TokenDetails, error) {
+func createToken(userID string, expiresIn time.Duration, privateKey string) (*TokenDetails, error) {
 	now := time.Now().UTC()
 	td := &TokenDetails{
 		Token:     new(string),
 		ExpiresIn: new(int64),
 	}
-	*td.ExpiresIn = now.Add(ttl).Unix()
+	*td.ExpiresIn = now.Add(expiresIn).Unix()
 	td.TokenUuid = uuid.NewString()
 	td.UserID = userID
 

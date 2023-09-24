@@ -52,15 +52,15 @@ func SignUpUser(c *fiber.Ctx) error {
 	}
 
 	if body.Password != body.ConfirmPassword {
-		return respondWithError(c, fiber.StatusBadRequest, "passwords do not match")
+		return utils.RespondWithError(c, fiber.StatusBadRequest, "passwords do not match")
 	}
 
 	userRes, err := createUser(body)
 	if err != nil && strings.Contains(err.Error(), "duplicate key value violates unique") {
-		return respondWithError(c, fiber.StatusConflict, "user with that username or email already exists")
+		return utils.RespondWithError(c, fiber.StatusConflict, "user with that username or email already exists")
 	}
 	if err != nil {
-		return respondWithError(c, fiber.StatusBadGateway, err.Error())
+		return utils.RespondWithError(c, fiber.StatusBadGateway, err.Error())
 	}
 
 	code, err := sendEmailVerification(userRes.Email, userRes.Username)
@@ -74,7 +74,7 @@ func SignUpUser(c *fiber.Ctx) error {
 		logrus.Error("unable to store mail verification data", err)
 	}
 
-	return respondWithSuccess(c, fiber.StatusCreated, "user created with succes")
+	return utils.RespondWithSuccess(c, fiber.StatusCreated, "user created with succes")
 }
 
 func SignInUser(c *fiber.Ctx) error {
@@ -90,21 +90,21 @@ func SignInUser(c *fiber.Ctx) error {
 
 	accessTokenDetails, err := utils.CreateAccessToken(user.ID.String())
 	if err != nil {
-		return respondWithError(c, fiber.StatusUnprocessableEntity, err.Error())
+		return utils.RespondWithError(c, fiber.StatusUnprocessableEntity, err.Error())
 	}
 
 	refreshTokenDetails, err := utils.CreateRefreshToken(user.ID.String())
 	if err != nil {
-		return respondWithError(c, fiber.StatusUnprocessableEntity, err.Error())
+		return utils.RespondWithError(c, fiber.StatusUnprocessableEntity, err.Error())
 	}
 
 	if err := storeTokensInRedis(c, accessTokenDetails, refreshTokenDetails); err != nil {
-		return respondWithError(c, fiber.StatusUnprocessableEntity, err.Error())
+		return utils.RespondWithError(c, fiber.StatusUnprocessableEntity, err.Error())
 	}
 
 	setCookies(c, accessTokenDetails.Token, refreshTokenDetails.Token)
 
-	return respondWithSuccess(c, fiber.StatusOK, fiber.Map{"token": accessTokenDetails.Token})
+	return utils.RespondWithSuccess(c, fiber.StatusOK, fiber.Map{"token": accessTokenDetails.Token})
 }
 
 func SignOutUser(c *fiber.Ctx) error {
@@ -117,18 +117,18 @@ func SignOutUser(c *fiber.Ctx) error {
 
 	refreshToken := c.Cookies(refreshTokenName)
 	if refreshToken == "" {
-		return respondWithError(c, fiber.StatusForbidden, message)
+		return utils.RespondWithError(c, fiber.StatusForbidden, message)
 	}
 
 	ctx := context.TODO()
 	tokenClaims, err := utils.ValidateRefreshToken(refreshToken)
 	if err != nil {
-		return respondWithError(c, fiber.StatusForbidden, err.Error())
+		return utils.RespondWithError(c, fiber.StatusForbidden, err.Error())
 	}
 
 	accessTokenUuid := c.Locals("access_token_uuid").(string)
 	if err := database.GetRedisClient().Del(ctx, tokenClaims.TokenUuid, accessTokenUuid).Err(); err != nil {
-		return respondWithError(c, fiber.StatusBadGateway, err.Error())
+		return utils.RespondWithError(c, fiber.StatusBadGateway, err.Error())
 	}
 
 	expired := time.Now().Add(-time.Hour * 24)
@@ -144,52 +144,52 @@ func SignOutUser(c *fiber.Ctx) error {
 	expireCookie(refreshTokenName)
 	expireCookie(loggedInName)
 
-	return respondWithSuccess(c, fiber.StatusOK, "signed out successfully")
+	return utils.RespondWithSuccess(c, fiber.StatusOK, "signed out successfully")
 }
 
 func RefreshAccessToken(c *fiber.Ctx) error {
 	refreshToken := c.Cookies("refresh_token")
 	if refreshToken == "" {
-		return respondWithError(c, fiber.StatusForbidden, "could not refresh the access token")
+		return utils.RespondWithError(c, fiber.StatusForbidden, "could not refresh the access token")
 	}
 
 	ctx := context.TODO()
 	tokenClaims, err := utils.ValidateRefreshToken(refreshToken)
 	if err != nil {
-		return respondWithError(c, fiber.StatusForbidden, err.Error())
+		return utils.RespondWithError(c, fiber.StatusForbidden, err.Error())
 	}
 
 	userId, err := database.GetUserIdFromCache(ctx, tokenClaims.TokenUuid)
 	if err != nil {
-		return respondWithError(c, fiber.StatusForbidden, err.Error())
+		return utils.RespondWithError(c, fiber.StatusForbidden, err.Error())
 	}
 
 	user, err := models.FindUserById(userId)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return respondWithError(c, fiber.StatusForbidden, "the user belonging to this token no longer exists")
+			return utils.RespondWithError(c, fiber.StatusForbidden, "the user belonging to this token no longer exists")
 		}
-		return respondWithError(c, fiber.StatusBadGateway, err.Error())
+		return utils.RespondWithError(c, fiber.StatusBadGateway, err.Error())
 	}
 
 	accessTokenDetails, err := utils.CreateAccessToken(user.ID.String())
 	if err != nil {
-		return respondWithError(c, fiber.StatusUnprocessableEntity, err.Error())
+		return utils.RespondWithError(c, fiber.StatusUnprocessableEntity, err.Error())
 	}
 
 	if err := storeTokenInRedis(c, accessTokenDetails, ctx, time.Now()); err != nil {
-		return respondWithError(c, fiber.StatusUnprocessableEntity, err.Error())
+		return utils.RespondWithError(c, fiber.StatusUnprocessableEntity, err.Error())
 	}
 
 	setAccessTokenCookies(c, accessTokenDetails.Token)
 
-	return respondWithSuccess(c, fiber.StatusOK, fiber.Map{"token": accessTokenDetails.Token})
+	return utils.RespondWithSuccess(c, fiber.StatusOK, fiber.Map{"token": accessTokenDetails.Token})
 }
 
 func SendEmailVerification(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.UserResponse)
 	if user.Verified {
-		return respondWithSuccess(c, fiber.StatusAlreadyReported, "email already verified")
+		return utils.RespondWithSuccess(c, fiber.StatusAlreadyReported, "email already verified")
 	}
 
 	code, err := sendEmailVerification(user.Email, user.Username)
@@ -203,13 +203,13 @@ func SendEmailVerification(c *fiber.Ctx) error {
 		logrus.Error("unable to store mail verification data", err)
 	}
 
-	return respondWithSuccess(c, fiber.StatusOK, "code sent successfully")
+	return utils.RespondWithSuccess(c, fiber.StatusOK, "code sent successfully")
 }
 
 func VerifyEmail(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.UserResponse)
 	if user.Verified {
-		return respondWithSuccess(c, fiber.StatusAlreadyReported, "email already verified")
+		return utils.RespondWithSuccess(c, fiber.StatusAlreadyReported, "email already verified")
 	}
 
 	params := new(VerifyParam)
@@ -218,14 +218,14 @@ func VerifyEmail(c *fiber.Ctx) error {
 	}
 
 	if err := models.VerifyEmailCode(user.Email, params.Code); err != nil {
-		return respondWithError(c, fiber.StatusUnauthorized, "invalid code")
+		return utils.RespondWithError(c, fiber.StatusUnauthorized, "invalid code")
 	}
 
 	if err := models.SetEmailVerified(user.ID); err != nil {
-		return respondWithError(c, fiber.StatusInternalServerError, "error when updating user status")
+		return utils.RespondWithError(c, fiber.StatusInternalServerError, "error when updating user status")
 	}
 
-	return respondWithSuccess(c, fiber.StatusOK, "email verified successfully")
+	return utils.RespondWithSuccess(c, fiber.StatusOK, "email verified successfully")
 }
 
 func ForgotPassword(c *fiber.Ctx) error {
@@ -237,9 +237,9 @@ func ForgotPassword(c *fiber.Ctx) error {
 	userRes, err := models.FindPrimaryKeysByUsernameOrEmail(body.Username)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return respondWithError(c, fiber.StatusForbidden, "Invalid username/email")
+			return utils.RespondWithError(c, fiber.StatusForbidden, "Invalid username/email")
 		}
-		return respondWithError(c, fiber.StatusBadGateway, err.Error())
+		return utils.RespondWithError(c, fiber.StatusBadGateway, err.Error())
 	}
 
 	code, err := sendPasswordVerification(userRes.Username, userRes.Email)
@@ -252,7 +252,7 @@ func ForgotPassword(c *fiber.Ctx) error {
 		logrus.Error("unable to store mail verification data", err)
 	}
 
-	return respondWithSuccess(c, fiber.StatusOK, "code sent successfully")
+	return utils.RespondWithSuccess(c, fiber.StatusOK, "code sent successfully")
 }
 
 func ResetPassword(c *fiber.Ctx) error {
@@ -269,41 +269,33 @@ func ResetPassword(c *fiber.Ctx) error {
 	userRes, err := models.FindPrimaryKeysByUsernameOrEmail(body.Username)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return respondWithError(c, fiber.StatusForbidden, "Invalid username/email")
+			return utils.RespondWithError(c, fiber.StatusForbidden, "Invalid username/email")
 		}
-		return respondWithError(c, fiber.StatusBadGateway, err.Error())
+		return utils.RespondWithError(c, fiber.StatusBadGateway, err.Error())
 	}
 
 	userId, err := models.VerifyPasswordCode(userRes.Email, params.Code)
 	if err != nil {
-		return respondWithError(c, fiber.StatusBadRequest, err.Error())
+		return utils.RespondWithError(c, fiber.StatusBadRequest, err.Error())
 	}
 
 	if body.Password != body.ConfirmPassword {
-		return respondWithError(c, fiber.StatusBadRequest, "passwords do not match")
+		return utils.RespondWithError(c, fiber.StatusBadRequest, "passwords do not match")
 	}
 
 	err = models.UpdatePassword(userId, body.Password)
 	if err != nil {
-		return respondWithError(c, fiber.StatusInternalServerError, err.Error())
+		return utils.RespondWithError(c, fiber.StatusInternalServerError, err.Error())
 	}
 
-	return respondWithSuccess(c, fiber.StatusOK, "password reset successfully")
+	return utils.RespondWithSuccess(c, fiber.StatusOK, "password reset successfully")
 }
 
 // private
 
-func respondWithError(c *fiber.Ctx, statusCode int, message interface{}) error {
-	return c.Status(statusCode).JSON(fiber.Map{"status": "fail", "message": message})
-}
-
-func respondWithSuccess(c *fiber.Ctx, statusCode int, data interface{}) error {
-	return c.Status(statusCode).JSON(fiber.Map{"status": "success", "data": data})
-}
-
 func parseAndValidateRequestBody(c *fiber.Ctx, body interface{}) error {
 	if err := c.BodyParser(body); err != nil {
-		return respondWithError(c, fiber.StatusBadRequest, err.Error())
+		return utils.RespondWithError(c, fiber.StatusBadRequest, err.Error())
 	}
 	if errors := utils.ValidateStruct(body); errors != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": errors})
@@ -313,10 +305,10 @@ func parseAndValidateRequestBody(c *fiber.Ctx, body interface{}) error {
 
 func parseAndValidateRequestParam(c *fiber.Ctx, params interface{}) error {
 	if err := c.QueryParser(params); err != nil {
-		return respondWithError(c, fiber.StatusBadGateway, err.Error())
+		return utils.RespondWithError(c, fiber.StatusBadGateway, err.Error())
 	}
 	if errors := utils.ValidateStruct(params); errors != nil {
-		return respondWithError(c, fiber.StatusBadRequest, errors)
+		return utils.RespondWithError(c, fiber.StatusBadRequest, errors)
 	}
 	return nil
 }
@@ -367,12 +359,12 @@ func storeVerificationCode(email, code string, mailType mail.MailType, expires_a
 func handleSignInError(c *fiber.Ctx, err error) error {
 	message := "Invalid username/email or password"
 	if err == gorm.ErrRecordNotFound {
-		return respondWithError(c, fiber.StatusForbidden, message)
+		return utils.RespondWithError(c, fiber.StatusForbidden, message)
 	}
 	if strings.Contains(err.Error(), "hashedPassword is not the hash of the given password") {
-		return respondWithError(c, fiber.StatusBadGateway, message)
+		return utils.RespondWithError(c, fiber.StatusBadGateway, message)
 	}
-	return respondWithError(c, fiber.StatusBadGateway, err.Error())
+	return utils.RespondWithError(c, fiber.StatusBadGateway, err.Error())
 }
 
 func storeTokensInRedis(c *fiber.Ctx, accessTokenDetails, refreshTokenDetails *utils.TokenDetails) error {

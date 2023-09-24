@@ -14,88 +14,88 @@ import (
 )
 
 func JwtMiddleware(c *fiber.Ctx) error {
-	var accessToken string
-	authorization := c.Get("Authorization")
-
-	if strings.HasPrefix(authorization, "Bearer ") {
-		accessToken = strings.TrimPrefix(authorization, "Bearer ")
-	} else if c.Cookies("access_token") != "" {
-		accessToken = c.Cookies("access_token")
-	}
-
-	if accessToken == "" {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "fail", "message": "You are not logged in"})
-	}
+	accessToken, refreshToken := getTokens(c)
 
 	tokenClaims, err := utils.ValidateAccessToken(accessToken)
 	if err != nil {
-		refreshToken := c.Cookies("refresh_token")
-		if refreshToken != "" {
-			newAccessToken, refreshErr := refreshAccessToken(refreshToken)
+		if refreshToken != "" && config.GetConfig().Server.IsRefreshingToken {
+			accessToken, newTokenClaims, refreshErr := refreshAccessToken(refreshToken)
 			if refreshErr != nil {
-				return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": err.Error()})
+				utils.RespondWithError(c, fiber.StatusForbidden, err.Error())
 			}
-			accessToken = newAccessToken
+			tokenClaims = newTokenClaims
+			setAccessTokenCookie(c, accessToken)
 		} else {
-			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": err.Error()})
+			return utils.RespondWithError(c, fiber.StatusForbidden, err.Error())
 		}
 	}
 
 	ctx := context.TODO()
 	userId, err := database.GetUserIdFromCache(ctx, tokenClaims.TokenUuid)
 	if err != nil {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": "token is invalid or session has expired"})
+		return utils.RespondWithError(c, fiber.StatusForbidden, "token is invalid or session has expired")
 	}
 
 	user, err := models.FindUserById(userId)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": "the user belonging to this token no logger exists"})
+			return utils.RespondWithError(c, fiber.StatusForbidden, "the user belonging to this token no longer exists")
 		} else {
-			return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{"status": "fail", "message": err.Error()})
+			return utils.RespondWithError(c, fiber.StatusBadGateway, err.Error())
 		}
 	}
 
 	c.Locals("user", models.FilterUser(&user))
 	c.Locals("access_token_uuid", tokenClaims.TokenUuid)
 
-	if accessToken != "" && accessToken != c.Cookies("access_token") {
-		setAccessTokenCookie(c, accessToken)
-	}
-
 	return c.Next()
 }
 
-func refreshAccessToken(refreshToken string) (string, error) {
+func getTokens(c *fiber.Ctx) (accessToken, refreshToken string) {
+	authorization := c.Get("Authorization")
+	if strings.HasPrefix(authorization, "Bearer ") {
+		accessToken = strings.TrimPrefix(authorization, "Bearer ")
+	} else if c.Cookies("access_token") != "" {
+		accessToken = c.Cookies("access_token")
+	}
+
+	if c.Cookies("refresh_token") != "" {
+		refreshToken = c.Cookies("refresh_token")
+	}
+
+	return accessToken, refreshToken
+}
+
+func refreshAccessToken(refreshToken string) (string, *utils.TokenDetails, error) {
 	ctx := context.TODO()
 	tokenClaims, err := utils.ValidateRefreshToken(refreshToken)
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
 
 	userId, err := database.GetUserIdFromCache(ctx, tokenClaims.TokenUuid)
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
 
 	user, err := models.FindUserById(userId)
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
 
 	accessTokenDetails, err := utils.CreateAccessToken(user.ID.String())
 	if err != nil {
-		return "", nil
+		return "", nil, err
 	}
 
 	now := time.Now()
 	err = database.GetRedisClient().Set(ctx, accessTokenDetails.TokenUuid, accessTokenDetails.UserID,
 		time.Unix(*accessTokenDetails.ExpiresIn, 0).Sub(now)).Err()
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
 
-	return *accessTokenDetails.Token, nil
+	return *accessTokenDetails.Token, tokenClaims, nil
 }
 
 func setAccessTokenCookie(c *fiber.Ctx, accessToken string) {
