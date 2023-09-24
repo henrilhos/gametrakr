@@ -1,6 +1,8 @@
 package config
 
-import "time"
+import (
+	"time"
+)
 
 type JWTConfiguration struct {
 	AccessTokenPublicKey   string        `mapstructure:"ACCESS_TOKEN_PUBLIC_KEY"`
@@ -11,4 +13,15 @@ type JWTConfiguration struct {
 	RefreshTokenPrivateKey string        `mapstructure:"REFRESH_TOKEN_PRIVATE_KEY"`
 	RefreshTokenMaxAge     int           `mapstructure:"REFRESH_TOKEN_MAXAGE"`
 	RefreshTokenExpiresIn  time.Duration `mapstructure:"REFRESH_TOKEN_EXPIRED_IN"`
+}
+
+func LoadJWTConfig() {
+	BindAndValidateEnv("ACCESS_TOKEN_PUBLIC_KEY")
+	BindAndValidateEnv("ACCESS_TOKEN_PRIVATE_KEY")
+	BindAndValidateEnv("ACCESS_TOKEN_MAXAGE")
+	BindAndValidateEnv("ACCESS_TOKEN_EXPIRED_IN")
+	BindAndValidateEnv("REFRESH_TOKEN_PUBLIC_KEY")
+	BindAndValidateEnv("REFRESH_TOKEN_PRIVATE_KEY")
+	BindAndValidateEnv("REFRESH_TOKEN_MAXAGE")
+	BindAndValidateEnv("REFRESH_TOKEN_EXPIRED_IN")
 }

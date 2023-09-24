@@ -10,3 +10,14 @@ type DBConfiguration struct {
 	Name     string `mapstructure:"POSTGRES_DB"`
 	SslMode  string `mapstructure:"DB_SSL_MODE"`
 }
+
+func LoadDBConfig() {
+	BindAndValidateEnv("REDIS_URL")
+	BindAndValidateEnv("ENABLE_GORM_LOGGER")
+	BindAndValidateEnv("POSTGRES_HOST")
+	BindAndValidateEnv("POSTGRES_PORT")
+	BindAndValidateEnv("POSTGRES_USER")
+	BindAndValidateEnv("POSTGRES_PASSWORD")
+	BindAndValidateEnv("POSTGRES_DB")
+	BindAndValidateEnv("DB_SSL_MODE")
+}

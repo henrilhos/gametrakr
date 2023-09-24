@@ -6,3 +6,10 @@ type ServerConfiguration struct {
 	ClientAddr  string `mapstructure:"CLIENT_ADDR"`
 	Debug       bool   `mapstructure:"DEBUG"`
 }
+
+func LoadServerConfig() {
+	BindAndValidateEnv("ENVIRONMENT")
+	BindAndValidateEnv("SERVER_PORT")
+	BindAndValidateEnv("CLIENT_ADDR")
+	BindAndValidateEnv("DEBUG")
+}

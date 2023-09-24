@@ -1,6 +1,8 @@
 package config
 
-import "time"
+import (
+	"time"
+)
 
 type SendGridConfiguration struct {
 	ApiKey                         string        `mapstructure:"SENDGRID_API_KEY"`
@@ -9,4 +11,13 @@ type SendGridConfiguration struct {
 	PasswordResetTemplateId        string        `mapstructure:"PASSWORD_VERIFICATION_TEMPLATE_ID"`
 	MailVerificationCodeExpiration time.Duration `mapstructure:"MAIL_VERIFICATION_CODE_EXPIRATION"`
 	PasswordResetCodeExpiration    time.Duration `mapstructure:"PASSWORD_RESET_CODE_EXPIRATION"`
+}
+
+func LoadSGConfig() {
+	BindAndValidateEnv("SENDGRID_API_KEY")
+	BindAndValidateEnv("SENDGRID_MAIL")
+	BindAndValidateEnv("MAIL_VERIFICATION_TEMPLATE_ID")
+	BindAndValidateEnv("PASSWORD_VERIFICATION_TEMPLATE_ID")
+	BindAndValidateEnv("MAIL_VERIFICATION_CODE_EXPIRATION")
+	BindAndValidateEnv("PASSWORD_RESET_CODE_EXPIRATION")
 }
