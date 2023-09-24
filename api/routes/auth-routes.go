@@ -13,10 +13,10 @@ func RegisterV1AuthRoutes(v1 fiber.Router) {
 	auth.Post("/signin", handlers.SignInUser)
 	auth.Post("/forgot-password", handlers.ForgotPassword)
 	auth.Post("/reset-password/:code", handlers.ResetPassword)
+	auth.Get("/refresh", handlers.RefreshAccessToken)
 
 	// Private
-	auth.Get("/logout", middlewares.JwtMiddleware, handlers.SignOutUser)
+	auth.Get("/signout", middlewares.JwtMiddleware, handlers.SignOutUser)
 	auth.Get("/verify-email", middlewares.JwtMiddleware, handlers.SendEmailVerification)
 	auth.Get("/verify-email/:code", middlewares.JwtMiddleware, handlers.VerifyEmail)
-	auth.Get("/refresh", middlewares.JwtMiddleware, handlers.RefreshAccessToken)
 }

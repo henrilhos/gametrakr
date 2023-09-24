@@ -37,7 +37,6 @@ jobs:
       - name: Run Docker container
         run: |
           docker run -d \
-          -e ACCESS_TOKEN_EXPIRED_IN='${{ secrets.ACCESS_TOKEN_EXPIRED_IN }}' \
           -e ACCESS_TOKEN_MAXAGE='${{ secrets.ACCESS_TOKEN_MAXAGE }}' \
           -e ACCESS_TOKEN_PRIVATE_KEY='${{ secrets.ACCESS_TOKEN_PRIVATE_KEY }}' \
           -e ACCESS_TOKEN_PUBLIC_KEY='${{ secrets.ACCESS_TOKEN_PUBLIC_KEY }}' \
@@ -49,14 +48,13 @@ jobs:
           -e MAIL_VERIFICATION_CODE_EXPIRATION='${{ secrets.MAIL_VERIFICATION_CODE_EXPIRATION }}' \
           -e MAIL_VERIFICATION_TEMPLATE_ID='${{ secrets.MAIL_VERIFICATION_TEMPLATE_ID }}' \
           -e PASSWORD_RESET_CODE_EXPIRATION='${{ secrets.PASSWORD_RESET_CODE_EXPIRATION }}' \
-          -e PASSWORD_RESET_TEMPLATE_ID='${{ secrets.PASSWORD_RESET_TEMPLATE_ID }}' \
+          -e PASSWORD_VERIFICATION_TEMPLATE_ID='${{ secrets.PASSWORD_VERIFICATION_TEMPLATE_ID }}' \
           -e POSTGRES_DB='${{ secrets.POSTGRES_DB }}' \
           -e POSTGRES_HOST='${{ secrets.POSTGRES_HOST }}' \
           -e POSTGRES_PASSWORD='${{ secrets.POSTGRES_PASSWORD }}' \
           -e POSTGRES_SSL_MODE='${{ secrets.POSTGRES_SSL_MODE }}' \
           -e POSTGRES_USER='${{ secrets.POSTGRES_USER }}' \
           -e REDIS_URL='${{ secrets.REDIS_URL }}' \
-          -e REFRESH_TOKEN_EXPIRED_IN='${{ secrets.REFRESH_TOKEN_EXPIRED_IN }}' \
           -e REFRESH_TOKEN_MAXAGE='${{ secrets.REFRESH_TOKEN_MAXAGE }}' \
           -e REFRESH_TOKEN_PRIVATE_KEY='${{ secrets.REFRESH_TOKEN_PRIVATE_KEY }}' \
           -e REFRESH_TOKEN_PUBLIC_KEY='${{ secrets.REFRESH_TOKEN_PUBLIC_KEY }}' \
