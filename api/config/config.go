@@ -24,6 +24,11 @@ func LoadConfig() {
 		logrus.Errorf("error to reading config file, %s", err)
 	}
 
+	LoadServerConfig()
+	LoadDBConfig()
+	LoadSGConfig()
+	LoadJWTConfig()
+
 	if err := viper.Unmarshal(&config); err != nil {
 		logrus.Errorf("error to decode, %v", err)
 	}
