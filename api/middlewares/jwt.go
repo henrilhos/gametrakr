@@ -21,7 +21,7 @@ func JwtMiddleware(c *fiber.Ctx) error {
 		if refreshToken != "" && config.GetConfig().Server.IsRefreshingToken {
 			accessToken, newTokenClaims, refreshErr := refreshAccessToken(refreshToken)
 			if refreshErr != nil {
-				utils.RespondWithError(c, fiber.StatusForbidden, refreshErr.Error())
+				utils.RespondWithError(c, fiber.StatusForbidden, fiber.Map{"1": refreshErr.Error(), "2": err.Error()})
 			}
 			tokenClaims = newTokenClaims
 			setAccessTokenCookie(c, accessToken)
