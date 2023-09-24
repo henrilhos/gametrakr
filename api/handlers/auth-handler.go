@@ -68,7 +68,7 @@ func SignUpUser(c *fiber.Ctx) error {
 		logrus.Error("unable to send mail verification", err)
 	}
 
-	expires_at := time.Hour * config.GetConfig().SendGrid.MailVerificationCodeExpiration
+	expires_at := time.Hour * time.Duration(config.GetConfig().SendGrid.MailVerificationCodeExpiration)
 	err = storeVerificationCode(userRes.Email, code, mail.MailConfirmation, expires_at)
 	if err != nil {
 		logrus.Error("unable to store mail verification data", err)
@@ -197,9 +197,8 @@ func SendEmailVerification(c *fiber.Ctx) error {
 		logrus.Error("unable to send mail verification", err)
 	}
 
-	expires_at := time.Hour * config.GetConfig().SendGrid.MailVerificationCodeExpiration
-	err = storeVerificationCode(user.Email, code, mail.MailConfirmation, expires_at)
-	if err != nil {
+	expires_at := time.Hour * time.Duration(config.GetConfig().SendGrid.MailVerificationCodeExpiration)
+	if err := storeVerificationCode(user.Email, code, mail.MailConfirmation, expires_at); err != nil {
 		logrus.Error("unable to store mail verification data", err)
 	}
 
@@ -242,12 +241,12 @@ func ForgotPassword(c *fiber.Ctx) error {
 		return utils.RespondWithError(c, fiber.StatusBadGateway, err.Error())
 	}
 
-	code, err := sendPasswordVerification(userRes.Username, userRes.Email)
+	code, err := sendPasswordVerification(userRes.Email, userRes.Username)
 	if err != nil {
 		logrus.Error("unable to send mail verification", err)
 	}
 
-	expires_at := time.Minute * config.GetConfig().SendGrid.PasswordResetCodeExpiration
+	expires_at := time.Minute * time.Duration(config.GetConfig().SendGrid.PasswordResetCodeExpiration)
 	if err := storeVerificationCode(userRes.Email, code, mail.PassReset, expires_at); err != nil {
 		logrus.Error("unable to store mail verification data", err)
 	}
@@ -326,6 +325,7 @@ func sendEmailVerification(email, username string) (string, error) {
 
 func sendPasswordVerification(email, username string) (string, error) {
 	templateID := config.GetConfig().SendGrid.PasswordResetTemplateId
+	logrus.Infof("oi %s", templateID)
 	return sendVerification(email, username, templateID, mail.PassReset)
 }
 

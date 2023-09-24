@@ -10,6 +10,7 @@ import (
 	"github.com/henrilhos/gametrakr/database"
 	"github.com/henrilhos/gametrakr/models"
 	"github.com/henrilhos/gametrakr/utils"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -21,6 +22,7 @@ func JwtMiddleware(c *fiber.Ctx) error {
 		if refreshToken != "" && config.GetConfig().Server.IsRefreshingToken {
 			accessToken, newTokenClaims, refreshErr := refreshAccessToken(refreshToken)
 			if refreshErr != nil {
+				logrus.Error(refreshErr.Error())
 				utils.RespondWithError(c, fiber.StatusForbidden, err.Error())
 			}
 			tokenClaims = newTokenClaims
