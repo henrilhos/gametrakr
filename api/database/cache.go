@@ -45,3 +45,11 @@ func RedisConnection() {
 func GetRedisClient() *redis.Client {
 	return redisClient
 }
+
+func GetUserIdFromCache(ctx context.Context, tokenUuid string) (string, error) {
+	userId, err := redisClient.Get(ctx, tokenUuid).Result()
+	if err == redis.Nil {
+		return "", fmt.Errorf("token not found")
+	}
+	return userId, nil
+}

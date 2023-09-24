@@ -11,7 +11,6 @@ import (
 	"github.com/henrilhos/gametrakr/models"
 	"github.com/henrilhos/gametrakr/utils"
 	"github.com/henrilhos/gametrakr/utils/mail"
-	"github.com/redis/go-redis/v9"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -149,67 +148,42 @@ func SignOutUser(c *fiber.Ctx) error {
 }
 
 func RefreshAccessToken(c *fiber.Ctx) error {
-	message := "could not refresh access token"
 	refreshToken := c.Cookies("refresh_token")
 	if refreshToken == "" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": message})
+		return respondWithError(c, fiber.StatusForbidden, "could not refresh the access token")
 	}
 
 	ctx := context.TODO()
 	tokenClaims, err := utils.ValidateRefreshToken(refreshToken)
 	if err != nil {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": err.Error()})
+		return respondWithError(c, fiber.StatusForbidden, err.Error())
 	}
 
-	userId, err := database.GetRedisClient().Get(ctx, tokenClaims.TokenUuid).Result()
-	if err == redis.Nil {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": message})
+	userId, err := database.GetUserIdFromCache(ctx, tokenClaims.TokenUuid)
+	if err != nil {
+		return respondWithError(c, fiber.StatusForbidden, err.Error())
 	}
 
 	user, err := models.FindUserById(userId)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": "the user belonging to this token no logger exists"})
-		} else {
-			return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{"status": "fail", "message": err.Error()})
+			return respondWithError(c, fiber.StatusForbidden, "the user belonging to this token no longer exists")
 		}
+		return respondWithError(c, fiber.StatusBadGateway, err.Error())
 	}
 
 	accessTokenDetails, err := utils.CreateAccessToken(user.ID.String())
 	if err != nil {
-		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"status": "fail", "message": err.Error()})
+		return respondWithError(c, fiber.StatusUnprocessableEntity, err.Error())
 	}
 
-	now := time.Now()
-
-	errAccess := database.GetRedisClient().Set(ctx, accessTokenDetails.TokenUuid, user.ID.String(), time.Unix(*accessTokenDetails.ExpiresIn, 0).Sub(now)).Err()
-	if errAccess != nil {
-		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"status": "fail", "message": errAccess.Error()})
+	if err := storeTokenInRedis(c, accessTokenDetails, ctx, time.Now()); err != nil {
+		return respondWithError(c, fiber.StatusUnprocessableEntity, err.Error())
 	}
 
-	accessTokenMaxAge := config.GetConfig().JWT.AccessTokenMaxAge
+	setAccessTokenCookies(c, accessTokenDetails.Token)
 
-	c.Cookie(&fiber.Cookie{
-		Name:     "access_token",
-		Value:    *accessTokenDetails.Token,
-		Path:     "/",
-		MaxAge:   accessTokenMaxAge * 60,
-		Secure:   false,
-		HTTPOnly: true,
-		Domain:   "localhost",
-	})
-
-	c.Cookie(&fiber.Cookie{
-		Name:     "logged_in",
-		Value:    "true",
-		Path:     "/",
-		MaxAge:   accessTokenMaxAge * 60,
-		Secure:   false,
-		HTTPOnly: false,
-		Domain:   "localhost",
-	})
-
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "access_token": accessTokenDetails.Token})
+	return respondWithSuccess(c, fiber.StatusOK, fiber.Map{"token": accessTokenDetails.Token})
 }
 
 func SendEmailVerification(c *fiber.Ctx) error {
@@ -423,11 +397,16 @@ func storeTokenInRedis(c *fiber.Ctx, tokenDetails *utils.TokenDetails, ctx conte
 }
 
 func setCookies(c *fiber.Ctx, accessToken, refreshToken *string) {
-	accessTokenMaxAge := config.GetConfig().JWT.AccessTokenMaxAge
 	refreshTokenMaxAge := config.GetConfig().JWT.RefreshTokenMaxAge
 
-	setCookie(c, "access_token", *accessToken, accessTokenMaxAge)
+	setAccessTokenCookies(c, accessToken)
 	setCookie(c, "refresh_token", *refreshToken, refreshTokenMaxAge)
+}
+
+func setAccessTokenCookies(c *fiber.Ctx, accessToken *string) {
+	accessTokenMaxAge := config.GetConfig().JWT.AccessTokenMaxAge
+
+	setCookie(c, "access_token", *accessToken, accessTokenMaxAge)
 	setCookie(c, "logged_in", "true", accessTokenMaxAge)
 }
 
