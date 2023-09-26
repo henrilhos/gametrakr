@@ -9,7 +9,7 @@ export default function Home() {
           game={{
             name: 'Starfield',
             year: '2023',
-            image: 'https://i.imgur.com/vKPeDY5.png',
+            image: 'https://i.imgur.com/bNNed9d.png',
           }}
         />
       </main>
