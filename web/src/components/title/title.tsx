@@ -8,7 +8,7 @@ type Props = {
 
 export const Title = ({ classes, children }: Props) => {
   const titleClasses = twMerge(
-    'bg-title px-1 font-apfel font-bold text-5xl text-black dark:bg-dark-title dark:text-white',
+    'bg-title px-1 font-apfel text-5xl font-bold text-black dark:bg-dark-title dark:text-white',
     classes
   )
 

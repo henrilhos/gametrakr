@@ -2,10 +2,10 @@
 
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import useBetterMediaQuery from '@/hooks/use-better-media-query'
 import { Button } from '../button'
 import { Title } from '../title'
 import { ToggleThemeButton } from '../toggle-theme-button'
-import useBetterMediaQuery from '@/hooks/use-better-media-query'
 
 export const Navbar = () => {
   const isMobile = useBetterMediaQuery('only screen and (max-width : 768px)')

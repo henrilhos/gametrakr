@@ -1,8 +1,8 @@
 'use client'
 
 import { ButtonHTMLAttributes, DetailedHTMLProps, ReactNode } from 'react'
-import clsx from 'clsx'
 import { AnimationProps, motion } from 'framer-motion'
+import { twMerge } from 'tailwind-merge'
 
 type Props = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -14,26 +14,26 @@ type Props = DetailedHTMLProps<
   classes?: string
 }
 
-const commonHoverClasses = clsx(
+const commonHoverClasses = twMerge(
   'hover:bg-white hover:text-black hover:inner-border-4 hover:inner-border-black',
   'active:bg-yellow-300 active:text-yellow active:inner-border-0',
   'dark:hover:bg-black dark:hover:text-white dark:hover:inner-border-4 dark:hover:inner-border-white',
   'dark:active:bg-yellow-800 dark:active:text-yellow dark:active:inner-border-0'
 )
 
-const primaryClasses = clsx(
+const primaryClasses = twMerge(
   'bg-yellow text-white',
   'dark:bg-yellow-400 dark:text-black',
   commonHoverClasses
 )
-const secondaryClasses = clsx(
-  'bg-yellow-300 text-black-lighter',
+const secondaryClasses = twMerge(
+  'text-black-lighter bg-yellow-300',
   'dark:bg-yellow-800 dark:text-white',
   commonHoverClasses
 )
 
-const textClasses = clsx('min-w-[10rem] px-5 py-3 text-left')
-const iconClasses = clsx('px-4 h-full text-yellow', 'dark:text-yellow')
+const textClasses = twMerge('min-w-[10rem] px-5 py-3 text-left')
+const iconClasses = twMerge('h-full px-4 text-yellow', 'dark:text-yellow')
 
 export const Button = ({
   children,
@@ -46,7 +46,7 @@ export const Button = ({
     <motion.button
       whileHover={{ scale: 1.1 } as AnimationProps}
       whileTap={{ scale: 0.9 } as AnimationProps}
-      className={clsx(
+      className={twMerge(
         'rounded-2xl text-xl font-bold',
         variant === 'primary' && primaryClasses,
         variant === 'secondary' && secondaryClasses,
