@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className='px-16 pb-16'>
+      <main className='md:px-16 md:pb-16'>
         <GetStartedContainer
           game={{
             name: 'Starfield',

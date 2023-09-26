@@ -24,7 +24,7 @@ export const ToggleThemeButton = () => {
 
   return (
     <Button icon variant='secondary' onClick={toggleTheme}>
-      <FontAwesomeIcon size='xl' height='20px' width='20px' icon={faMoon} />
+      <FontAwesomeIcon size='xl' icon={faMoon} />
     </Button>
   )
 }

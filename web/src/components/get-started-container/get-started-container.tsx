@@ -27,7 +27,7 @@ export const GetStartedContainer = ({ game }: Props) => {
       <div className='ml-4 mt-4 text-white'>{getTitleAndYear()}</div>
 
       <div className='flex flex-col items-center'>
-        <div className='my-12 max-w-screen-md rounded-2xl bg-white px-20 py-12 dark:bg-black'>
+        <div className='mx-8 my-12 max-w-screen-md rounded-2xl bg-white p-8 dark:bg-black md:mx-0 md:px-20 md:py-12'>
           <Title>Track your gaming journey</Title>
 
           <h2 className='text-black-lighter mt-8 text-center text-xl dark:text-gray-400'>

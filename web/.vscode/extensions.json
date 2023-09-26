@@ -1,8 +1,11 @@
 {
   "recommendations": [
-    "esbenp.prettier-vscode",
-    "dbaeumer.vscode-eslint",
     "bradlc.vscode-tailwindcss",
-    "oven.bun-vscode"
+    "davidanson.vscode-markdownlint",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "oven.bun-vscode",
+    "yoavbls.pretty-ts-errors"
   ]
 }
