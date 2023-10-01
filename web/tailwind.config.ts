@@ -1,57 +1,83 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss"
 
 const config: Config = {
-  mode: 'jit',
-  darkMode: 'class',
+  darkMode: ["class"],
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./src/pages/**/*.{ts,tsx}",
+    "./src/components/**/*.{ts,tsx}",
+    "./src/app/**/*.{ts,tsx}",
   ],
   theme: {
     extend: {
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        title: 'linear-gradient(0, #FFE5B2 45%, transparent 0%)',
-        'dark-title': 'linear-gradient(0, #59431F 45%, transparent 0%)',
-      },
-      fontFamily: {
-        atkinson: ['Atkinson Hyperlegible', 'sans-serif'],
-        apfel: ['Apfel Grotezk', 'sans-serif'],
-        sans: ['Atkinson Hyperlegible'],
+        heading: "linear-gradient(0, var(--heading) 45%, transparent 0%)",
       },
       colors: {
-        white: '#FFFFFF',
-        black: '#121212',
-        yellow: {
-          DEFAULT: '#F2A100',
-          200: '#FFF0D1',
-          300: '#FFE5B2',
-          400: '#FFC44D',
-          500: '#F2A100',
-          600: '#BF7C1D',
-          700: '#99661F',
-          800: '#59431F',
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
         },
-        gray: {
-          DEFAULT: '#8C8C8C',
-          200: '#F2F2F2',
-          300: '#D9D9D9',
-          400: '#BABABA',
-          500: '#8C8C8C',
-          600: '#666666',
-          700: '#4D4D4D',
-          800: '#333333',
-          900: '#121212',
+        secondary: {
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
         },
+        destructive: {
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
+        },
+        muted: {
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
+        },
+        popover: {
+          DEFAULT: "var(--popover)",
+          foreground: "var(--popover-foreground)",
+        },
+        card: {
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
+        },
+      },
+      fontFamily: {
+        atkinson: ["Atkinson Hyperlegible", "sans-serif"],
+        apfel: ["Apfel Grotezk", "sans-serif"],
+        sans: ["Atkinson Hyperlegible"],
+      },
+      // TODO: Check if they're used
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
-    require('tailwindcss-inner-border'),
+    require("@tailwindcss/typography"),
+    require("tailwindcss-animate"),
+    require("tailwindcss-inner-border"),
   ],
 }
 export default config

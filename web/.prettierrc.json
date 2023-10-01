@@ -17,12 +17,12 @@
     "^~/",
     "^[.]"
   ],
-  "jsxSingleQuote": true,
+  "jsxSingleQuote": false,
   "printWidth": 80,
   "semi": false,
-  "singleQuote": true,
+  "singleQuote": false,
   "tabWidth": 2,
   "trailingComma": "es5",
   "tailwindAttributes": ["classes"],
-  "tailwindFunctions": ["twMerge", "clsx"]
+  "tailwindFunctions": ["clsx", "cn", "cva", "twMerge"]
 }
