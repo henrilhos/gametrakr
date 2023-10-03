@@ -133,6 +133,10 @@
 }
 
 @layer components {
+  .full-height-sheet {
+    height: calc(100% - 2.25rem);
+  }
+
   .full-height {
     min-height: calc(100vh - 11.25rem);
   }
