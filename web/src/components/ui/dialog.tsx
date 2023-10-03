@@ -58,10 +58,9 @@ const DialogBackground = ({ className }: DialogBackgroundProps) => (
     leaveFrom="opacity-100"
     leaveTo="opacity-0"
   >
-    {/* TODO: check bg-color */}
     <div
       className={cn(
-        "fixed inset-0 bg-black bg-opacity-75 transition-opacity",
+        "fixed inset-0 bg-foreground/20 backdrop-blur-sm transition-opacity",
         className
       )}
     />

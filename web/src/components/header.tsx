@@ -1,13 +1,22 @@
 "use client"
 
 import React from "react"
-import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons"
+import Link from "next/link"
+import { faBars, faMoon, faSun } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useTheme } from "next-themes"
 import { SignInDialog } from "./auth"
 import { SignUpDialog } from "./auth/sign-up-dialog"
 import { Heading } from "./heading"
 import { Button } from "./ui/button"
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet"
 
 export const Header = () => {
   const { theme, setTheme } = useTheme()
@@ -16,9 +25,46 @@ export const Header = () => {
 
   return (
     <header className="mx-8 my-4 flex justify-between md:mx-16 md:my-8">
-      <Heading>gametrakr</Heading>
+      <Link href="/">
+        <Heading className="select-none">gametrakr</Heading>
+      </Link>
 
-      <div className="md:hidden">Celular</div>
+      <div className="inline-flex items-center md:hidden">
+        <Sheet>
+          <SheetTrigger>
+            <FontAwesomeIcon size="2xl" icon={faBars} />
+          </SheetTrigger>
+
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>
+                <Heading align="left" size="sm">
+                  gametrakr
+                </Heading>
+              </SheetTitle>
+            </SheetHeader>
+            <div className="full-height-sheet flex flex-col-reverse gap-4">
+              <SheetClose>
+                <Button
+                  className="min-w-full"
+                  onClick={() => setOpenSignUpDialog(true)}
+                >
+                  Sign Up
+                </Button>
+              </SheetClose>
+              <SheetClose>
+                <Button
+                  className="min-w-full"
+                  onClick={() => setOpenSignInDialog(true)}
+                  variant="secondary"
+                >
+                  Sign In
+                </Button>
+              </SheetClose>
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
 
       <div className="hidden gap-4 md:flex">
         <Button onClick={() => setOpenSignInDialog(true)} variant="secondary">
