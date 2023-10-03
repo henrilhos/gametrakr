@@ -25,7 +25,9 @@ export const ImageContainer = () => {
             </div>
 
             <div className="mt-16 text-center">
-              <Button size="lg" align="center">Get started</Button>
+              <Button size="lg" align="center">
+                Get started
+              </Button>
             </div>
           </Card>
         </div>

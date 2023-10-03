@@ -4,11 +4,13 @@ import React from "react"
 import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useTheme } from "next-themes"
+import { SignUpDialog } from "./auth/sign-up-dialog"
 import { Heading } from "./heading"
 import { Button } from "./ui/button"
 
 export const Header = () => {
   const { theme, setTheme } = useTheme()
+  const [openSignUpDialog, setOpenSignUpDialog] = React.useState(false)
 
   return (
     <header className="mx-8 my-4 flex justify-between md:mx-16 md:my-8">
@@ -18,7 +20,7 @@ export const Header = () => {
 
       <div className="hidden gap-4 md:flex">
         <Button variant="secondary">Sign In</Button>
-        <Button>Sign Up</Button>
+        <Button onClick={() => setOpenSignUpDialog(true)}>Sign Up</Button>
 
         <Button
           className="ml-4"
@@ -38,6 +40,11 @@ export const Header = () => {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </div>
+
+      <SignUpDialog
+        open={openSignUpDialog}
+        onClose={() => setOpenSignUpDialog(false)}
+      />
     </header>
   )
 }
