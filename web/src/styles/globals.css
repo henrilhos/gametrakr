@@ -30,8 +30,9 @@
     --destructive: var(--pink-400);
     --destructive-foreground: var(--purple-400);
 
-    --border: var(--pink-400);
+    --border: var(--gray-300);
     --input: var(--black);
+    --label: var(--gray-600);
     --ring: var(--purple-400);
 
     --heading: var(--yellow-200);
@@ -56,7 +57,7 @@
     --secondary-foreground: var(--yellow-400);
 
     --muted: var(--gray-300);
-    --muted-foreground: var(--purple-400);
+    --muted-foreground: var(--gray-300);
 
     --accent: var(--yellow-700);
     --accent-foreground: var(--yellow-400);
@@ -64,8 +65,9 @@
     --destructive: var(--pink-400);
     --destructive-foreground: var(--purple-400);
 
-    --border: var(--pink-400);
+    --border: var(--gray-500);
     --input: var(--white);
+    --label: var(--gray-200);
     --ring: var(--purple-400);
 
     --heading: var(--yellow-700);
@@ -77,28 +79,32 @@
     font-family: Atkinson Hyperlegible;
     font-style: normal;
     font-weight: 400;
-    src: url(../../public/fonts/Atkinson-Hyperlegible-Regular-102a.woff2) format(woff2);
+    src: url(../../public/fonts/Atkinson-Hyperlegible-Regular-102a.woff2)
+      format(woff2);
   }
 
   @font-face {
     font-family: Atkinson Hyperlegible;
     font-style: italic;
     font-weight: 400;
-    src: url(../../public/fonts/Atkinson-Hyperlegible-Italic-102a.woff2) format(woff2);
+    src: url(../../public/fonts/Atkinson-Hyperlegible-Italic-102a.woff2)
+      format(woff2);
   }
 
   @font-face {
     font-family: Atkinson Hyperlegible;
     font-style: normal;
     font-weight: 700;
-    src: url(../../public/fonts/Atkinson-Hyperlegible-Bold-102a.woff2) format(woff2);
+    src: url(../../public/fonts/Atkinson-Hyperlegible-Bold-102a.woff2)
+      format(woff2);
   }
 
   @font-face {
     font-family: Atkinson Hyperlegible;
     font-style: italic;
     font-weight: 700;
-    src: url(../../public/fonts/Atkinson-Hyperlegible-BoldItalic-102a.woff2) format(woff2);
+    src: url(../../public/fonts/Atkinson-Hyperlegible-BoldItalic-102a.woff2)
+      format(woff2);
   }
 
   @font-face {

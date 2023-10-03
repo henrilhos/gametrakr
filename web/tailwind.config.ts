@@ -15,6 +15,7 @@ const config: Config = {
       colors: {
         border: "var(--border)",
         input: "var(--input)",
+        label: "var(--label)",
         ring: "var(--ring)",
         background: "var(--background)",
         foreground: "var(--foreground)",
