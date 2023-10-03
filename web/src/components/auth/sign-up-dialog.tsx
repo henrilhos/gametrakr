@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -67,7 +69,6 @@ export const SignUpDialog = ({ open, onClose }: SignUpDialogProps) => {
           <CardTitle className="text-left">Join the community</CardTitle>
         </CardHeader>
 
-        {/* SignUp form here */}
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
