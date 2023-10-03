@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { Heading } from "../heading"
 import {
   Button,
   Card,
@@ -17,7 +18,6 @@ import {
   FormItem,
   Input,
 } from "../ui"
-import { Heading } from "../heading"
 
 const signInSchema = z.object({
   username: z.string(),

@@ -54,7 +54,7 @@
     --primary-foreground: var(--black);
 
     --secondary: var(--yellow-700);
-    --secondary-foreground: var(--yellow-400);
+    --secondary-foreground: var(--white);
 
     --muted: var(--gray-300);
     --muted-foreground: var(--gray-300);
