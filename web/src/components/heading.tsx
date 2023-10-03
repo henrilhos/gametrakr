@@ -15,14 +15,32 @@ export const headingVariants = cva("bg-heading px-1 font-apfel font-bold", {
   },
 })
 
-export interface HeadingProps extends VariantProps<typeof headingVariants> {
+export const alignVariants = cva("", {
+  variants: {
+    align: {
+      center: "text-center",
+      left: "text-left",
+      right: "text-right",
+    },
+  },
+  defaultVariants: {
+    align: "center",
+  },
+})
+
+export interface HeadingProps
+  extends VariantProps<typeof headingVariants>,
+    VariantProps<typeof alignVariants> {
+  className?: string
   children: React.ReactNode
 }
 
-export const Heading = ({ size, children }: HeadingProps) => {
+export const Heading = ({ align, size, className, children }: HeadingProps) => {
   return (
-    <h1 className="text-center">
-      <span className={cn(headingVariants({ size }))}>{children}</span>
+    <h1 className={cn(alignVariants({ align }))}>
+      <span className={cn(headingVariants({ size }), className)}>
+        {children}
+      </span>
     </h1>
   )
 }

@@ -64,7 +64,7 @@ export const SignUpDialog = ({ open, onClose }: SignUpDialogProps) => {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <Card className="min-w-[31rem] rounded-[2rem] px-14 pb-10 pt-20 md:my-8">
+      <Card className="min-h-[100vh] min-w-[100vw] rounded-none px-7 pb-5 pt-20 md:my-8 md:min-h-fit md:min-w-[31rem] md:rounded-[2rem] md:px-14 md:pb-10">
         <CardHeader>
           <CardTitle className="text-left">Join the community</CardTitle>
         </CardHeader>
