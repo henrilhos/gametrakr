@@ -47,6 +47,7 @@ const config: Config = {
           DEFAULT: "rgb(var(--card))",
           foreground: "rgb(var(--card-foreground))",
         },
+        error: "rgb(var(--error))",
       },
       fontFamily: {
         atkinson: ["Atkinson Hyperlegible", "sans-serif"],

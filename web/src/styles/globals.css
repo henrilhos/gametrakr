@@ -35,6 +35,7 @@
     --label: var(--gray-600);
     --ring: var(--purple-400);
 
+    --error: var(--red-500);
     --heading: var(--yellow-200);
 
     --radius: 0.5rem;

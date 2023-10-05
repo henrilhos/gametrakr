@@ -30,17 +30,17 @@ export const alignVariants = cva("", {
 
 export interface HeadingProps
   extends VariantProps<typeof headingVariants>,
-    VariantProps<typeof alignVariants> {
+  VariantProps<typeof alignVariants> {
   className?: string
   children: React.ReactNode
 }
 
 export const Heading = ({ align, size, className, children }: HeadingProps) => {
   return (
-    <h1 className={cn(alignVariants({ align }))}>
+    <div className={cn(alignVariants({ align }))}>
       <span className={cn(headingVariants({ size }), className)}>
         {children}
       </span>
-    </h1>
+    </div>
   )
 }

@@ -5,8 +5,7 @@ import Link from "next/link"
 import { faBars, faMoon, faSun } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useTheme } from "next-themes"
-import { SignInDialog } from "./auth"
-import { SignUpDialog } from "./auth/sign-up-dialog"
+import { AuthDialog, SignInForm, SignUpForm } from "./auth"
 import { Heading } from "./heading"
 import { Button } from "./ui/button"
 import {
@@ -46,6 +45,7 @@ export const Header = () => {
             <div className="full-height-sheet flex flex-col-reverse gap-4">
               <SheetClose>
                 <Button
+                  asChild
                   className="min-w-full"
                   onClick={() => setOpenSignUpDialog(true)}
                 >
@@ -54,6 +54,7 @@ export const Header = () => {
               </SheetClose>
               <SheetClose>
                 <Button
+                  asChild
                   className="min-w-full"
                   onClick={() => setOpenSignInDialog(true)}
                   variant="secondary"
@@ -91,14 +92,18 @@ export const Header = () => {
         </Button>
       </div>
 
-      <SignInDialog
+      <AuthDialog
         open={openSignInDialog}
         onClose={() => setOpenSignInDialog(false)}
-      />
-      <SignUpDialog
+      >
+        <SignInForm />
+      </AuthDialog>
+      <AuthDialog
         open={openSignUpDialog}
         onClose={() => setOpenSignUpDialog(false)}
-      />
+      >
+        <SignUpForm />
+      </AuthDialog>
     </header>
   )
 }
