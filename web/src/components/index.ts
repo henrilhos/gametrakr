@@ -1,6 +1,0 @@
-export * from "./header"
-export * from "./heading"
-export * from "./image-container"
-export * from "./theme-provider"
-export * from "./ui"
-export * from "./auth"
