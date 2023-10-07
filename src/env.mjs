@@ -14,6 +14,13 @@ export const env = createEnv({
         (str) => !str.includes("YOUR_POSTGRESQL_URL_HERE"),
         "You forgot to change the default URL",
       ),
+    RESEND_API_KEY: z
+      .string()
+      .min(1)
+      .refine(
+        (str) => !str.includes("YOUR_RESEND_API_KEY_HERE"),
+        "You forgot to change the default API key",
+      ),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -46,6 +53,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,

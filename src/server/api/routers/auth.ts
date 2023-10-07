@@ -1,11 +1,35 @@
 import { TRPCError } from "@trpc/server";
 import { hash } from "argon2";
+import { Resend } from "resend";
 
 import { signUpSchema } from "~/common/validation/auth";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import ConfirmEmail from "~/emails/confirm-email";
+import { env } from "~/env.mjs";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+
+const resend = new Resend(env.RESEND_API_KEY);
+
+const sendVerificationEmail = async () => {
+  try {
+    const data = await resend.emails.send({
+      from: "Acme <onboarding@resend.dev>",
+      to: ["resend.development@henrique.zip"],
+      subject: "Confirm your gametrakr account",
+      react: ConfirmEmail({ validationCode: "654321" }),
+    });
+
+    console.log("data", data);
+
+    return data;
+  } catch (error) {
+    console.log("error", error);
+
+    return error;
+  }
+};
 
 export const authRouter = createTRPCRouter({
-  signup: publicProcedure
+  signUp: publicProcedure
     .input(signUpSchema)
     .mutation(async ({ ctx, input }) => {
       const { email, password, username, confirmPassword } = input;
@@ -35,6 +59,8 @@ export const authRouter = createTRPCRouter({
       const result = await ctx.db.user.create({
         data: { username, email, password: hashedPassword },
       });
+
+      await sendVerificationEmail();
 
       return {
         status: 201,

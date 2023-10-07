@@ -27,7 +27,7 @@ const SignUpPage: NextPage = () => {
     },
   });
 
-  const { mutateAsync } = api.auth.signup.useMutation();
+  const { mutateAsync } = api.auth.signUp.useMutation();
 
   const onSubmit = useCallback(
     async (data: SignUp) => {
