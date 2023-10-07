@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 import { faBars, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { signIn } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 
 import { Heading } from "~/components/heading";
@@ -20,6 +20,7 @@ import {
 export const Header = () => {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
+  const { data: sessionData } = useSession();
 
   return (
     <header className="mx-8 my-4 flex justify-between md:mx-16 md:my-8">
@@ -65,13 +66,17 @@ export const Header = () => {
       </div>
 
       <div className="hidden gap-4 md:flex">
-        {/* TODO: change to <Button /> */}
-        <Button variant="secondary" onClick={() => void signIn()}>
-          Sign In
+        <Button
+          variant="secondary"
+          onClick={sessionData ? () => void signOut() : () => void signIn()}
+        >
+          {sessionData ? "Sign out" : "Sign in"}
         </Button>
-        <Button onClick={() => void router.push("/sign-up")}>Sign Up</Button>
 
-        {/* TODO: add toggle theme button */}
+        {!sessionData && (
+          <Button onClick={() => void router.push("/sign-up")}>Sign Up</Button>
+        )}
+
         <Button
           className="ml-4"
           variant="icon"

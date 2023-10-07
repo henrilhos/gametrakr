@@ -1,45 +1,18 @@
 import { useRouter } from "next/router";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 import { Heading } from "~/components/heading";
 import { PageLayout } from "~/components/layout";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
 import { Container } from "~/components/ui/container";
-import { api } from "~/utils/api";
 
 import type { NextPage } from "next";
 
-const AuthShowcase = () => {
-  const { data: sessionData } = useSession();
-
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined },
-  );
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      {(sessionData ?? secretMessage) && (
-        <p className="text-center text-2xl">
-          {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-          {secretMessage && <span> - {secretMessage}</span>}
-        </p>
-      )}
-      <button
-        className="rounded-full bg-foreground/10 px-10 py-3 font-semibold no-underline transition hover:bg-foreground/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
-  );
-};
-
 const HomePage: NextPage = () => {
   const router = useRouter();
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const { data: sessionData } = useSession();
 
   const getTitleAndYear = () => {
     return `Starfield (2023)`.toUpperCase();
@@ -64,26 +37,21 @@ const HomePage: NextPage = () => {
                 and connect with a thriving gaming community.
               </div>
 
-              <div className="mt-16 text-center">
-                <Button
-                  size="lg"
-                  align="center"
-                  onClick={() => void router.push("/sign-up")}
-                >
-                  Get started
-                </Button>
-              </div>
+              {!sessionData && (
+                <div className="mt-16 text-center">
+                  <Button
+                    size="lg"
+                    align="center"
+                    onClick={() => void router.push("/sign-up")}
+                  >
+                    Get started
+                  </Button>
+                </div>
+              )}
             </Card>
           </div>
         </Card>
       </Container>
-
-      <div className="flex flex-col items-center gap-2">
-        <p className="text-2xl">
-          {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-        </p>
-        <AuthShowcase />
-      </div>
     </PageLayout>
   );
 };
