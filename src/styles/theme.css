@@ -23,7 +23,7 @@
     --accent: var(--yellow-200);
     --accent-foreground: var(--yellow-400);
 
-    --destructive: var(--pink-400);
+    --destructive: var(--red-400);
     --destructive-foreground: var(--purple-400);
 
     --border: var(--gray-300);
@@ -58,7 +58,7 @@
     --accent: var(--yellow-700);
     --accent-foreground: var(--yellow-400);
 
-    --destructive: var(--pink-400);
+    --destructive: var(--red-400);
     --destructive-foreground: var(--purple-400);
 
     --border: var(--gray-500);

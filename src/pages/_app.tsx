@@ -3,7 +3,6 @@ import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 
-import { Header } from "~/components/header";
 import { api } from "~/utils/api";
 
 import type { Session } from "next-auth";
@@ -11,7 +10,7 @@ import type { AppType } from "next/app";
 
 import "~/styles/globals.css";
 
-const MyApp: AppType<{ session: Session | null }> = ({
+const GametrakrApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
@@ -25,11 +24,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <Header />
         <Component {...pageProps} />
       </ThemeProvider>
     </SessionProvider>
   );
 };
 
-export default api.withTRPC(MyApp);
+export default api.withTRPC(GametrakrApp);

@@ -8,7 +8,14 @@ export const authRouter = createTRPCRouter({
   signup: publicProcedure
     .input(signUpSchema)
     .mutation(async ({ ctx, input }) => {
-      const { email, password, username } = input;
+      const { email, password, username, confirmPassword } = input;
+
+      if (password !== confirmPassword) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Passwords don't match",
+        });
+      }
 
       const exists = await ctx.db.user.findFirst({
         where: {
