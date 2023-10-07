@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 import { faBars, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { signIn } from "next-auth/react";
 import { useTheme } from "next-themes";
 
 import { Heading } from "~/components/heading";
@@ -52,7 +53,7 @@ export const Header = () => {
               <SheetClose>
                 <Button
                   className="min-w-full"
-                  onClick={() => void router.push("/sign-in")}
+                  onClick={() => void signIn()}
                   variant="secondary"
                 >
                   Sign In
@@ -65,10 +66,7 @@ export const Header = () => {
 
       <div className="hidden gap-4 md:flex">
         {/* TODO: change to <Button /> */}
-        <Button
-          variant="secondary"
-          onClick={() => void router.push("/sign-in")}
-        >
+        <Button variant="secondary" onClick={() => void signIn()}>
           Sign In
         </Button>
         <Button onClick={() => void router.push("/sign-up")}>Sign Up</Button>
