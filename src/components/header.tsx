@@ -19,8 +19,13 @@ import {
 
 export const Header = () => {
   const router = useRouter();
-  const { theme, setTheme } = useTheme();
+  const { theme, systemTheme, setTheme } = useTheme();
   const { data: sessionData } = useSession();
+
+  const toggleTheme = () => {
+    const currentTheme = theme === "system" ? systemTheme : theme;
+    setTheme(currentTheme === "dark" ? "light" : "dark");
+  };
 
   return (
     <header className="mx-8 my-4 flex justify-between md:mx-16 md:my-8">
@@ -82,7 +87,7 @@ export const Header = () => {
           variant="icon"
           size="icon"
           aria-label="Toggle theme"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          onClick={toggleTheme}
         >
           <FontAwesomeIcon
             className="h-6 w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
