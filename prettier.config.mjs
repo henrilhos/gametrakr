@@ -8,6 +8,7 @@ const config = {
   importOrder: [
     "^react$",
     "^next$",
+    "^(next)(/.*)$",
     "",
     "<THIRD_PARTY_MODULES>",
     "<BUILTIN_MODULES>",
