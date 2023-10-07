@@ -24,6 +24,8 @@
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
+    "@react-email/button": "0.0.10",
+    "@react-email/html": "0.0.4",
     "@t3-oss/env-nextjs": "^0.7.0",
     "@tanstack/react-query": "^4.35.7",
     "@trpc/client": "^10.40.0",
@@ -36,7 +38,9 @@
     "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-email": "1.9.5",
     "react-hook-form": "^7.47.0",
+    "resend": "^1.1.0",
     "superjson": "^1.13.3",
     "zod": "^3.22.4"
   },
