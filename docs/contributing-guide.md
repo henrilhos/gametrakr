@@ -15,9 +15,16 @@ cd gametrakr
 pnpm install
 ```
 
+Then create your local `.env` file:
+
+```bash
+cp .env.example .env
+```
+
 And then run the development application:
 
 ```bash
+docker-compose up -d
 pnpm run dev
 ```
 
