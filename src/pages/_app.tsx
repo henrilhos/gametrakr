@@ -9,6 +9,7 @@ import type { Session } from "next-auth";
 import type { AppType } from "next/app";
 
 import "~/styles/globals.css";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 
 const GametrakrApp: AppType<{ session: Session | null }> = ({
   Component,
