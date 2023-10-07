@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "fonts.css";
+@import "colors.css";
+@import "theme.css";
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+}
