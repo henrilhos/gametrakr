@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "fonts.css";
+@import "colors.css";
+@import "theme.css";
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .full-height-sheet {
+    height: calc(100% - 2.25rem);
+  }
+
+  .full-height {
+    min-height: calc(100vh - 11.25rem);
+  }
+
+  @media only screen and (max-width: 768px) {
+    .full-height {
+      min-height: calc(100vh - 4.5rem);
+    }
+  }
+}

@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  postgres-db:
+    container_name: postgres
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=gametrakr
+      - POSTGRES_USER=crash_bandicoot
+      - POSTGRES_PASSWORD=12345678
+    volumes:
+      - gametrakr-pg:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - "5432:5432"
+
+volumes:
+  gametrakr-pg:

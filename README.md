@@ -14,7 +14,7 @@ You can check out the use cases, requirements and models in their respective loc
 
 ## Contributing guide
 
-We welcome contributions from the community. If you'd like to contribute to the development of gametrakr, please check out the [web contributing guide](web/docs/contributing-guide.md) and the [API contributing guide](api/docs/contributing-guide.md).
+We welcome contributions from the community. If you'd like to contribute to the development of gametrakr, please check out the [contributing guide](docs/contributing-guide.md).
 
 ## License
 

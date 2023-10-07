@@ -1,5 +1,0 @@
-export * from './button'
-export * from './get-started-container'
-export * from './navbar'
-export * from './title'
-export * from './toggle-theme-button'
