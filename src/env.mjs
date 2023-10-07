@@ -21,6 +21,14 @@ export const env = createEnv({
         (str) => !str.includes("YOUR_RESEND_API_KEY_HERE"),
         "You forgot to change the default API key",
       ),
+    RESEND_EMAIL: z
+      .string()
+      .email()
+      .min(1)
+      .refine(
+        (str) => !str.includes("YOUR_RESEND_EMAIL_HERE"),
+        "You forgot to change the default email",
+      ),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -54,6 +62,7 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    RESEND_EMAIL: process.env.RESEND_EMAIL,
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
