@@ -26,7 +26,7 @@ export const signUpSchema = z
   });
 
 export const verifyAccountSchema = z.object({
-  username: z.string().min(1),
+  email: z.string().min(1),
   token: z.string().min(6).max(6),
 });
 

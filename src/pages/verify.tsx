@@ -45,7 +45,7 @@ const VerifyAccountPage: NextPage = () => {
     }
 
     try {
-      const result = await mutateAsync({ token: value, username: email });
+      const result = await mutateAsync({ token: value, email });
       if (result.status === 200) {
         void router.push("/sign-in");
       } else {
@@ -84,7 +84,7 @@ const VerifyAccountPage: NextPage = () => {
           length={6}
           placeholder=""
           classNames={{
-            container: "mt-2 h-20 min-w-[23.5rem]",
+            container: "mt-2 h-20 min-w-[384px]",
             character:
               "flex items-center justify-center rounded-2xl border-none bg-[#FFE5B2] text-center text-[56px] leading-[69px]",
             characterInactive: "",
@@ -92,6 +92,15 @@ const VerifyAccountPage: NextPage = () => {
               "text-black outline-none inner-border-4 inner-border-foreground",
           }}
         />
+        <div className="mt-2 text-right">
+          <button
+            type="button"
+            className="inline-flex text-lg leading-5 hover:underline"
+            onClick={() => void router.back()}
+          >
+            <div>RESEND EMAIL</div>
+          </button>
+        </div>
       </div>
     </AuthPageLayout>
   );

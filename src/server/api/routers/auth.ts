@@ -106,13 +106,9 @@ export const authRouter = createTRPCRouter({
   validateAccount: publicProcedure
     .input(verifyAccountSchema)
     .mutation(async ({ ctx, input }) => {
-      const { token, username } = input;
+      const { token, email } = input;
 
-      const user = await ctx.db.user.findFirst({
-        where: {
-          OR: [{ email: username }, { username }],
-        },
-      });
+      const user = await ctx.db.user.findFirst({ where: { email } });
 
       if (!user) {
         throw new TRPCError({
@@ -129,7 +125,7 @@ export const authRouter = createTRPCRouter({
       if (!emailToken?.valid) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "Code does not exists",
+          message: "Code expired",
         });
       }
 
