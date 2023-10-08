@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,6 +15,7 @@ import type { SignIn } from "~/common/validation/auth";
 import type { NextPage } from "next";
 
 const SignInPage: NextPage = () => {
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const form = useForm<SignIn>({
@@ -26,6 +27,7 @@ const SignInPage: NextPage = () => {
   });
 
   const onSubmit = useCallback(async (data: SignIn) => {
+    setLoading(true);
     await signIn("credentials", { ...data, callbackUrl: "/" });
   }, []);
 
@@ -62,7 +64,12 @@ const SignInPage: NextPage = () => {
             {/* TODO: add Forgot your password link */}
           </div>
 
-          <Button type="submit" className="min-w-full" align="center">
+          <Button
+            type="submit"
+            className="min-w-full"
+            align="center"
+            disabled={loading}
+          >
             Sign in
           </Button>
 
