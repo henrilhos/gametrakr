@@ -7,6 +7,7 @@ import Credentials from "next-auth/providers/credentials";
 
 import { signInSchema } from "~/common/validation/auth";
 import { db } from "~/server/db";
+import { env } from "../env.mjs";
 
 import type { DefaultSession, DefaultUser, NextAuthOptions } from "next-auth";
 
@@ -20,6 +21,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
+      username: string;
       // ...other properties
       // role: UserRole;
     };
@@ -39,34 +41,35 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    // TODO: if we use JWT
-    // jwt: ({ token, user }) => {
-    //   if (user) {
-    //     token.sub = user.id;
-    //     token.email = user.email;
-    //     token.name = user.name;
-    //     token.username = user.username;
-    //   }
+    jwt: ({ token, user }) => {
+      console.log("[JWT] token", token);
+      console.log("[JWT] user", user);
 
-    //   return token;
-    // },
-    // session: ({ session, token }) => {
-    //   // TODO: Add user image
-    //   if (token?.sub) {
-    //     session.user.id = token.sub;
-    //     session.user.email = token.email;
-    //     session.user.name = token.name;
-    //   }
+      // TODO: add user image
+      if (user) {
+        token.sub = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        token.username = user.username;
+      }
 
-    //   return session;
-    // },
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+      return token;
+    },
+    session: ({ session, token, user }) => {
+      console.log("[SESSION] session", session);
+      console.log("[SESSION] token", token);
+      console.log("[SESSION] user", user);
+
+      // TODO: Add user image
+      if (token?.sub) {
+        session.user.id = token.sub;
+        session.user.email = token.email;
+        session.user.name = token.name;
+        session.user.username = token.username as string;
+      }
+
+      return session;
+    },
   },
   adapter: PrismaAdapter(db),
   providers: [
@@ -118,19 +121,17 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
-  // TODO: update when create sign up and sign in pages
   pages: {
     signIn: "/sign-in",
     newUser: "/sign-up",
   },
-  // TODO: if we use JWT
-  // secret: env.NEXTAUTH_SECRET,
-  // jwt: {
-  //   maxAge: 15 * 24 * 30 * 60, // 15 days
-  // },
-  // session: {
-  //   strategy: "jwt",
-  // },
+  secret: env.NEXTAUTH_SECRET,
+  jwt: {
+    maxAge: 15 * 24 * 30 * 60, // 15 days
+  },
+  session: {
+    strategy: "jwt",
+  },
 };
 
 /**

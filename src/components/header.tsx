@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 import { faBars, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { signIn } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 
 import { Heading } from "~/components/heading";
@@ -19,7 +19,13 @@ import {
 
 export const Header = () => {
   const router = useRouter();
-  const { theme, setTheme } = useTheme();
+  const { theme, systemTheme, setTheme } = useTheme();
+  const { data: sessionData } = useSession();
+
+  const toggleTheme = () => {
+    const currentTheme = theme === "system" ? systemTheme : theme;
+    setTheme(currentTheme === "dark" ? "light" : "dark");
+  };
 
   return (
     <header className="mx-8 my-4 flex justify-between md:mx-16 md:my-8">
@@ -65,19 +71,23 @@ export const Header = () => {
       </div>
 
       <div className="hidden gap-4 md:flex">
-        {/* TODO: change to <Button /> */}
-        <Button variant="secondary" onClick={() => void signIn()}>
-          Sign In
+        <Button
+          variant="secondary"
+          onClick={sessionData ? () => void signOut() : () => void signIn()}
+        >
+          {sessionData ? "Sign out" : "Sign in"}
         </Button>
-        <Button onClick={() => void router.push("/sign-up")}>Sign Up</Button>
 
-        {/* TODO: add toggle theme button */}
+        {!sessionData && (
+          <Button onClick={() => void router.push("/sign-up")}>Sign Up</Button>
+        )}
+
         <Button
           className="ml-4"
           variant="icon"
           size="icon"
           aria-label="Toggle theme"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          onClick={toggleTheme}
         >
           <FontAwesomeIcon
             className="h-6 w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"

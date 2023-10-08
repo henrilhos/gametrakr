@@ -45,8 +45,8 @@ export default {
         ring: "rgb(var(--ring))",
       },
       fontFamily: {
-        atkinson: ["Atkinson Hyperlegible", "sans-serif"],
         apfel: ["Apfel Grotezk", "sans-serif"],
+        atkinson: ["Atkinson Hyperlegible", "sans-serif"],
         sans: ["Atkinson Hyperlegible"],
       },
       // TODO: Check if they're used
