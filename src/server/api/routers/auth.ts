@@ -65,6 +65,7 @@ const createEmailToken = async (
 
 export const authRouter = createTRPCRouter({
   signUp: publicProcedure
+    .meta({ description: "Create a new user" })
     .input(signUpSchema)
     .mutation(async ({ ctx, input }) => {
       const { email, password, username, confirmPassword } = input;
@@ -104,6 +105,7 @@ export const authRouter = createTRPCRouter({
       };
     }),
   validateAccount: publicProcedure
+    .meta({ description: "Validate user account" })
     .input(verifyAccountSchema)
     .mutation(async ({ ctx, input }) => {
       const { token, username } = input;
