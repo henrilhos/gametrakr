@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -6,16 +6,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { signUpSchema } from "~/common/validation/auth";
+import { AuthPageLayout, DialogLayout } from "~/components/layout";
 import { Button } from "~/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { LoadingSpinner } from "~/components/ui/loading";
+import toast from "~/components/ui/toast";
 import { api } from "~/utils/api";
-import { AuthPageLayout } from "../components/layout";
 
+import type { TRPCError } from "@trpc/server";
 import type { SignUp } from "~/common/validation/auth";
 import type { NextPage } from "next";
+import type { FieldErrors } from "react-hook-form";
 
 const SignUpPage: NextPage = () => {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const form = useForm<SignUp>({
     resolver: zodResolver(signUpSchema),
@@ -29,22 +34,69 @@ const SignUpPage: NextPage = () => {
 
   const { mutateAsync } = api.auth.signUp.useMutation();
 
-  const onSubmit = useCallback(
+  const onValid = useCallback(
     async (data: SignUp) => {
-      const result = await mutateAsync(data);
-      if (result.status === 201) {
-        localStorage.setItem("email", data.email);
-        void router.push("/verify");
+      setLoading(true);
+
+      try {
+        const result = await mutateAsync(data);
+        if (result.status === 201) {
+          localStorage.setItem("email", data.email);
+          void router.push("/verify");
+        } else {
+          setLoading(false);
+          toast.error(result.message);
+        }
+      } catch (e) {
+        const message = (e as TRPCError).message ?? "";
+
+        if (message === "User already exists") {
+          form.setError("username", { message });
+          form.setError("email", { message });
+        }
+
+        setLoading(false);
+        toast.error(message);
       }
     },
-    [mutateAsync, router],
+    [mutateAsync, router, form],
   );
+
+  const onInvalid = useCallback((data: FieldErrors<SignUp>) => {
+    const fields: (keyof SignUp)[] = [
+      "username",
+      "email",
+      "password",
+      "confirmPassword",
+    ];
+
+    for (const field of fields) {
+      if (data[field]) {
+        toast.error(data[field]?.message ?? "");
+        return;
+      }
+    }
+  }, []);
+
+  if (loading) {
+    return (
+      <DialogLayout
+        className={{
+          card: "flex flex-col justify-center md:min-h-[706px]",
+        }}
+      >
+        <LoadingSpinner size={48} />
+      </DialogLayout>
+    );
+  }
 
   return (
     <AuthPageLayout title="Join the community">
       <Form {...form}>
         <form
-          onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
+          onSubmit={(event) =>
+            void form.handleSubmit(onValid, onInvalid)(event)
+          }
           className="space-y-8"
         >
           <div className="space-y-6">
@@ -65,12 +117,7 @@ const SignUpPage: NextPage = () => {
               render={({ field, fieldState }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      label="Email"
-                      type="email"
-                      state={fieldState}
-                      {...field}
-                    />
+                    <Input label="Email" state={fieldState} {...field} />
                   </FormControl>
                 </FormItem>
               )}

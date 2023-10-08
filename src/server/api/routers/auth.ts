@@ -79,7 +79,10 @@ export const authRouter = createTRPCRouter({
 
       const exists = await ctx.db.user.findFirst({
         where: {
-          OR: [{ email }, { username }],
+          OR: [
+            { email: { equals: email, mode: "insensitive" } },
+            { username: { equals: username, mode: "insensitive" } },
+          ],
         },
       });
 
@@ -93,7 +96,11 @@ export const authRouter = createTRPCRouter({
       const hashedPassword = await hash(password);
 
       const result = await ctx.db.user.create({
-        data: { username, email, password: hashedPassword },
+        data: {
+          username,
+          email: email.toLowerCase(),
+          password: hashedPassword,
+        },
       });
 
       await createEmailToken(result.id, result.email, ctx.db);

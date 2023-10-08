@@ -13,30 +13,29 @@ import { cn } from "~/utils/cn";
 import type { VariantProps } from "class-variance-authority";
 import type { PropsWithChildren } from "react";
 
-const toastComponentVariants = cva("pointer-events-auto rounded-2xl", {
-  variants: {
-    variant: {
-      neutral: "bg-neutral text-neutral-foreground",
-      success: "bg-success text-success-foreground",
-      error: "bg-error text-error-foreground",
-      info: "bg-info text-info-foreground",
+const toastVariants = cva(
+  "pointer-events-none max-w-md select-none rounded-2xl text-center",
+  {
+    variants: {
+      variant: {
+        neutral: "bg-neutral text-neutral-foreground",
+        success: "bg-success text-success-foreground",
+        error: "bg-error text-error-foreground",
+        info: "bg-info text-info-foreground",
+      },
+    },
+    defaultVariants: {
+      variant: "neutral",
     },
   },
-  defaultVariants: {
-    variant: "neutral",
-  },
-});
+);
 
-type ToastComponentProps = PropsWithChildren<
+type ToastProps = PropsWithChildren<
   {
     visible?: boolean;
-  } & VariantProps<typeof toastComponentVariants>
+  } & VariantProps<typeof toastVariants>
 >;
-const ToastComponent = ({
-  children,
-  variant,
-  visible,
-}: ToastComponentProps) => {
+export const Toast = ({ children, variant, visible }: ToastProps) => {
   const icons = {
     neutral: faTriangleExclamation,
     success: faCircleCheck,
@@ -47,13 +46,18 @@ const ToastComponent = ({
   return (
     <div
       className={cn(
-        toastComponentVariants({ variant }),
+        toastVariants({ variant }),
         visible && "animate-enter",
         !visible && "animate-leave",
       )}
     >
-      <div className="px-6 py-3 text-lg leading-5">
-        <FontAwesomeIcon icon={icons[variant ?? "neutral"]} className="mr-4" />
+      <div className="flex items-center px-6 py-3 text-lg leading-5">
+        <div>
+          <FontAwesomeIcon
+            icon={icons[variant ?? "neutral"]}
+            className="mr-4"
+          />
+        </div>
         {children}
       </div>
     </div>
@@ -63,9 +67,9 @@ const ToastComponent = ({
 const createToastHandler =
   (variant: "error" | "success" | "neutral" | "info") => (message: string) =>
     baseToast.custom((t) => (
-      <ToastComponent variant={variant} visible={t.visible}>
+      <Toast variant={variant} visible={t.visible}>
         {message}
-      </ToastComponent>
+      </Toast>
     ));
 
 const toast = {

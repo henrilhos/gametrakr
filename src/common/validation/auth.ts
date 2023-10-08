@@ -9,7 +9,7 @@ export const signUpSchema = z
   .object({
     username: z
       .string()
-      .min(3, { message: "Nickname must be at least 1 character" })
+      .min(3, { message: "Nickname must be at least 3 characters" })
       .max(24, { message: "Nickname must be not exceed 15 characters" })
       .regex(
         new RegExp(/^[a-zA-Z0-9._]+$/),
@@ -27,10 +27,13 @@ export const signUpSchema = z
         new RegExp(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
         ),
-        "Password must be a combinantion of uppercase and lowercase letters, numbers, and special characters",
+        "Password should include uppercase and lowercase letters, numbers, and special characters",
       )
       .describe("The user password"),
-    confirmPassword: z.string().describe("The user password (again 😁)"),
+    confirmPassword: z
+      .string()
+      .min(8, "Passwords don't match")
+      .describe("The user password (again 😁)"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
