@@ -11,21 +11,35 @@ datasource db {
 }
 
 model User {
-    id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    name          String?
-    username      String   @unique
-    email         String   @unique
-    password      String
-    emailVerified Boolean? @default(false)
-    image         String?
-    createdAt     DateTime @default(now())
-    updatedAt     DateTime @updatedAt
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    name      String?
+    username  String   @unique
+    email     String   @unique
+    password  String
+    verified  Boolean? @default(false)
+    image     String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relation fileds
+    tokens Token[]
 }
 
-model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+model Token {
+    id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    type       TokenType
+    token      String    @unique
+    valid      Boolean   @default(true)
+    expiration DateTime
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
 
-    @@unique([identifier, token])
+    // Relation fields
+    user   User   @relation(fields: [userId], references: [id])
+    userId String @db.Uuid
+}
+
+enum TokenType {
+    EMAIL
+    PASSWORD
 }

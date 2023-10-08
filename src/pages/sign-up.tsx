@@ -33,7 +33,8 @@ const SignUpPage: NextPage = () => {
     async (data: SignUp) => {
       const result = await mutateAsync(data);
       if (result.status === 201) {
-        void router.push("/sign-in");
+        localStorage.setItem("email", data.email);
+        void router.push("/verify");
       }
     },
     [mutateAsync, router],

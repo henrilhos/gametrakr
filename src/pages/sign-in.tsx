@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useRouter } from "next/router";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
@@ -14,6 +15,8 @@ import type { SignIn } from "~/common/validation/auth";
 import type { NextPage } from "next";
 
 const SignInPage: NextPage = () => {
+  const router = useRouter();
+
   const form = useForm<SignIn>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -72,6 +75,7 @@ const SignInPage: NextPage = () => {
               className="mt-2 min-w-full"
               type="button"
               variant="secondary"
+              onClick={() => void router.push("/sign-up")}
             >
               Create an Account
             </Button>

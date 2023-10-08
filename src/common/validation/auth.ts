@@ -25,5 +25,11 @@ export const signUpSchema = z
     path: ["confirmPassword"],
   });
 
+export const verifyAccountSchema = z.object({
+  username: z.string().min(1),
+  token: z.string().min(6).max(6),
+});
+
 export type SignIn = z.infer<typeof signInSchema>;
 export type SignUp = z.infer<typeof signUpSchema>;
+export type VerifyAccount = z.infer<typeof verifyAccountSchema>;

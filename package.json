@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
     "dev": "next dev",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma migrate deploy",
     "start": "next start",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
@@ -33,6 +33,7 @@
     "@trpc/react-query": "^10.40.0",
     "@trpc/server": "^10.40.0",
     "argon2": "^0.31.1",
+    "date-fns": "^2.30.0",
     "next": "^13.5.4",
     "next-auth": "^4.23.2",
     "next-themes": "^0.2.1",
@@ -40,6 +41,7 @@
     "react-dom": "18.2.0",
     "react-email": "1.9.5",
     "react-hook-form": "^7.47.0",
+    "react-verification-input": "^3.3.1",
     "resend": "^1.1.0",
     "superjson": "^1.13.3",
     "zod": "^3.22.4"
