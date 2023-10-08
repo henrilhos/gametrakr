@@ -6,7 +6,7 @@
     "build": "next build",
     "db:migrate": "prisma migrate dev",
     "dev": "next dev",
-    "postinstall": "prisma migrate deploy",
+    "postinstall": "prisma generate && prisma migrate deploy",
     "start": "next start",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
