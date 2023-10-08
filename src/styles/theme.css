@@ -33,6 +33,18 @@
 
     --heading: var(--yellow-200);
 
+    --error: var(--red-100);
+    --error-foreground: var(--red-400);
+
+    --success: var(--green-100);
+    --success-foreground: var(--green-400);
+
+    --neutral: var(--yellow-100);
+    --neutral-foreground: var(--yellow-400);
+
+    --info: var(--blue-100);
+    --info-foreground: var(--blue-400);
+
     --radius: 0.5rem;
   }
 
@@ -65,6 +77,18 @@
     --input: var(--white);
     --label: var(--gray-200);
     --ring: var(--purple-400);
+
+    --error: var(--red-700);
+    --error-foreground: var(--red-300);
+
+    --success: var(--green-700);
+    --success-foreground: var(--green-300);
+
+    --neutral: var(--yellow-700);
+    --neutral-foreground: var(--yellow-300);
+
+    --info: var(--blue-700);
+    --info-foreground: var(--blue-300);
 
     --heading: var(--yellow-700);
   }

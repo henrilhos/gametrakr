@@ -39,6 +39,22 @@ export default {
           DEFAULT: "rgb(var(--destructive))",
           foreground: "rgb(var(--destructive-foreground))",
         },
+        error: {
+          DEFAULT: "rgb(var(--error))",
+          foreground: "rgb(var(--error-foreground))",
+        },
+        success: {
+          DEFAULT: "rgb(var(--success))",
+          foreground: "rgb(var(--success-foreground))",
+        },
+        neutral: {
+          DEFAULT: "rgb(var(--neutral))",
+          foreground: "rgb(var(--neutral-foreground))",
+        },
+        info: {
+          DEFAULT: "rgb(var(--info))",
+          foreground: "rgb(var(--info-foreground))",
+        },
         border: "rgb(var(--border))",
         input: "rgb(var(--input))",
         label: "rgb(var(--label))",
@@ -64,8 +80,23 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        enter: {
+          "0%": { transform: "scale(0.9)", opacity: "0" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        leave: {
+          "0%": { transform: "scale(1)", opacity: "1" },
+          "100%": { transform: "scale(0.9)", opacity: "0" },
+        },
+        "slide-in": {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(0)" },
+        },
       },
       animation: {
+        enter: "enter 200ms ease-out",
+        leave: "leave 150ms ease-in forwards",
+        "slide-in": "slide-in 1.2s cubic-bezier(.41,.73,.51,1.02)",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },

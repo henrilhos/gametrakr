@@ -2,6 +2,7 @@ import Head from "next/head";
 
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "react-hot-toast";
 
 import { api } from "~/utils/api";
 
@@ -24,6 +25,7 @@ const GametrakrApp: AppType<{ session: Session | null }> = ({
           <meta name="description" content="🎮" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
+        <Toaster position="bottom-center" />
 
         <Component {...pageProps} />
       </ThemeProvider>

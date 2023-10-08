@@ -65,6 +65,7 @@ const createEmailToken = async (
 
 export const authRouter = createTRPCRouter({
   signUp: publicProcedure
+    .meta({ description: "Create a new user" })
     .input(signUpSchema)
     .mutation(async ({ ctx, input }) => {
       const { email, password, username, confirmPassword } = input;
@@ -78,7 +79,10 @@ export const authRouter = createTRPCRouter({
 
       const exists = await ctx.db.user.findFirst({
         where: {
-          OR: [{ email }, { username }],
+          OR: [
+            { email: { equals: email, mode: "insensitive" } },
+            { username: { equals: username, mode: "insensitive" } },
+          ],
         },
       });
 
@@ -92,7 +96,11 @@ export const authRouter = createTRPCRouter({
       const hashedPassword = await hash(password);
 
       const result = await ctx.db.user.create({
-        data: { username, email, password: hashedPassword },
+        data: {
+          username,
+          email: email.toLowerCase(),
+          password: hashedPassword,
+        },
       });
 
       await createEmailToken(result.id, result.email, ctx.db);
@@ -104,6 +112,7 @@ export const authRouter = createTRPCRouter({
       };
     }),
   validateAccount: publicProcedure
+    .meta({ description: "Validate user account" })
     .input(verifyAccountSchema)
     .mutation(async ({ ctx, input }) => {
       const { token, email } = input;
