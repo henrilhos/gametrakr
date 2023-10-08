@@ -21,6 +21,8 @@ const config = {
     "^(?!.*[.]css$)[./].*$",
     ".css$",
   ],
+  tailwindAttributes: ["classes"],
+  tailwindFunctions: ["clsx", "cn", "cva", "twMerge"],
 };
 
 export default config;

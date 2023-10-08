@@ -27,13 +27,14 @@ const SignUpPage: NextPage = () => {
     },
   });
 
-  const { mutateAsync } = api.auth.signup.useMutation();
+  const { mutateAsync } = api.auth.signUp.useMutation();
 
   const onSubmit = useCallback(
     async (data: SignUp) => {
       const result = await mutateAsync(data);
       if (result.status === 201) {
-        void router.push("/sign-in");
+        localStorage.setItem("email", data.email);
+        void router.push("/verify");
       }
     },
     [mutateAsync, router],
