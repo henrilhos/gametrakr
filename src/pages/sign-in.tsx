@@ -1,4 +1,5 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,16 +7,29 @@ import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 
 import { signInSchema } from "~/common/validation/auth";
+import { AuthPageLayout, DialogLayout } from "~/components/layout";
 import { Button } from "~/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { AuthPageLayout } from "../components/layout";
+import { LoadingSpinner } from "~/components/ui/loading";
+import toast from "~/components/ui/toast";
 
 import type { SignIn } from "~/common/validation/auth";
 import type { NextPage } from "next";
 
 const SignInPage: NextPage = () => {
+  const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
   const router = useRouter();
+
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
+  const error = searchParams.get("error");
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Invalid credentials");
+    }
+  }, [error]);
 
   const form = useForm<SignIn>({
     resolver: zodResolver(signInSchema),
@@ -25,9 +39,29 @@ const SignInPage: NextPage = () => {
     },
   });
 
-  const onSubmit = useCallback(async (data: SignIn) => {
-    await signIn("credentials", { ...data, callbackUrl: "/" });
-  }, []);
+  const onSubmit = useCallback(
+    async (data: SignIn) => {
+      setLoading(true);
+      try {
+        await signIn("credentials", { ...data, callbackUrl });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [callbackUrl],
+  );
+
+  if (loading) {
+    return (
+      <DialogLayout
+        className={{
+          card: "flex flex-col justify-center md:min-h-[589px]",
+        }}
+      >
+        <LoadingSpinner size={48} />
+      </DialogLayout>
+    );
+  }
 
   return (
     <AuthPageLayout title="Join the community">
