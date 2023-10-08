@@ -25,17 +25,10 @@ export const PageLayout = (props: PropsWithChildren) => {
   );
 };
 
-type AuthPageLayoutProps = PropsWithChildren<{
-  title: string;
+type DialogLayoutProps = PropsWithChildren<{
   className?: { card?: string };
 }>;
-export const AuthPageLayout = ({
-  children,
-  title,
-  className,
-}: AuthPageLayoutProps) => {
-  const router = useRouter();
-
+export const DialogLayout = ({ className, children }: DialogLayoutProps) => {
   return (
     <main className="flex min-h-screen min-w-full items-center justify-center bg-foreground/20 backdrop-blur-sm">
       <Card
@@ -44,28 +37,48 @@ export const AuthPageLayout = ({
           className?.card,
         )}
       >
-        <div>
-          <CardHeader>
-            <div className="text-left">
-              <button
-                type="button"
-                className="inline-flex text-lg font-bold leading-5"
-                onClick={() => void router.back()}
-              >
-                <FontAwesomeIcon icon={faCaretLeft} className="mr-1.5" />
-                <div>BACK</div>
-              </button>
-            </div>
-            <CardTitle className="mt-6 text-left">{title}</CardTitle>
-          </CardHeader>
-
-          <CardContent>{children}</CardContent>
-        </div>
-
-        <CardFooter>
-          <Heading size="sm">gametrakr</Heading>
-        </CardFooter>
+        {children}
       </Card>
     </main>
+  );
+};
+
+type AuthPageLayoutProps = PropsWithChildren<
+  {
+    title: string;
+  } & DialogLayoutProps
+>;
+export const AuthPageLayout = ({
+  children,
+  title,
+  className,
+}: AuthPageLayoutProps) => {
+  const router = useRouter();
+
+  return (
+    <DialogLayout className={className}>
+      <div>
+        <CardHeader>
+          <div className="text-left">
+            <button
+              type="button"
+              className="inline-flex text-lg font-bold leading-5"
+              onClick={() => void router.back()}
+            >
+              <FontAwesomeIcon icon={faCaretLeft} className="mr-1.5" />
+              <div>BACK</div>
+            </button>
+          </div>
+
+          <CardTitle className="mt-6 text-left">{title}</CardTitle>
+        </CardHeader>
+
+        <CardContent>{children}</CardContent>
+      </div>
+
+      <CardFooter>
+        <Heading size="sm">gametrakr</Heading>
+      </CardFooter>
+    </DialogLayout>
   );
 };

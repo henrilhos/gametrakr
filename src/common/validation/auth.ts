@@ -10,18 +10,30 @@ export const signUpSchema = z
     username: z
       .string()
       .min(3, { message: "Nickname must be at least 3 characters" })
-      .max(50, { message: "Nickname must be not exceed 50 characters" })
+      .max(24, { message: "Nickname must be not exceed 15 characters" })
+      .regex(
+        new RegExp(/^[a-zA-Z0-9._]+$/),
+        "Nickname can only have alphanumeric characters, underscores, and dots",
+      )
       .describe("The user nickname"),
     email: z
       .string()
       .email({ message: "Invalid email" })
-      .min(5, { message: "Email must be at least 5 characters" })
       .describe("The user email"),
     password: z
       .string()
       .min(8, { message: "Password must be at least 8 characters" })
+      .regex(
+        new RegExp(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+        ),
+        "Password should include uppercase and lowercase letters, numbers, and special characters",
+      )
       .describe("The user password"),
-    confirmPassword: z.string().describe("The user password (again 😁)"),
+    confirmPassword: z
+      .string()
+      .min(8, "Passwords don't match")
+      .describe("The user password (again 😁)"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",

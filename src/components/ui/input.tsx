@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -12,14 +12,9 @@ type InputProps = {
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, label, state, ...props }, ref) => {
-    useEffect(() => {
-      if (state?.error?.message) {
-        console.log(state?.error?.message);
-      }
-    }, [state?.error?.message]);
-
     return (
       <div ref={ref} className={clsx("relative w-full")}>
+        {/* {JSON.stringify(state)} */}
         <input
           {...props}
           type={type}
