@@ -95,7 +95,7 @@ export const authRouter = createTRPCRouter({
         data: { username, email, password: hashedPassword },
       });
 
-      await createEmailToken(result.id, result.email, ctx.db);
+      // await createEmailToken(result.id, result.email, ctx.db);
 
       return {
         status: 201,
