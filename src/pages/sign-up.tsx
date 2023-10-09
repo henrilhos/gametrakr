@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -21,7 +20,7 @@ import type { FieldErrors } from "react-hook-form";
 
 const SignUpPage: NextPage = () => {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const [verify, setVerify] = useState(false);
   const form = useForm<SignUp>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -32,23 +31,26 @@ const SignUpPage: NextPage = () => {
     },
   });
 
-  const { mutateAsync } = api.auth.signUp.useMutation();
+  const { mutateAsync: signUpMutationAsync } = api.auth.signUp.useMutation();
+  const { mutateAsync: resendEmailMutationAsync } =
+    api.auth.resendEmailVerification.useMutation();
 
   const onValid = useCallback(
     async (data: SignUp) => {
       setLoading(true);
 
       try {
-        const result = await mutateAsync(data);
+        const result = await signUpMutationAsync(data);
         if (result.status === 201) {
           localStorage.setItem("email", data.email);
-          void router.push("/verify");
+          setVerify(true);
+          setLoading(false);
         } else {
           setLoading(false);
           toast.error(result.message);
         }
-      } catch (e) {
-        const message = (e as TRPCError).message ?? "";
+      } catch (err) {
+        const message = (err as TRPCError).message ?? "";
 
         if (message === "User already exists") {
           form.setError("username", { message });
@@ -59,7 +61,7 @@ const SignUpPage: NextPage = () => {
         toast.error(message);
       }
     },
-    [mutateAsync, router, form],
+    [signUpMutationAsync, form],
   );
 
   const onInvalid = useCallback((data: FieldErrors<SignUp>) => {
@@ -78,6 +80,19 @@ const SignUpPage: NextPage = () => {
     }
   }, []);
 
+  const resendEmail = useCallback(async () => {
+    setLoading(true);
+    const email = form.getValues("email");
+
+    try {
+      await resendEmailMutationAsync({ email });
+      setLoading(false);
+      toast.success("Email resent successfully");
+    } catch (err) {
+      console.log(err);
+    }
+  }, [form, resendEmailMutationAsync]);
+
   if (loading) {
     return (
       <DialogLayout
@@ -90,8 +105,36 @@ const SignUpPage: NextPage = () => {
     );
   }
 
+  if (verify) {
+    return (
+      <AuthPageLayout
+        title="Verify your account"
+        className={{ card: "md:min-h-[706px]" }}
+      >
+        <div className="text-left text-lg leading-6">
+          We&apos;ve just sent a verification link to{" "}
+          <span className="font-bold">{form.getValues("email")}</span>. Please
+          check your inbox.
+        </div>
+
+        <div className="mt-4 text-left">
+          <button
+            type="button"
+            className="text-lg leading-5 hover:underline"
+            onClick={() => void resendEmail()}
+          >
+            RESEND EMAIL
+          </button>
+        </div>
+      </AuthPageLayout>
+    );
+  }
+
   return (
-    <AuthPageLayout title="Join the community">
+    <AuthPageLayout
+      title="Join the community"
+      className={{ card: "md:min-h-[706px]" }}
+    >
       <Form {...form}>
         <form
           onSubmit={(event) =>

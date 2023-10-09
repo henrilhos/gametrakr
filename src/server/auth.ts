@@ -6,8 +6,8 @@ import { getServerSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 import { signInSchema } from "~/common/validation/auth";
+import { env } from "~/env.mjs";
 import { db } from "~/server/db";
-import { env } from "../env.mjs";
 
 import type { DefaultSession, DefaultUser, NextAuthOptions } from "next-auth";
 

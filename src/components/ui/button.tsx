@@ -52,7 +52,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, align, className }))}
+        className={cn(
+          buttonVariants({ variant, size, align, className }),
+          props.disabled && "bg-destructive",
+        )}
         ref={ref}
         {...props}
       />

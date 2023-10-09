@@ -42,11 +42,7 @@ const SignInPage: NextPage = () => {
   const onSubmit = useCallback(
     async (data: SignIn) => {
       setLoading(true);
-      try {
-        await signIn("credentials", { ...data, callbackUrl });
-      } catch (error) {
-        console.log(error);
-      }
+      await signIn("credentials", { ...data, callbackUrl });
     },
     [callbackUrl],
   );
@@ -96,7 +92,12 @@ const SignInPage: NextPage = () => {
             {/* TODO: add Forgot your password link */}
           </div>
 
-          <Button type="submit" className="min-w-full" align="center">
+          <Button
+            type="submit"
+            className="min-w-full"
+            align="center"
+            disabled={loading}
+          >
             Sign in
           </Button>
 
