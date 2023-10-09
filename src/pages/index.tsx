@@ -12,15 +12,15 @@ import { Container } from "~/components/ui/container";
 import type { NextPage } from "next";
 
 const HomePage: NextPage = () => {
-  let isSmallDevice = false;
-  let height = 0;
+  // let isSmallDevice = false;
+  // let height = 0;
 
-  if (typeof window !== "undefined") {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    height = useWindowSize().height ?? 0;
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    isSmallDevice = useMediaQuery("only screen and (max-width: 768px)");
-  }
+  // if (typeof window !== "undefined") {
+  //   // eslint-disable-next-line react-hooks/rules-of-hooks
+  //   height = useWindowSize().height ?? 0;
+  //   // eslint-disable-next-line react-hooks/rules-of-hooks
+  //   isSmallDevice = useMediaQuery("only screen and (max-width: 768px)");
+  // }
 
   const router = useRouter();
   const { data: sessionData } = useSession();
@@ -33,12 +33,12 @@ const HomePage: NextPage = () => {
     <PageLayout>
       <Container>
         <Card
-          className="flex h-fit max-w-full flex-col justify-between rounded-2xl bg-cover bg-center bg-no-repeat"
+          className="full-height flex h-fit max-w-full flex-col justify-between rounded-2xl bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url(https://i.imgur.com/bNNed9d.png)",
-            minHeight: `calc(${height}px - ${
-              isSmallDevice ? "4.5" : "11.25"
-            }rem)`,
+            // minHeight: `calc(${height}px - ${
+            //   isSmallDevice ? "4.5" : "11.25"
+            // }rem)`,
           }}
         >
           {/* TODO: add link to game page */}
