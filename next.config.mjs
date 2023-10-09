@@ -2,7 +2,7 @@
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
  * for Docker builds.
  */
-await import("./src/env.mjs");
+import { env } from "./src/env.mjs";
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -19,4 +19,18 @@ const config = {
   },
 };
 
-export default config;
+/**
+ * @param {string} _phase
+ * @param {{ _defaultConfig: import('next').NextConfig }} _options
+ */
+const configWithPlugins = async (_phase, { _defaultConfig }) => {
+  /* Dynamically import plugins from devDependencies to reduce bundle size */
+
+  const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
+    enabled: env.ANALYZE,
+  });
+
+  return withBundleAnalyzer(config);
+};
+
+export default configWithPlugins;

@@ -3,16 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
-    "db:migrate": "prisma migrate dev",
+    "--RUN": "",
+    "build": "prisma migrate deploy && next build",
+    "build:analyze": "ANALYZE=true next build",
     "dev": "next dev",
-    "postinstall": "prisma generate && prisma migrate deploy",
     "start": "next start",
+    "--PRISMA": "",
+    "db:migrate": "prisma migrate dev",
+    "postinstall": "prisma generate",
+    "--CHECK": "",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "typecheck": "tsc --noEmit",
+    "--TEST": "",
+    "--EMAIL": "",
     "email": "email dev"
   },
   "dependencies": {
@@ -51,6 +57,7 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
+    "@next/bundle-analyzer": "^13.5.4",
     "@tailwindcss/forms": "^0.5.6",
     "@tailwindcss/typography": "^0.5.10",
     "@types/eslint": "^8.44.3",
