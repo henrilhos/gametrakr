@@ -2,7 +2,7 @@ import { renderTrpcPanel } from "trpc-panel";
 
 import { env } from "~/env.mjs";
 import { appRouter } from "~/server/api/root";
-import { getBaseUrl } from "~/utils/api";
+import { getBaseSsrUrl } from "~/utils/api";
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -15,7 +15,7 @@ const handler = (_: NextApiRequest, res: NextApiResponse) => {
 
   res.status(200).send(
     renderTrpcPanel(appRouter, {
-      url: `${getBaseUrl()}/api/trpc`,
+      url: `${getBaseSsrUrl()}/api/trpc`,
       transformer: "superjson",
     }),
   );

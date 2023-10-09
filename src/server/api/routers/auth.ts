@@ -12,7 +12,7 @@ import {
 import ConfirmEmail from "~/emails/confirm-email";
 import { env } from "~/env.mjs";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { getBaseUrl } from "~/utils/api";
+import { getBaseUrl } from "~/utils/get-base-url";
 
 import type { db as prismaDB } from "~/server/db";
 
