@@ -154,6 +154,20 @@ export const authRouter = createTRPCRouter({
         include: { user: true },
       });
 
+      if (!token) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Token not found",
+        });
+      }
+
+      if (token?.user.verified) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User already verified",
+        });
+      }
+
       if (!token?.valid) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
