@@ -26,13 +26,11 @@ model User {
 }
 
 model Token {
-    id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    type       TokenType
-    token      String    @unique
-    valid      Boolean   @default(true)
-    expiration DateTime
-    createdAt  DateTime  @default(now())
-    updatedAt  DateTime  @updatedAt
+    id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    type      TokenType
+    valid     Boolean   @default(true)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
 
     // Relation fields
     user   User   @relation(fields: [userId], references: [id])
