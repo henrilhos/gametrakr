@@ -1,28 +1,30 @@
 import { TokenType } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { hash } from "argon2";
-import { add } from "date-fns";
 import { Resend } from "resend";
 import { randomUUID } from "crypto";
 
-import { signUpSchema, verifyAccountSchema } from "~/common/validation/auth";
+import {
+  resendEmailSchema,
+  signUpSchema,
+  verifyAccountSchema,
+} from "~/common/validation/auth";
 import ConfirmEmail from "~/emails/confirm-email";
 import { env } from "~/env.mjs";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { getBaseUrl } from "~/utils/api";
 
 import type { db as prismaDB } from "~/server/db";
 
-const EMAIL_TOKEN_EXPIRATION_MINUTES = 10;
-
 const resend = new Resend(env.RESEND_API_KEY);
 
-const sendVerificationEmail = async (email: string, token: string) => {
+const sendVerificationEmail = async (email: string, verifyUrl: string) => {
   try {
     const data = await resend.emails.send({
       from: `gametrakr <${env.RESEND_EMAIL}>`,
       to: [email],
       subject: "Confirm your gametrakr account",
-      react: ConfirmEmail({ validationCode: token }),
+      react: ConfirmEmail({ verifyUrl }),
       headers: {
         "X-Entity-Ref-ID": randomUUID(),
       },
@@ -43,22 +45,31 @@ const createEmailToken = async (
   email: string,
   db: typeof prismaDB,
 ) => {
-  const validationToken = generateToken();
-  const expirationDate = add(new Date(), {
-    minutes: EMAIL_TOKEN_EXPIRATION_MINUTES,
-  });
-
   try {
-    await db.token.create({
+    await db.token.updateMany({
+      where: {
+        userId: id,
+        type: TokenType.EMAIL,
+      },
       data: {
-        expiration: expirationDate,
-        token: validationToken,
+        valid: false,
+      },
+    });
+
+    const token = await db.token.create({
+      data: {
         type: TokenType.EMAIL,
         userId: id,
       },
     });
-    await sendVerificationEmail(email, validationToken);
+
+    const verifyUrl = `${getBaseUrl()}/verify?token=${token.id}&type=${
+      token.type
+    }`;
+
+    await sendVerificationEmail(email, verifyUrl);
   } catch (error) {
+    console.log(error);
     return { status: "error", message: error };
   }
 };
@@ -111,61 +122,58 @@ export const authRouter = createTRPCRouter({
         result: result.id,
       };
     }),
+  resendEmailVerification: publicProcedure
+    .meta({ description: "Resend verification email link" })
+    .input(resendEmailSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { email } = input;
+
+      const user = await ctx.db.user.findFirst({
+        where: { email: { equals: email, mode: "insensitive" } },
+      });
+
+      if (!user) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "User not found",
+        });
+      }
+
+      await createEmailToken(user.id, user.email, ctx.db);
+
+      return { status: 200, message: "Email sent successfully" };
+    }),
   validateAccount: publicProcedure
     .meta({ description: "Validate user account" })
     .input(verifyAccountSchema)
     .mutation(async ({ ctx, input }) => {
-      const { token, email } = input;
+      const { id, type } = input;
 
-      const user = await ctx.db.user.findFirst({ where: { email } });
-
-      if (!user) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "User does not exists",
-        });
-      }
-
-      const emailToken = await ctx.db.token.findUnique({
-        where: { token },
+      const token = await ctx.db.token.findFirst({
+        where: { AND: [{ id }, { type }] },
         include: { user: true },
       });
 
-      if (!emailToken?.valid) {
+      if (!token?.valid) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "Code expired",
+          message: "Invalid token",
         });
-      }
-
-      if (emailToken.expiration < new Date()) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Code expired",
-        });
-      }
-
-      if (emailToken.user.email !== user.email) {
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Code invalid" });
       }
 
       await ctx.db.user.update({
-        where: { id: user.id },
+        where: { id: token.user.id },
         data: { verified: true },
       });
+
       await ctx.db.token.update({
-        where: { id: emailToken.id },
+        where: { id: token.id },
         data: { valid: false },
       });
 
       return {
         status: 200,
         message: "Account verified successfully",
-        data: true,
       };
     }),
 });
-
-const generateToken = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-};

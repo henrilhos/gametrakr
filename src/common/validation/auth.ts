@@ -1,3 +1,4 @@
+import { TokenType } from "@prisma/client";
 import { z } from "zod";
 
 export const signInSchema = z.object({
@@ -41,10 +42,15 @@ export const signUpSchema = z
   });
 
 export const verifyAccountSchema = z.object({
-  email: z.string().min(1).describe("User email for validation"),
-  token: z.string().min(6).max(6).describe("Token sent for user email"),
+  id: z.string().uuid().describe("Token id"),
+  type: z.nativeEnum(TokenType).describe("Token type"),
+});
+
+export const resendEmailSchema = z.object({
+  email: z.string().email().describe("User email"),
 });
 
 export type SignIn = z.infer<typeof signInSchema>;
 export type SignUp = z.infer<typeof signUpSchema>;
 export type VerifyAccount = z.infer<typeof verifyAccountSchema>;
+export type ResendEmail = z.infer<typeof resendEmailSchema>;

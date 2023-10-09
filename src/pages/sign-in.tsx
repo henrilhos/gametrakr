@@ -42,11 +42,7 @@ const SignInPage: NextPage = () => {
   const onSubmit = useCallback(
     async (data: SignIn) => {
       setLoading(true);
-      try {
-        await signIn("credentials", { ...data, callbackUrl });
-      } catch (error) {
-        console.log(error);
-      }
+      await signIn("credentials", { ...data, callbackUrl });
     },
     [callbackUrl],
   );

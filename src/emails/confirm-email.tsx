@@ -2,6 +2,7 @@ import * as React from "react";
 
 import {
   Body,
+  Button,
   Container,
   Head,
   Heading,
@@ -13,9 +14,11 @@ import {
 } from "@react-email/components";
 
 type ConfirmEmailProps = {
-  validationCode?: string;
+  verifyUrl?: string;
 };
-const ConfirmEmail = ({ validationCode = "123456" }: ConfirmEmailProps) => {
+const ConfirmEmail = ({
+  verifyUrl = "https://google.com",
+}: ConfirmEmailProps) => {
   return (
     <Html>
       <Head />
@@ -26,15 +29,19 @@ const ConfirmEmail = ({ validationCode = "123456" }: ConfirmEmailProps) => {
             <Heading className="my-[30px] p-0 text-4xl font-bold text-[#1d1c1d]">
               Confirm your account
             </Heading>
+
             <Text className="mb-[30px] text-xl">
-              Your confirmation code is below - enter it in your open browser
-              window and we&apos;ll verify your account.
+              Thank you for signing up for gametrakr. To confirm your acount,
+              please follow the button below.
             </Text>
 
-            <Section className="mb-[30px] mr-[50px] rounded bg-[#F5F4F5] px-[23px] py-[43px]">
-              <Text className="text-center align-middle text-3xl">
-                {validationCode}
-              </Text>
+            <Section className="text-center">
+              <Button
+                className="min-w-[10rem] items-center rounded-2xl bg-[#f2a100] px-5 py-3 text-xl font-bold leading-6 text-[#121212]"
+                href={verifyUrl}
+              >
+                Confirm account
+              </Button>
             </Section>
 
             <Text className="text-sm leading-6 text-black">
@@ -42,11 +49,9 @@ const ConfirmEmail = ({ validationCode = "123456" }: ConfirmEmailProps) => {
               worry about - you can safely ignore it.
             </Text>
 
-            <Section>
-              <Text className="mb-[50px] text-left text-xs text-[#b7b7b7]">
-                ©2023 gametrakr
-              </Text>
-            </Section>
+            <Text className="mb-[50px] text-left text-xs text-[#b7b7b7]">
+              ©2023 gametrakr
+            </Text>
           </Container>
         </Body>
       </Tailwind>
