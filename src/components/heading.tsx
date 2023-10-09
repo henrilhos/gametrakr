@@ -21,9 +21,9 @@ const headingVariants = cva("", {
 const spanVariants = cva("bg-heading px-1 font-apfel font-bold", {
   variants: {
     size: {
-      sm: "text-3xl",
-      md: "text-4xl",
-      lg: "text-5xl",
+      sm: "text-2xl md:text-3xl",
+      md: "text-3xl md:text-4xl",
+      lg: "text-4xl md:text-5xl",
     },
   },
   defaultVariants: {
