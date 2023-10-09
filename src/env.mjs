@@ -1,12 +1,17 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
+const toggle = z
+  .enum(["true", "false", "0", "1"])
+  .transform((v) => v === "true" || v === "1");
+
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars.
    */
   server: {
+    ANALYZE: toggle.default("false"),
     DATABASE_URL: z
       .string()
       .url()
@@ -60,6 +65,7 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    ANALYZE: process.env.ANALYZE,
     DATABASE_URL: process.env.DATABASE_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_EMAIL: process.env.RESEND_EMAIL,
