@@ -117,7 +117,7 @@ const SignUpPage: NextPage = () => {
           check your inbox.
         </div>
 
-        <div className="mt-2 text-right">
+        <div className="mt-4 text-left">
           <button
             type="button"
             className="text-lg leading-5 hover:underline"
