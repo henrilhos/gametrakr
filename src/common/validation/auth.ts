@@ -2,7 +2,7 @@ import { TokenType } from "@prisma/client";
 import { z } from "zod";
 
 export const signInSchema = z.object({
-  username: z.string().describe("User email or nickname"),
+  credential: z.string().describe("User email or nickname"),
   password: z.string().describe("User password"),
 });
 

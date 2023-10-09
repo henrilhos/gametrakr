@@ -84,14 +84,14 @@ export const authOptions: NextAuthOptions = {
       },
       authorize: async (credentials) => {
         try {
-          const { username, password } =
+          const { credential, password } =
             await signInSchema.parseAsync(credentials);
 
           const result = await db.user.findFirst({
             where: {
               OR: [
-                { email: { equals: username } },
-                { username: { equals: username } },
+                { email: { equals: credential, mode: "insensitive" } },
+                { username: { equals: credential, mode: "insensitive" } },
               ],
             },
           });

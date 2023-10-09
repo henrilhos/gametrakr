@@ -34,7 +34,7 @@ const SignInPage: NextPage = () => {
   const form = useForm<SignIn>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      username: "",
+      credential: "",
       password: "",
     },
   });
@@ -69,7 +69,7 @@ const SignInPage: NextPage = () => {
           <div className="space-y-6">
             <FormField
               control={form.control}
-              name="username"
+              name="credential"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -102,7 +102,7 @@ const SignInPage: NextPage = () => {
           </Button>
 
           <div>
-            <div className="text-lg leading-6 text-muted-foreground">
+            <div className="text-muted-foreground text-lg leading-6">
               New on gametrakr?
             </div>
             <Button
