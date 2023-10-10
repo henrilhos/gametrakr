@@ -90,7 +90,9 @@ const SignInPage: NextPage = () => {
                         <button
                           className="font-bold hover:underline"
                           type="button"
-                          onClick={() => void router.push("/forgot-password")}
+                          onClick={() =>
+                            void router.push("/auth/forgot-password")
+                          }
                         >
                           Forgot your password?
                         </button>

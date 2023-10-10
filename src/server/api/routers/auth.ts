@@ -5,74 +5,91 @@ import { Resend } from "resend";
 import { randomUUID } from "crypto";
 
 import {
+  forgotPasswordSchema,
   resendEmailSchema,
   signUpSchema,
   verifyAccountSchema,
 } from "~/common/validation/auth";
-import ConfirmEmail from "~/emails/confirm-email";
+import ConfirmAccount from "~/emails/confirm-account";
+import ResetPassword from "~/emails/reset-password";
 import { env } from "~/env.mjs";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { getBaseUrl } from "~/utils/get-base-url";
 
+import type { User } from "@prisma/client";
 import type { db as prismaDB } from "~/server/db";
 
 const resend = new Resend(env.RESEND_API_KEY);
 
-const sendVerificationEmail = async (email: string, verifyUrl: string) => {
+type SendEmailProps = {
+  email: string;
+  type: TokenType;
+  verifyUrl: string;
+};
+const sendEmail = async ({ email, type, verifyUrl }: SendEmailProps) => {
   try {
+    const subject =
+      type === "EMAIL"
+        ? "Confirm your gametrakr account"
+        : "Reset your gametrakr password";
+    const react = type === "EMAIL" ? ConfirmAccount : ResetPassword;
     const data = await resend.emails.send({
       from: `gametrakr <${env.RESEND_EMAIL}>`,
       to: [email],
-      subject: "Confirm your gametrakr account",
-      react: ConfirmEmail({ verifyUrl }),
-      headers: {
-        "X-Entity-Ref-ID": randomUUID(),
-      },
+      subject,
+      react: react({ href: verifyUrl }),
+      headers: { "X-Entity-Ref-ID": randomUUID() },
     });
-
-    console.log("data", data);
 
     return data;
-  } catch (error) {
-    console.log("error", error);
-
-    return error;
+  } catch (err) {
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Unable to send the email",
+    });
   }
 };
 
-const createEmailToken = async (
-  id: string,
-  email: string,
-  db: typeof prismaDB,
-) => {
+type CreateTokenProps = {
+  user: User;
+  db: typeof prismaDB;
+  type: TokenType;
+};
+const createAndSendToken = async ({ user, db, type }: CreateTokenProps) => {
   try {
+    // Invalidate existing tokens
     await db.token.updateMany({
-      where: {
-        userId: id,
-        type: TokenType.EMAIL,
-      },
-      data: {
-        valid: false,
-      },
+      where: { userId: user.id, type },
+      data: { valid: false },
     });
 
-    const token = await db.token.create({
-      data: {
-        type: TokenType.EMAIL,
-        userId: id,
-      },
-    });
+    const token = await db.token.create({ data: { userId: user.id, type } });
 
-    const verifyUrl = `${getBaseUrl()}/verify?token=${token.id}&type=${
-      token.type
-    }`;
+    const url =
+      type === TokenType.EMAIL
+        ? `${getBaseUrl()}/auth/confirm-account`
+        : `${getBaseUrl()}/auth/reset-password`;
+    const verifyUrl = `${url}?token=${token.id}&email=${user.email}`;
 
-    await sendVerificationEmail(email, verifyUrl);
+    await sendEmail({ email: user.email, type, verifyUrl });
   } catch (error) {
-    console.log(error);
-    return { status: "error", message: error };
+    throw error;
   }
 };
+
+const findUserByEmailOrUsername = (
+  email: string,
+  username: string,
+  db: typeof prismaDB,
+) =>
+  db.user.findFirst({
+    where: {
+      OR: [
+        { email: { equals: email, mode: "insensitive" } },
+        { username: { equals: username, mode: "insensitive" } },
+      ],
+    },
+  });
 
 export const authRouter = createTRPCRouter({
   signUp: publicProcedure
@@ -88,14 +105,7 @@ export const authRouter = createTRPCRouter({
         });
       }
 
-      const exists = await ctx.db.user.findFirst({
-        where: {
-          OR: [
-            { email: { equals: email, mode: "insensitive" } },
-            { username: { equals: username, mode: "insensitive" } },
-          ],
-        },
-      });
+      const exists = await findUserByEmailOrUsername(email, username, ctx.db);
 
       if (exists) {
         throw new TRPCError({
@@ -114,12 +124,15 @@ export const authRouter = createTRPCRouter({
         },
       });
 
-      await createEmailToken(result.id, result.email, ctx.db);
+      await createAndSendToken({
+        user: result,
+        db: ctx.db,
+        type: TokenType.EMAIL,
+      });
 
       return {
-        status: 201,
         message: "User created successfully",
-        result: result.id,
+        data: result.id,
       };
     }),
   resendEmailVerification: publicProcedure
@@ -139,9 +152,13 @@ export const authRouter = createTRPCRouter({
         });
       }
 
-      await createEmailToken(user.id, user.email, ctx.db);
+      await createAndSendToken({
+        user,
+        db: ctx.db,
+        type: TokenType.EMAIL,
+      });
 
-      return { status: 200, message: "Email sent successfully" };
+      return { message: "Email sent successfully" };
     }),
   validateAccount: publicProcedure
     .meta({ description: "Validate user account" })
@@ -186,8 +203,37 @@ export const authRouter = createTRPCRouter({
       });
 
       return {
-        status: 200,
         message: "Account verified successfully",
       };
+    }),
+  forgotPassword: publicProcedure
+    .meta({
+      description: "Send reset passwork link",
+    })
+    .input(forgotPasswordSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { credential } = input;
+
+      try {
+        const user = await findUserByEmailOrUsername(
+          credential,
+          credential,
+          ctx.db,
+        );
+
+        if (!user) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+        }
+
+        await createAndSendToken({
+          user,
+          db: ctx.db,
+          type: TokenType.PASSWORD,
+        });
+
+        return { message: "Email sent successfully" };
+      } catch (error) {
+        throw error;
+      }
     }),
 });
