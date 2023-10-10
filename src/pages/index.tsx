@@ -57,7 +57,7 @@ const HomePage: NextPage = () => {
                   <Button
                     size="lg"
                     align="center"
-                    onClick={() => void router.push("/sign-up")}
+                    onClick={() => void router.push("/auth/sign-up")}
                   >
                     Get started
                   </Button>

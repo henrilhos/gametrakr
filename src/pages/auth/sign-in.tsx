@@ -84,25 +84,30 @@ const SignInPage: NextPage = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input label="Password" type="password" {...field} />
+                    <>
+                      <Input label="Password" type="password" {...field} />
+                      <div className="text-right">
+                        <button
+                          className="font-bold hover:underline"
+                          type="button"
+                          onClick={() => void router.push("/forgot-password")}
+                        >
+                          Forgot your password?
+                        </button>
+                      </div>
+                    </>
                   </FormControl>
                 </FormItem>
               )}
             />
-            {/* TODO: add Forgot your password link */}
           </div>
 
-          <Button
-            type="submit"
-            className="min-w-full"
-            align="center"
-            disabled={loading}
-          >
+          <Button type="submit" className="min-w-full" align="center">
             Sign in
           </Button>
 
           <div>
-            <div className="text-muted-foreground text-lg leading-6">
+            <div className="text-lg leading-6 text-muted-foreground">
               New on gametrakr?
             </div>
             <Button
@@ -110,7 +115,7 @@ const SignInPage: NextPage = () => {
               className="mt-2 min-w-full"
               type="button"
               variant="secondary"
-              onClick={() => void router.push("/sign-up")}
+              onClick={() => void router.push("/auth/sign-up")}
             >
               Create an Account
             </Button>

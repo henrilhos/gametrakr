@@ -1,4 +1,4 @@
-import { env } from "../env.mjs";
+import { env } from "~/env.mjs";
 
 export const getBaseUrl = () => {
   if (env.NODE_ENV === "production" && process.env.BASE_URL)

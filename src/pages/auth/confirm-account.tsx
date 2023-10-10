@@ -19,22 +19,20 @@ const VerifyAccountPage: NextPage = () => {
   const type = searchParams.get("type") as "EMAIL" | "PASSWORD";
   const redirectTo = searchParams.get("redirect_to");
 
-  const verifyEmail = useCallback(() => {
+  const verifyEmail = useCallback(async () => {
     if (id && type) {
-      validateAccountMutationAsync({ id, type })
-        .then((response) => {
-          if (response.status === 200) {
-            void router.push(redirectTo ?? "/sign-in");
-          }
-        })
-        .catch(() => {
-          void router.push("/sign-in");
-        });
+      try {
+        await validateAccountMutationAsync({ id, type });
+        void router.push(redirectTo ?? "/auth/sign-in");
+      } catch (err) {
+        console.log(err);
+        void router.push("/auth/sign-in");
+      }
     }
   }, [id, router, type, redirectTo, validateAccountMutationAsync]);
 
   useEffect(() => {
-    verifyEmail();
+    void verifyEmail();
   }, [verifyEmail]);
 
   return (

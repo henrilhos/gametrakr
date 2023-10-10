@@ -20,7 +20,7 @@ import type { FieldErrors } from "react-hook-form";
 
 const SignUpPage: NextPage = () => {
   const [loading, setLoading] = useState(false);
-  const [verify, setVerify] = useState(false);
+  const [mailSent, setMailSent] = useState(false);
   const form = useForm<SignUp>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -40,15 +40,11 @@ const SignUpPage: NextPage = () => {
       setLoading(true);
 
       try {
-        const result = await signUpMutationAsync(data);
-        if (result.status === 201) {
-          localStorage.setItem("email", data.email);
-          setVerify(true);
-          setLoading(false);
-        } else {
-          setLoading(false);
-          toast.error(result.message);
-        }
+        await signUpMutationAsync(data);
+
+        localStorage.setItem("email", data.email);
+        setMailSent(true);
+        setLoading(false);
       } catch (err) {
         const message = (err as TRPCError).message ?? "";
 
@@ -86,6 +82,7 @@ const SignUpPage: NextPage = () => {
 
     try {
       await resendEmailMutationAsync({ email });
+
       setLoading(false);
       toast.success("Email resent successfully");
     } catch (err) {
@@ -105,7 +102,7 @@ const SignUpPage: NextPage = () => {
     );
   }
 
-  if (verify) {
+  if (mailSent) {
     return (
       <AuthPageLayout
         title="Verify your account"
@@ -214,7 +211,7 @@ const SignUpPage: NextPage = () => {
 
           <div className="text-lg leading-6 text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/sign-in">
+            <Link href="/auth/sign-in">
               <span className="font-bold text-card-foreground hover:underline">
                 Sign In
               </span>
