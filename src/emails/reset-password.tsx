@@ -13,26 +13,23 @@ import {
   Text,
 } from "@react-email/components";
 
-type ConfirmAccountProps = {
+type ConfirmEmailProps = {
   href?: string;
 };
-const ConfirmAccount = ({
-  href = "https://google.com",
-}: ConfirmAccountProps) => {
+const ResetPassword = ({ href = "https://google.com" }: ConfirmEmailProps) => {
   return (
     <Html>
       <Head />
-      <Preview>Confirm your gametrakr account</Preview>
+      <Preview>Reset your gametrakr password</Preview>
       <Tailwind>
         <Body className="mx-auto bg-white font-sans">
           <Container className="mx-auto max-w-[600px]">
             <Heading className="my-[30px] p-0 text-4xl font-bold text-[#1d1c1d]">
-              Confirm your account
+              Reset your password
             </Heading>
 
             <Text className="mb-[30px] text-xl">
-              Thank you for signing up for gametrakr. To confirm your acount,
-              please follow the button below.
+              Follow the button to reset the password for your user.
             </Text>
 
             <Section className="text-center">
@@ -40,7 +37,7 @@ const ConfirmAccount = ({
                 className="min-w-[10rem] items-center rounded-2xl bg-[#f2a100] px-5 py-3 text-xl font-bold leading-6 text-[#121212]"
                 href={href}
               >
-                Confirm Account
+                Reset Password
               </Button>
             </Section>
 
@@ -59,4 +56,4 @@ const ConfirmAccount = ({
   );
 };
 
-export default ConfirmAccount;
+export default ResetPassword;
