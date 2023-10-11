@@ -7,6 +7,7 @@ import { randomUUID } from "crypto";
 import {
   forgotPasswordSchema,
   resendEmailSchema,
+  resetPasswordSchema,
   signUpSchema,
   verifyAccountSchema,
 } from "~/common/validation/auth";
@@ -235,5 +236,51 @@ export const authRouter = createTRPCRouter({
       } catch (error) {
         throw error;
       }
+    }),
+  resetPassword: publicProcedure
+    .meta({ description: "Reset user password" })
+    .input(resetPasswordSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { email, token: tokenId, password, confirmPassword } = input;
+
+      try {
+        const token = await ctx.db.token.findFirst({
+          where: { AND: [{ id: tokenId, type: TokenType.PASSWORD }] },
+          include: { user: true },
+        });
+
+        if (!token) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Token not found",
+          });
+        }
+
+        if (!token.valid || token.user.email !== email) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Invalid token",
+          });
+        }
+
+        if (password === confirmPassword) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Passwords don't match",
+          });
+        }
+
+        const hashedPassword = await hash(password);
+
+        const result = await ctx.db.user.update({
+          where: { id: token.user.id },
+          data: { password: hashedPassword },
+        });
+
+        return {
+          message: "Password updated successfully",
+          data: result.id,
+        };
+      } catch (error) {}
     }),
 });

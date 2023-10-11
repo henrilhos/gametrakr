@@ -2,6 +2,8 @@ import { useCallback, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 
+import { TokenType } from "@prisma/client";
+
 import { DialogLayout } from "~/components/layout";
 import { LoadingSpinner } from "~/components/ui/loading";
 import { api } from "~/utils/api";
@@ -15,21 +17,22 @@ const VerifyAccountPage: NextPage = () => {
   const { mutateAsync: validateAccountMutationAsync } =
     api.auth.validateAccount.useMutation();
 
-  const id = searchParams.get("token");
-  const type = searchParams.get("type") as "EMAIL" | "PASSWORD";
-  const redirectTo = searchParams.get("redirect_to");
+  const token = searchParams.get("token");
 
   const verifyEmail = useCallback(async () => {
-    if (id && type) {
+    if (token) {
       try {
-        await validateAccountMutationAsync({ id, type });
-        void router.push(redirectTo ?? "/auth/sign-in");
+        await validateAccountMutationAsync({
+          id: token,
+          type: TokenType.EMAIL,
+        });
+        void router.push("/auth/sign-in");
       } catch (err) {
         console.log(err);
         void router.push("/auth/sign-in");
       }
     }
-  }, [id, router, type, redirectTo, validateAccountMutationAsync]);
+  }, [token, router, validateAccountMutationAsync]);
 
   useEffect(() => {
     void verifyEmail();

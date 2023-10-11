@@ -35,7 +35,10 @@ const credential = z
 
 // Schemas
 
-export const signInSchema = z.object({ credential, password });
+export const signInSchema = z.object({
+  credential: z.string(),
+  passoword: z.string(),
+});
 
 export const signUpSchema = z
   .object({
@@ -60,6 +63,15 @@ export const resendEmailSchema = z.object({ email });
 
 export const forgotPasswordSchema = z.object({ credential });
 
+export const resetPasswordSchema = z.object({
+  email,
+  password,
+  confirmPassword: password
+    .min(8, "Passwords don't match")
+    .describe("The user password (again 😁)"),
+  token: z.string().uuid().describe("Token id"),
+});
+
 // Types
 
 export type SignIn = z.infer<typeof signInSchema>;
@@ -67,3 +79,4 @@ export type SignUp = z.infer<typeof signUpSchema>;
 export type VerifyAccount = z.infer<typeof verifyAccountSchema>;
 export type ResendEmail = z.infer<typeof resendEmailSchema>;
 export type ForgotPassword = z.infer<typeof forgotPasswordSchema>;
+export type ResetPassword = z.infer<typeof resetPasswordSchema>;
