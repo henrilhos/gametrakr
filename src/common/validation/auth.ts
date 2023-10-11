@@ -35,7 +35,7 @@ const credential = z
 
 export const signInSchema = z.object({
   credential: z.string(),
-  passoword: z.string(),
+  password: z.string(),
 });
 
 export const signUpSchema = z

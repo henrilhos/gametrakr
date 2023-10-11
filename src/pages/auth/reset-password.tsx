@@ -26,8 +26,8 @@ const ResetPasswordAccount: NextPage = () => {
   const form = useForm<ResetPassword>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      email: searchParams.get("token") ?? "",
-      token: searchParams.get("token") ?? "",
+      email: searchParams?.get("token") ?? "",
+      token: searchParams?.get("token") ?? "",
       password: "",
       confirmPassword: "",
     },
@@ -36,8 +36,8 @@ const ResetPasswordAccount: NextPage = () => {
   const { mutateAsync } = api.auth.resetPassword.useMutation();
 
   useEffect(() => {
-    form.setValue("email", searchParams.get("email") ?? "");
-    form.setValue("token", searchParams.get("token") ?? "");
+    form.setValue("email", searchParams?.get("email") ?? "");
+    form.setValue("token", searchParams?.get("token") ?? "");
   }, [form, searchParams]);
 
   // TODO: verify if token is valid and if matches with email

@@ -17,7 +17,7 @@ const VerifyAccountPage: NextPage = () => {
   const { mutateAsync: validateAccountMutationAsync } =
     api.auth.validateAccount.useMutation();
 
-  const token = searchParams.get("token");
+  const token = searchParams?.get("token");
 
   const verifyEmail = useCallback(async () => {
     if (token) {

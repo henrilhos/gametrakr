@@ -263,7 +263,7 @@ export const authRouter = createTRPCRouter({
           });
         }
 
-        if (password === confirmPassword) {
+        if (password !== confirmPassword) {
           throw new TRPCError({
             code: "BAD_REQUEST",
             message: "Passwords don't match",
@@ -271,6 +271,11 @@ export const authRouter = createTRPCRouter({
         }
 
         const hashedPassword = await hash(password);
+
+        await ctx.db.token.update({
+          where: { id: token.id },
+          data: { valid: false },
+        });
 
         const result = await ctx.db.user.update({
           where: { id: token.user.id },

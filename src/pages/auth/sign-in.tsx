@@ -22,8 +22,8 @@ const SignInPage: NextPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
-  const error = searchParams.get("error");
+  const callbackUrl = searchParams?.get("callbackUrl") ?? "/";
+  const error = searchParams?.get("error");
 
   useEffect(() => {
     if (error) {
@@ -39,7 +39,7 @@ const SignInPage: NextPage = () => {
     },
   });
 
-  const onSubmit = useCallback(
+  const onValid = useCallback(
     async (data: SignIn) => {
       setLoading(true);
       await signIn("credentials", { ...data, callbackUrl });
@@ -63,7 +63,7 @@ const SignInPage: NextPage = () => {
     <AuthPageLayout title="Join the community">
       <Form {...form}>
         <form
-          onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
+          onSubmit={(event) => void form.handleSubmit(onValid)(event)}
           className="space-y-8"
         >
           <div className="space-y-6">
