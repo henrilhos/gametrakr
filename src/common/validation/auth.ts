@@ -22,9 +22,7 @@ const password = z
   .string()
   .min(8, { message: "Password must be at least 8 characters" })
   .regex(
-    new RegExp(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-    ),
+    new RegExp(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s])+$/),
     "Password should include uppercase and lowercase letters, numbers, and special characters",
   )
   .describe("The user password");
