@@ -28,7 +28,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="mx-8 my-4 flex justify-between md:mx-16 md:my-8">
+    <header className="mx-8 my-6 flex justify-between md:mx-8 md:my-6">
       <Link href="/">
         <Heading>gametrakr</Heading>
       </Link>
@@ -85,7 +85,6 @@ export const Header = () => {
         )}
 
         <Button
-          className="ml-4"
           variant="icon"
           size="icon"
           aria-label="Toggle theme"
