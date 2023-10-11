@@ -18,6 +18,7 @@ model User {
     password  String
     verified  Boolean? @default(false)
     image     String?
+    active    Boolean  @default(true)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -35,6 +36,17 @@ model Token {
     // Relation fields
     user   User   @relation(fields: [userId], references: [id])
     userId String @db.Uuid
+}
+
+model Carousel {
+    id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    imageUrl    String
+    name        String
+    publisher   String
+    releaseDate DateTime
+    active      Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
 
 enum TokenType {
