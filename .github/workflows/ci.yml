@@ -49,8 +49,8 @@ jobs:
           cp .env.example .env
           echo "NEXTAUTH_SECRET=supersecret" >> .env
 
-      - name: Push schema to database
-        run: pnpx prisma db push
+      # - name: Push schema to database
+      #   run: pnpx prisma db push
 
       - name: Build application
         run: pnpm build
