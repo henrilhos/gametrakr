@@ -54,8 +54,8 @@ dependencies:
     specifier: ^10.40.0
     version: 10.40.0
   '@uidotdev/usehooks':
-    specifier: ^2.3.1
-    version: 2.3.1(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^2.4.0
+    version: 2.4.0(react-dom@18.2.0)(react@18.2.0)
   argon2:
     specifier: ^0.31.1
     version: 0.31.1
@@ -1844,8 +1844,8 @@ packages:
       eslint-visitor-keys: 3.4.3
     dev: true
 
-  /@uidotdev/usehooks@2.3.1(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-1GL8CatTsTGZdwPNrZ44JhJI5QWip7oyDXEXFBEibJ+P+p+ZBi7mKrpG90ZIdQTSEcvkfiE2Y492Uo3ubPBZ3g==}
+  /@uidotdev/usehooks@2.4.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-NrpTsZUGsawYxFbEXrd8+FPpfziC4M01GSQgYWOnGa84UiavqVCzCL5bSRe6rfQc4QsHS2rGAA0h63ya/j+p6A==}
     engines: {node: '>=16'}
     peerDependencies:
       react: '>=18.0.0'
