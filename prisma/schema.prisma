@@ -40,8 +40,8 @@ model Token {
 
 model Carousel {
     id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    name        String   @unique
     imageUrl    String
-    name        String
     publisher   String
     releaseDate DateTime
     active      Boolean  @default(true)

@@ -7,27 +7,32 @@ import { PageLayout } from "~/components/layout";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
 import { Container } from "~/components/ui/container";
+import { api } from "~/utils/api";
 
 import type { NextPage } from "next";
 
 const HomePage: NextPage = () => {
+  const { data } = api.carousel.getRandomGame.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
+
   const router = useRouter();
   const { data: sessionData } = useSession();
 
-  const image =
-    "https://blog.br.playstation.com/tachyon/sites/4/2023/09/1e7bd7539e6c12744bec0368cc51d372761c22e4-scaled.jpeg";
+  // TODO: create a skeleton loading
+  if (!data) return <div>loading...</div>;
 
   const getTitleAndYear = () => {
-    return `Starfield (2023)`.toUpperCase();
+    return `${data?.name} (${data?.releaseYear}) © ${data.publisher}`.toUpperCase();
   };
 
   return (
     <PageLayout>
-      <Container className="flex min-h-screen flex-col md:-mt-[96px] md:pt-[96px]">
+      <Container className="-mt-[84px] flex min-h-screen flex-col pt-[84px] md:-mt-[96px] md:pt-[96px]">
         <Card
           className="flex max-w-full grow flex-col justify-between rounded-2xl bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url(${image})`,
+            backgroundImage: `url(${data.imageUrl})`,
           }}
         >
           {/* TODO: add link to game page */}
