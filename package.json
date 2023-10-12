@@ -2,6 +2,7 @@
   "name": "gametrakr",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@8.9.0",
   "scripts": {
     "--RUN": "",
     "build": "prisma migrate deploy && next build",
@@ -12,11 +13,11 @@
     "db:migrate": "prisma migrate dev",
     "postinstall": "prisma generate",
     "--CHECK": "",
+    "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "format:fix": "prettier --write .",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "typecheck": "tsc --noEmit",
+    "ts:check": "tsc --noEmit",
     "--TEST": "",
     "--EMAIL": "",
     "email": "email dev"
@@ -83,6 +84,5 @@
   },
   "ct3aMetadata": {
     "initVersion": "7.20.2"
-  },
-  "packageManager": "pnpm@8.8.0"
+  }
 }
