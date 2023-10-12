@@ -42,9 +42,6 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt: ({ token, user }) => {
-      console.log("[JWT] token", token);
-      console.log("[JWT] user", user);
-
       // TODO: add user image
       if (user) {
         token.sub = user.id;
@@ -55,11 +52,7 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
-    session: ({ session, token, user }) => {
-      console.log("[SESSION] session", session);
-      console.log("[SESSION] token", token);
-      console.log("[SESSION] user", user);
-
+    session: ({ session, token }) => {
       // TODO: Add user image
       if (token?.sub) {
         session.user.id = token.sub;
@@ -122,8 +115,8 @@ export const authOptions: NextAuthOptions = {
      */
   ],
   pages: {
-    signIn: "/sign-in",
-    newUser: "/sign-up",
+    signIn: "/auth/sign-in",
+    newUser: "/auth/sign-up",
   },
   secret: env.NEXTAUTH_SECRET,
   jwt: {

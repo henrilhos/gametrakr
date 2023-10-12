@@ -51,7 +51,7 @@ export const Header = () => {
               <SheetClose>
                 <Button
                   className="min-w-full"
-                  onClick={() => void router.push("/sign-up")}
+                  onClick={() => void router.push("/auth/sign-up")}
                 >
                   Sign Up
                 </Button>
@@ -79,7 +79,9 @@ export const Header = () => {
         </Button>
 
         {!sessionData && (
-          <Button onClick={() => void router.push("/sign-up")}>Sign Up</Button>
+          <Button onClick={() => void router.push("/auth/sign-up")}>
+            Sign Up
+          </Button>
         )}
 
         <Button

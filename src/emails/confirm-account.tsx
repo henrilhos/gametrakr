@@ -13,12 +13,12 @@ import {
   Text,
 } from "@react-email/components";
 
-type ConfirmEmailProps = {
-  verifyUrl?: string;
+type ConfirmAccountProps = {
+  href?: string;
 };
-const ConfirmEmail = ({
-  verifyUrl = "https://google.com",
-}: ConfirmEmailProps) => {
+const ConfirmAccount = ({
+  href = "https://google.com",
+}: ConfirmAccountProps) => {
   return (
     <Html>
       <Head />
@@ -38,9 +38,9 @@ const ConfirmEmail = ({
             <Section className="text-center">
               <Button
                 className="min-w-[10rem] items-center rounded-2xl bg-[#f2a100] px-5 py-3 text-xl font-bold leading-6 text-[#121212]"
-                href={verifyUrl}
+                href={href}
               >
-                Confirm account
+                Confirm Account
               </Button>
             </Section>
 
@@ -59,4 +59,4 @@ const ConfirmEmail = ({
   );
 };
 
-export default ConfirmEmail;
+export default ConfirmAccount;
