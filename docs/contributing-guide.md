@@ -6,26 +6,36 @@ For development we use [Node.js](https://nodejs.org) as our runtime and [pnpm](h
 
 ### Getting started
 
-Clone the repository and install dependencies:
+1. Clone the repository:
 
 ```bash
 git clone https://github/com/henrilhos/gametrakr.git
 cd gametrakr
+```
 
+1. Install deps
+
+```badh
 pnpm install
 ```
 
-Then create your local `.env` file:
+1. Update `.env` and push the schema to the db
 
 ```bash
 cp .env.example .env
+pnpm prisma db push
 ```
 
-And then run the development application:
+1. Start the dev server
 
 ```bash
-docker-compose up -d
-pnpm run dev
+pnpm dev
+```
+
+1. Run the tests
+
+```bash
+pnpm test
 ```
 
 ## Stack
