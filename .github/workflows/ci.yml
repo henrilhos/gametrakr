@@ -47,7 +47,7 @@ jobs:
       - name: Setup environment variables
         run: |
           cp .env.example .env
-          echo "RESEND_API_KEY="supersecret-key" >> .env
+          echo "RESEND_API_KEY=supersecret-key" >> .env
           echo "RESEND_EMAIL=ci@gametra.kr" >> .env
           echo "NEXTAUTH_SECRET=supersecret" >> .env
 
