@@ -2,9 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
-import { useForm } from "react-hook-form";
 
 import { signInSchema } from "~/common/validation/auth";
 import { AuthPageLayout, DialogLayout } from "~/components/layout";
@@ -13,6 +11,7 @@ import { Form, FormControl, FormField, FormItem } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { LoadingSpinner } from "~/components/ui/loading";
 import toast from "~/components/ui/toast";
+import { useZodForm } from "~/utils/zod-form";
 
 import type { SignIn } from "~/common/validation/auth";
 import type { NextPage } from "next";
@@ -31,13 +30,7 @@ const SignInPage: NextPage = () => {
     }
   }, [error]);
 
-  const form = useForm<SignIn>({
-    resolver: zodResolver(signInSchema),
-    defaultValues: {
-      credential: "",
-      password: "",
-    },
-  });
+  const form = useZodForm({ schema: signInSchema });
 
   const onValid = useCallback(
     async (data: SignIn) => {

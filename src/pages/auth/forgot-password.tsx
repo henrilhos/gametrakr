@@ -1,8 +1,5 @@
 import { useCallback, useState } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
 import { forgotPasswordSchema } from "~/common/validation/auth";
 import { AuthPageLayout, DialogLayout } from "~/components/layout";
 import { Button } from "~/components/ui/button";
@@ -11,6 +8,7 @@ import { Input } from "~/components/ui/input";
 import { LoadingSpinner } from "~/components/ui/loading";
 import toast from "~/components/ui/toast";
 import { api } from "~/utils/api";
+import { useZodForm } from "~/utils/zod-form";
 
 import type { TRPCError } from "@trpc/server";
 import type { ForgotPassword } from "~/common/validation/auth";
@@ -23,12 +21,7 @@ const ForgotPasswordPage: NextPage = () => {
 
   const { mutateAsync } = api.auth.forgotPassword.useMutation();
 
-  const form = useForm<ForgotPassword>({
-    resolver: zodResolver(forgotPasswordSchema),
-    defaultValues: {
-      credential: "",
-    },
-  });
+  const form = useZodForm({ schema: forgotPasswordSchema });
 
   const onValid = useCallback(
     async (data: ForgotPassword) => {
