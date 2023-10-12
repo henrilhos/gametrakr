@@ -44,10 +44,10 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
-      - name: Setup environment variables
-        run: |
-          cp .env.example .env
-          echo "NEXTAUTH_SECRET=supersecret" >> .env
+      # - name: Setup environment variables
+      #   run: |
+      #     cp .env.example .env
+      #     echo "NEXTAUTH_SECRET=supersecret" >> .env
 
       # - name: Push schema to database
       #   run: pnpx prisma db push
