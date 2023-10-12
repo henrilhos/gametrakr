@@ -38,7 +38,7 @@
     "@trpc/next": "^10.40.0",
     "@trpc/react-query": "^10.40.0",
     "@trpc/server": "^10.40.0",
-    "@uidotdev/usehooks": "^2.3.1",
+    "@uidotdev/usehooks": "^2.4.0",
     "argon2": "^0.31.1",
     "date-fns": "^2.30.0",
     "next": "^13.5.4",
