@@ -6,7 +6,7 @@ import { z } from "zod";
 const username = z
   .string()
   .min(3, { message: "Nickname must be at least 3 characters" })
-  .max(24, { message: "Nickname must be not exceed 15 characters" })
+  .max(24, { message: "Nickname must be not exceed 24 characters" })
   .regex(
     new RegExp(/^[a-zA-Z0-9._]+$/),
     "Nickname can only have alphanumeric characters, underscores, and dots",

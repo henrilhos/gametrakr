@@ -16,8 +16,9 @@ jobs:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: gametrakr
+          POSTGRES_USER: crash_bandicoot
+          POSTGRES_PASSWORD: 12345678
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -50,9 +51,6 @@ jobs:
           echo "RESEND_API_KEY=supersecret-key" >> .env
           echo "RESEND_EMAIL=ci@gametra.kr" >> .env
           echo "NEXTAUTH_SECRET=supersecret" >> .env
-
-      # - name: Push schema to database
-      #   run: pnpx prisma db push
 
       - name: Build application
         run: pnpm build

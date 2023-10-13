@@ -5,7 +5,9 @@ services:
     container_name: postgres
     image: postgres:15
     environment:
-      POSTGRES_PASSWORD: ${PGPASSWORD}
+      - POSTGRES_DB=gametrakr
+      - POSTGRES_USER=crash_bandicoot
+      - POSTGRES_PASSWORD=12345678
     volumes:
       - gametrakr-pg:/var/lib/postgresql/data
     restart: always

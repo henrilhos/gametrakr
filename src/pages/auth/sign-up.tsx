@@ -202,10 +202,11 @@ const SignUpPage: NextPage = () => {
 
           <div className="text-lg leading-6 text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/auth/sign-in">
-              <span className="font-bold text-card-foreground hover:underline">
-                Sign In
-              </span>
+            <Link
+              href="/auth/sign-in"
+              className="font-bold text-card-foreground hover:underline"
+            >
+              Sign In
             </Link>
           </div>
         </form>
