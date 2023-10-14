@@ -3,12 +3,15 @@ const config = {
   $schema: "https://json.schemastore.org/prettierrc",
   plugins: [
     "@ianvs/prettier-plugin-sort-imports",
+    /**
+     * If you're adding more plugins, keep in mind
+     * that the Tailwind plugin must come last!
+     */
     "prettier-plugin-tailwindcss",
   ],
   importOrder: [
-    "^react$",
-    "^next$",
-    "^(next)(/.*)$",
+    "^(react/(.*)$)|^(react$)",
+    "^(next/(.*)$)|^(next$)",
     "",
     "<THIRD_PARTY_MODULES>",
     "<BUILTIN_MODULES>",

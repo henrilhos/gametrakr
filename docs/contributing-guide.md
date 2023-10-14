@@ -13,26 +13,26 @@ git clone https://github/com/henrilhos/gametrakr.git
 cd gametrakr
 ```
 
-1. Install deps
+2. Install deps
 
 ```badh
 pnpm install
 ```
 
-1. Update `.env` and push the schema to the db
+3. Update `.env` and push the schema to the db
 
 ```bash
 cp .env.example .env
 pnpm prisma db push
 ```
 
-1. Start the dev server
+4. Start the dev server
 
 ```bash
 pnpm dev
 ```
 
-1. Run the tests
+5. Run the tests
 
 ```bash
 pnpm test
