@@ -44,11 +44,27 @@ const buttonVariants = cva(
 
 type ButtonProps = {
   asChild?: boolean;
+  link?: boolean;
 } & React.ButtonHTMLAttributes<HTMLButtonElement> &
+  React.AnchorHTMLAttributes<HTMLAnchorElement> &
   VariantProps<typeof buttonVariants>;
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, align, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
+export const Button = React.forwardRef<
+  HTMLButtonElement & HTMLAnchorElement,
+  ButtonProps
+>(
+  (
+    {
+      className,
+      variant,
+      size,
+      align,
+      asChild = false,
+      link = false,
+      ...props
+    },
+    ref,
+  ) => {
+    const Comp = link ? "a" : asChild ? Slot : "button";
 
     return (
       <Comp

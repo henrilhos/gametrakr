@@ -11,9 +11,8 @@ import "@trpc/server";
 
 import superjson from "superjson";
 
-import { type AppRouter } from "~/server/api/root";
-
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "~/server/api/root";
 
 export const getBaseSsrUrl = () => {
   if (typeof window !== "undefined") return ""; // browser should use relative url

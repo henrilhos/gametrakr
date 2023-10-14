@@ -36,7 +36,7 @@ type HeadingProps = PropsWithChildren<
     VariantProps<typeof spanVariants>
 >;
 export const Heading = ({ align, children, className, size }: HeadingProps) => (
-  <h1 className={cn(headingVariants({ align }))}>
+  <h3 className={cn(headingVariants({ align }))}>
     <span className={cn(spanVariants({ size }), className)}>{children}</span>
-  </h1>
+  </h3>
 );

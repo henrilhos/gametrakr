@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
-import { useForm } from "react-hook-form";
 
 import { signInSchema } from "~/common/validation/auth";
 import { AuthPageLayout, DialogLayout } from "~/components/layout";
@@ -13,6 +11,7 @@ import { Form, FormControl, FormField, FormItem } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { LoadingSpinner } from "~/components/ui/loading";
 import toast from "~/components/ui/toast";
+import { useZodForm } from "~/utils/zod-form";
 
 import type { SignIn } from "~/common/validation/auth";
 import type { NextPage } from "next";
@@ -20,7 +19,6 @@ import type { NextPage } from "next";
 const SignInPage: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   const callbackUrl = searchParams?.get("callbackUrl") ?? "/";
   const error = searchParams?.get("error");
@@ -31,13 +29,7 @@ const SignInPage: NextPage = () => {
     }
   }, [error]);
 
-  const form = useForm<SignIn>({
-    resolver: zodResolver(signInSchema),
-    defaultValues: {
-      credential: "",
-      password: "",
-    },
-  });
+  const form = useZodForm({ schema: signInSchema });
 
   const onValid = useCallback(
     async (data: SignIn) => {
@@ -60,7 +52,7 @@ const SignInPage: NextPage = () => {
   }
 
   return (
-    <AuthPageLayout title="Join the community">
+    <AuthPageLayout title="Welcome back">
       <Form {...form}>
         <form
           onSubmit={(event) => void form.handleSubmit(onValid)(event)}
@@ -87,15 +79,12 @@ const SignInPage: NextPage = () => {
                     <>
                       <Input label="Password" type="password" {...field} />
                       <div className="text-right">
-                        <button
+                        <Link
                           className="font-bold hover:underline"
-                          type="button"
-                          onClick={() =>
-                            void router.push("/auth/forgot-password")
-                          }
+                          href="/auth/forgot-password"
                         >
                           Forgot your password?
-                        </button>
+                        </Link>
                       </div>
                     </>
                   </FormControl>
@@ -117,7 +106,8 @@ const SignInPage: NextPage = () => {
               className="mt-2 min-w-full"
               type="button"
               variant="secondary"
-              onClick={() => void router.push("/auth/sign-up")}
+              href="/auth/sign-up"
+              link
             >
               Create an Account
             </Button>

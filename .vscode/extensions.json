@@ -4,6 +4,7 @@
     "dbaeumer.vscode-eslint",
     "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
+    "prisma.prisma",
     "yoavbls.pretty-ts-errors"
   ]
 }
