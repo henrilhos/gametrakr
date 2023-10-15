@@ -1,9 +1,6 @@
 import { useCallback, useState } from "react";
 import Link from "next/link";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
 import { signUpSchema } from "~/common/validation/auth";
 import { AuthPageLayout, DialogLayout } from "~/components/layout";
 import { Button } from "~/components/ui/button";
@@ -12,6 +9,7 @@ import { Input } from "~/components/ui/input";
 import { LoadingSpinner } from "~/components/ui/loading";
 import toast from "~/components/ui/toast";
 import { api } from "~/utils/api";
+import { useZodForm } from "~/utils/zod-form";
 
 import type { TRPCError } from "@trpc/server";
 import type { SignUp } from "~/common/validation/auth";
@@ -21,15 +19,8 @@ import type { FieldErrors } from "react-hook-form";
 const SignUpPage: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [mailSent, setMailSent] = useState(false);
-  const form = useForm<SignUp>({
-    resolver: zodResolver(signUpSchema),
-    defaultValues: {
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
+
+  const form = useZodForm({ schema: signUpSchema });
 
   const { mutateAsync: signUpMutationAsync } = api.auth.signUp.useMutation();
   const { mutateAsync: resendEmailMutationAsync } =
@@ -211,10 +202,11 @@ const SignUpPage: NextPage = () => {
 
           <div className="text-lg leading-6 text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/auth/sign-in">
-              <span className="font-bold text-card-foreground hover:underline">
-                Sign In
-              </span>
+            <Link
+              href="/auth/sign-in"
+              className="font-bold text-card-foreground hover:underline"
+            >
+              Sign In
             </Link>
           </div>
         </form>

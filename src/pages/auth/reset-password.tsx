@@ -2,17 +2,15 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
 import { resetPasswordSchema } from "~/common/validation/auth";
 import { AuthPageLayout, DialogLayout } from "~/components/layout";
+import { Button } from "~/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { LoadingSpinner } from "~/components/ui/loading";
-import { Button } from "../../components/ui/button";
-import toast from "../../components/ui/toast";
-import { api } from "../../utils/api";
+import toast from "~/components/ui/toast";
+import { api } from "~/utils/api";
+import { useZodForm } from "~/utils/zod-form";
 
 import type { ResetPassword } from "~/common/validation/auth";
 import type { NextPage } from "next";
@@ -23,15 +21,7 @@ const ResetPasswordAccount: NextPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const form = useForm<ResetPassword>({
-    resolver: zodResolver(resetPasswordSchema),
-    defaultValues: {
-      email: searchParams?.get("token") ?? "",
-      token: searchParams?.get("token") ?? "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
+  const form = useZodForm({ schema: resetPasswordSchema });
 
   const { mutateAsync } = api.auth.resetPassword.useMutation();
 

@@ -1,3 +1,5 @@
+import { fontFamily } from "tailwindcss/defaultTheme";
+
 import { type Config } from "tailwindcss";
 
 export default {
@@ -62,8 +64,7 @@ export default {
       },
       fontFamily: {
         apfel: ["Apfel Grotezk", "sans-serif"],
-        atkinson: ["Atkinson Hyperlegible", "sans-serif"],
-        sans: ["Atkinson Hyperlegible"],
+        sans: ["Atkinson Hyperlegible", ...fontFamily.sans],
       },
       // TODO: Check if they're used
       borderRadius: {
