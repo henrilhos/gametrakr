@@ -11,13 +11,28 @@ import { api } from "~/utils/api";
 
 import type { NextPage } from "next";
 
+const GameHeading = (props: {
+  name?: string;
+  publisher?: string;
+  releaseYear?: number;
+}) => {
+  return (
+    <>
+      <div>{`${props.name} (${props.releaseYear})`.toUpperCase()}&nbsp;</div>
+      <div className="inline-flex gap-1">
+        <div>©</div>
+        <div>{`${props.publisher}`.toUpperCase()}</div>
+      </div>
+    </>
+  );
+};
+
 const HomePage: NextPage = () => {
+  const router = useRouter();
+  const { data: sessionData } = useSession();
   const { data } = api.carousel.getRandomGame.useQuery(undefined, {
     refetchOnWindowFocus: false,
   });
-
-  const router = useRouter();
-  const { data: sessionData } = useSession();
 
   // TODO: add skeleton loading
   if (!data) {
@@ -28,35 +43,38 @@ const HomePage: NextPage = () => {
     <PageLayout>
       <Container className="-mt-[84px] flex min-h-screen flex-col pt-[84px] md:-mt-[96px] md:pt-[96px]">
         <Card
-          className="flex max-w-full grow flex-col justify-between rounded-2xl bg-cover bg-center bg-no-repeat"
+          className="flex max-w-full grow flex-col justify-between rounded-3xl bg-cover bg-center bg-no-repeat px-2 pb-2 pt-4 md:rounded-4xl md:p-6"
           style={{
             backgroundImage: `url(${data.imageUrl})`,
           }}
         >
           {/* TODO: add link to game page */}
-          <div className="ml-4 mt-4 text-background">
-            {`${data.name} (${data.releaseYear}) © ${data.publisher}`.toUpperCase()}
+          <div className="px-8 text-center text-neutral-100/60 md:inline-flex md:gap-1 md:px-0 md:text-left">
+            <GameHeading {...data} />
           </div>
 
-          <div className="flex flex-col items-center md:mx-6 md:my-6">
-            <Card className="min-w-full px-12 pb-12 pt-10">
-              <Heading align="left" size="lg">
+          <div className="flex flex-col items-center">
+            <Card className="min-w-full px-5 pb-6 pt-8 md:px-12 md:pb-12 md:pt-11">
+              <Heading
+                className={{ container: "text-center md:text-left" }}
+                size="lg"
+              >
                 Track your gaming journey
               </Heading>
 
-              <div className="mt-10 flex flex-col items-end justify-between md:flex-row">
-                <div className="text-lg text-muted md:text-xl">
+              <div className="mx-1.5 mt-5 flex flex-col items-end justify-between md:mx-0 md:mt-10 md:flex-row">
+                <div className="max-w-2xl text-center text-sm md:text-left md:text-xl/6">
                   Show everyone what games you love, share your thoughts and
-                  experiences
-                  <br /> and connect with a passionate gaming community.
+                  experiences and connect with a passionate gaming community.
                 </div>
 
                 {!sessionData && (
-                  <div className="mt-3 min-w-full text-center md:mt-0 md:min-w-fit">
+                  <div className="mt-9 min-w-full text-center md:mt-0 md:min-w-fit">
                     <Button
                       size="lg"
                       align="center"
                       onClick={() => void router.push("/auth/sign-up")}
+                      className="min-w-full text-left md:min-w-[14rem]"
                     >
                       Get started
                     </Button>
