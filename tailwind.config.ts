@@ -1,5 +1,7 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 
+import colors from "./src/styles/colors";
+
 import { type Config } from "tailwindcss";
 
 export default {
@@ -11,6 +13,22 @@ export default {
         heading: "linear-gradient(0, rgb(var(--heading)) 45%, transparent 0%)",
       },
       colors: {
+        inherit: colors.inherit,
+        current: colors.current,
+        transparent: colors.transparent,
+        black: colors.black,
+        white: colors.white,
+        yellow: colors.yellow,
+        teal: colors.teal,
+        green: colors.green,
+        blue: colors.blue,
+        violet: colors.violet,
+        pink: colors.pink,
+        red: colors.red,
+        orange: colors.orange,
+        neutral: colors.neutral,
+        slate: colors.slate,
+        // DEPRECATED
         background: "rgb(var(--background))",
         foreground: "rgb(var(--foreground))",
         card: {
@@ -49,7 +67,7 @@ export default {
           DEFAULT: "rgb(var(--success))",
           foreground: "rgb(var(--success-foreground))",
         },
-        neutral: {
+        oldneutral: {
           DEFAULT: "rgb(var(--neutral))",
           foreground: "rgb(var(--neutral-foreground))",
         },
@@ -65,6 +83,7 @@ export default {
       fontFamily: {
         apfel: ["Apfel Grotezk", "sans-serif"],
         sans: ["Atkinson Hyperlegible", ...fontFamily.sans],
+        serif: ["Apfel Grotezk", ...fontFamily.serif],
       },
       // TODO: Check if they're used
       borderRadius: {

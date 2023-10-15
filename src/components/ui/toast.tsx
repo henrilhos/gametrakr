@@ -18,7 +18,7 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-        neutral: "bg-neutral text-neutral-foreground",
+        neutral: "bg-oldneutral text-oldneutral-foreground",
         success: "bg-success text-success-foreground",
         error: "bg-error text-error-foreground",
         info: "bg-info text-info-foreground",
