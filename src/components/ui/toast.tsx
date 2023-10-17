@@ -51,7 +51,7 @@ export const Toast = ({ children, variant, visible }: ToastProps) => {
         !visible && "animate-leave",
       )}
     >
-      <div className="flex items-center px-6 py-3 text-lg leading-5">
+      <div className="flex items-center px-6 py-3 text-lg/5">
         <div>
           <FontAwesomeIcon
             icon={icons[variant ?? "neutral"]}

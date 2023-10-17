@@ -80,7 +80,7 @@ const SignInPage: NextPage = () => {
                       <Input label="Password" type="password" {...field} />
                       <div className="text-right">
                         <Link
-                          className="font-bold hover:underline"
+                          className="font-bold text-black hover:underline dark:text-white"
                           href="/auth/forgot-password"
                         >
                           Forgot your password?
@@ -98,7 +98,7 @@ const SignInPage: NextPage = () => {
           </Button>
 
           <div>
-            <div className="mb-2 text-lg leading-6 text-muted-foreground">
+            <div className="mb-2 text-lg/6 text-neutral-700 dark:text-slate-400">
               New on gametrakr?
             </div>
             <Button

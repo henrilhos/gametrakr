@@ -59,10 +59,10 @@ export const AuthPageLayout = ({
     <DialogLayout className={className}>
       <div>
         <CardHeader>
-          <div className="text-left">
+          <div className="text-left text-neutral-900 dark:text-slate-100">
             <button
               type="button"
-              className="inline-flex text-lg font-bold leading-5"
+              className="inline-flex text-lg/5 font-bold"
               onClick={() => void router.back()}
             >
               <FontAwesomeIcon icon={faCaretLeft} className="mr-1.5" />
@@ -70,7 +70,9 @@ export const AuthPageLayout = ({
             </button>
           </div>
 
-          <CardTitle className="mt-6 text-left">{title}</CardTitle>
+          <CardTitle className="mt-6 text-left text-black dark:text-white">
+            {title}
+          </CardTitle>
         </CardHeader>
 
         <CardContent>{children}</CardContent>

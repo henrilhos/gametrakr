@@ -99,16 +99,18 @@ const SignUpPage: NextPage = () => {
         title="Verify your account"
         className={{ card: "md:min-h-[706px]" }}
       >
-        <div className="text-left text-lg leading-6">
+        <div className="text-left text-lg/6 text-neutral-700 dark:text-slate-400">
           We&apos;ve just sent a verification link to{" "}
-          <span className="font-bold">{form.getValues("email")}</span>. Please
-          check your inbox.
+          <span className="text-black dark:text-white">
+            {form.getValues("email")}
+          </span>
+          . Please check your inbox.
         </div>
 
         <div className="mt-4 text-left">
           <button
             type="button"
-            className="text-lg/5 hover:underline"
+            className="text-lg/5 text-black hover:underline dark:text-white"
             onClick={() => void resendEmail()}
           >
             RESEND EMAIL
@@ -188,11 +190,14 @@ const SignUpPage: NextPage = () => {
           </div>
 
           <div>
-            <div className="text-sm leading-4 text-muted-foreground">
+            <div className="text-sm/4 text-neutral-700 dark:text-slate-400">
               By creating you agree to the{" "}
-              <span className="font-bold text-card-foreground">
+              <Link
+                href="/legal/terms-of-use"
+                className="font-bold text-black hover:underline dark:text-white"
+              >
                 Terms and Conditions
-              </span>
+              </Link>
               .
             </div>
             <Button type="submit" className="mt-2 min-w-full" justify="center">
@@ -200,11 +205,11 @@ const SignUpPage: NextPage = () => {
             </Button>
           </div>
 
-          <div className="text-lg leading-6 text-muted-foreground">
+          <div className="text-lg/6 text-neutral-700 dark:text-slate-400">
             Already have an account?{" "}
             <Link
               href="/auth/sign-in"
-              className="font-bold text-card-foreground hover:underline"
+              className="font-bold text-black hover:underline dark:text-white"
             >
               Sign In
             </Link>
