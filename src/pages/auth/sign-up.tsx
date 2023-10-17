@@ -108,7 +108,7 @@ const SignUpPage: NextPage = () => {
         <div className="mt-4 text-left">
           <button
             type="button"
-            className="text-lg leading-5 hover:underline"
+            className="text-lg/5 hover:underline"
             onClick={() => void resendEmail()}
           >
             RESEND EMAIL
@@ -195,7 +195,7 @@ const SignUpPage: NextPage = () => {
               </span>
               .
             </div>
-            <Button type="submit" className="mt-2 min-w-full" align="center">
+            <Button type="submit" className="mt-2 min-w-full" justify="center">
               Sign Up
             </Button>
           </div>

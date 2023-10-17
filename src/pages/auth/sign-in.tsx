@@ -93,21 +93,20 @@ const SignInPage: NextPage = () => {
             />
           </div>
 
-          <Button type="submit" className="min-w-full" align="center">
+          <Button justify="center" full type="submit">
             Sign in
           </Button>
 
           <div>
-            <div className="text-lg leading-6 text-muted-foreground">
+            <div className="mb-2 text-lg leading-6 text-muted-foreground">
               New on gametrakr?
             </div>
             <Button
-              align="center"
-              className="mt-2 min-w-full"
-              type="button"
+              as="a"
               variant="secondary"
+              full
+              justify="center"
               href="/auth/sign-up"
-              link
             >
               Create an Account
             </Button>

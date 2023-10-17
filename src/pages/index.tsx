@@ -1,5 +1,3 @@
-import { useRouter } from "next/router";
-
 import { useSession } from "next-auth/react";
 
 import { Heading } from "~/components/heading";
@@ -28,7 +26,6 @@ const GameHeading = (props: {
 };
 
 const HomePage: NextPage = () => {
-  const router = useRouter();
   const { data: sessionData } = useSession();
   const { data } = api.carousel.getRandomGame.useQuery(undefined, {
     refetchOnWindowFocus: false,
@@ -71,10 +68,9 @@ const HomePage: NextPage = () => {
                 {!sessionData && (
                   <div className="mt-9 min-w-full text-center md:mt-0 md:min-w-fit">
                     <Button
-                      size="lg"
-                      align="center"
-                      onClick={() => void router.push("/auth/sign-up")}
-                      className="min-w-full text-left md:min-w-[14rem]"
+                      as="a"
+                      href="/auth/sign-up"
+                      className="w-full md:w-56"
                     >
                       Get started
                     </Button>

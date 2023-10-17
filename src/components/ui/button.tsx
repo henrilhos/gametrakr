@@ -8,48 +8,50 @@ import { cn } from "~/utils/cn";
 import type { VariantProps } from "class-variance-authority";
 
 const buttonVariants = cva(
-  "items-center rounded-2xl text-xl font-bold leading-6 transition-all hover:scale-105 hover:bg-background hover:text-foreground hover:inner-border-4 hover:inner-border-foreground active:scale-95 active:bg-accent active:text-accent-foreground active:inner-border-0",
+  "inline-flex cursor-pointer items-center rounded-2xl text-xl font-bold ring-offset-white transition-all hover:scale-105 hover:bg-white hover:text-black hover:inner-border-4 hover:inner-border-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 active:scale-95 active:bg-yellow-200 active:text-yellow-500 active:inner-border-0 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:hover:bg-black dark:hover:text-white dark:hover:inner-border-white dark:focus-visible:ring-slate-300 dark:active:bg-yellow-800 dark:active:text-yellow-400",
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primary-foreground",
-        // destructive:
-        //   "hover:bg-destructive/90 bg-destructive text-destructive-foreground",
-        // outline:
-        //   "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground",
-        icon: "inline-flex justify-center bg-secondary text-secondary-foreground",
-        // ghost: "hover:bg-accent hover:text-accent-foreground",
-        // link: "text-primary underline-offset-4 hover:underline",
+        primary: "bg-yellow-500 text-white dark:bg-yellow-400 dark:text-black",
+        destructive:
+          "bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90",
+        outline:
+          "border border-slate-200 bg-white hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50",
+        secondary:
+          "bg-yellow-200 text-black dark:bg-yellow-800 dark:text-white",
+        ghost:
+          "hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50",
+        icon: "bg-yellow-50 text-yellow-500 dark:bg-yellow-900 dark:text-yellow-400",
       },
       size: {
-        sm: "px-4 py-2 text-lg",
-        md: "min-w-[10rem] px-5 py-3",
-        lg: "min-w-[13rem] px-5 py-3",
-        icon: "h-full px-3.5 text-accent-foreground",
+        md: "h-12 px-5 py-3",
+        sm: "h-9 px-3",
+        lg: "h-11 px-8",
+        icon: "h-12 w-12",
       },
-      align: {
-        left: "text-left",
-        center: "text-center",
-        right: "text-right",
+      justify: {
+        start: "justify-start",
+        center: "justify-center",
+        end: "justify-end",
       },
     },
     defaultVariants: {
       variant: "primary",
       size: "md",
-      align: "left",
+      justify: "start",
     },
   },
 );
 
 type ButtonProps = {
+  as?: "a" | "button";
+  full?: boolean;
   asChild?: boolean;
-  link?: boolean;
 } & React.ButtonHTMLAttributes<HTMLButtonElement> &
   React.AnchorHTMLAttributes<HTMLAnchorElement> &
   VariantProps<typeof buttonVariants>;
 export const Button = React.forwardRef<
-  HTMLButtonElement & HTMLAnchorElement,
+  HTMLButtonElement | HTMLAnchorElement,
   ButtonProps
 >(
   (
@@ -57,20 +59,24 @@ export const Button = React.forwardRef<
       className,
       variant,
       size,
-      align,
+      justify,
+      as = "button",
+      full = false,
       asChild = false,
-      link = false,
       ...props
     },
     ref,
   ) => {
-    const Comp = link ? "a" : asChild ? Slot : "button";
+    const Component = asChild ? Slot : as;
+    const btnProps = { ...ref, ...props };
 
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, align, className }))}
-        ref={ref}
-        {...props}
+      <Component
+        className={cn(
+          buttonVariants({ variant, size, justify, className }),
+          full && "w-full",
+        )}
+        {...btnProps}
       />
     );
   },

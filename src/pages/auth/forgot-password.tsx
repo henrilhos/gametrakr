@@ -76,7 +76,7 @@ const ForgotPasswordPage: NextPage = () => {
         <div className="mt-4 text-left">
           <button
             type="button"
-            className="text-lg leading-5 hover:underline"
+            className="text-lg/5 hover:underline"
             onClick={() => void mutateAsync(form.getValues())}
           >
             RESEND EMAIL
@@ -120,7 +120,7 @@ const ForgotPasswordPage: NextPage = () => {
             )}
           />
 
-          <Button type="submit" className="min-w-full" align="center">
+          <Button justify="center" type="submit" full>
             Send reset link
           </Button>
         </form>
