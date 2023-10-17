@@ -13,14 +13,8 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: "bg-yellow-500 text-white dark:bg-yellow-400 dark:text-black",
-        destructive:
-          "bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90",
-        outline:
-          "border border-slate-200 bg-white hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50",
         secondary:
           "bg-yellow-200 text-black dark:bg-yellow-800 dark:text-white",
-        ghost:
-          "hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50",
         icon: "bg-yellow-50 text-yellow-500 dark:bg-yellow-900 dark:text-yellow-400",
       },
       size: {
