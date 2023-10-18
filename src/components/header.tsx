@@ -1,22 +1,22 @@
+import { useState } from "react";
 import Link from "next/link";
 
-import { faBars, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEllipsisVertical,
+  faMoon,
+  faRightToBracket,
+  faSun,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 
 import { Heading } from "~/components/heading";
 import { Button } from "~/components/ui/button";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "~/components/ui/sheet";
+import Menu from "./menu";
 
 export const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, systemTheme, setTheme } = useTheme();
   const { data: sessionData } = useSession();
 
@@ -26,37 +26,23 @@ export const Header = () => {
   };
 
   return (
-    <header className="mx-8 my-6 flex justify-between md:mx-8 md:my-6">
+    <header className="mx-3 my-4 flex justify-between md:mx-8 md:my-6">
       <Link href="/">
         <Heading>gametrakr</Heading>
       </Link>
 
-      <div className="inline-flex items-center md:hidden">
-        <Sheet>
-          <SheetTrigger>
-            <FontAwesomeIcon size="2xl" icon={faBars} />
-          </SheetTrigger>
+      <div className="inline-flex items-center gap-2 md:hidden">
+        {!sessionData && (
+          <Button size="icon" onClick={() => void signIn()}>
+            <FontAwesomeIcon className="h-10 w-10" icon={faRightToBracket} />
+          </Button>
+        )}
 
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>
-                <Heading size="sm">gametrakr</Heading>
-              </SheetTitle>
-            </SheetHeader>
-            <div className="full-height-sheet flex flex-col-reverse gap-4">
-              <SheetClose>
-                <Button full as="a" href="/auth/sign-up">
-                  Sign Up
-                </Button>
-              </SheetClose>
-              <SheetClose>
-                <Button full variant="secondary" onClick={() => void signIn()}>
-                  Sign In
-                </Button>
-              </SheetClose>
-            </div>
-          </SheetContent>
-        </Sheet>
+        <Button size="icon" variant="icon" onClick={() => setIsMenuOpen(true)}>
+          <FontAwesomeIcon className="h-10 w-10" icon={faEllipsisVertical} />
+        </Button>
+
+        <Menu open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       </div>
 
       <div className="hidden gap-4 md:flex">

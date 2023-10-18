@@ -21,7 +21,7 @@ const buttonVariants = cva(
         md: "h-12 px-5 py-3",
         sm: "h-9 px-3",
         lg: "h-11 px-8",
-        icon: "h-12 w-12",
+        icon: "h-10 w-10 md:h-12 md:w-12",
       },
       justify: {
         start: "justify-start",
