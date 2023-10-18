@@ -67,16 +67,18 @@ const ForgotPasswordPage: NextPage = () => {
         title="Verify your account"
         className={{ card: "md:min-h-[706px]" }}
       >
-        <div className="text-left text-lg leading-6">
+        <div className="text-left text-lg/6 text-neutral-700 dark:text-slate-400">
           We&apos;ve just sent a reset link to{" "}
-          <span className="font-bold">{form.getValues("credential")}</span>.
-          Please check your inbox.
+          <span className="text-black dark:text-white">
+            {form.getValues("credential")}
+          </span>
+          . Please check your inbox.
         </div>
 
         <div className="mt-4 text-left">
           <button
             type="button"
-            className="text-lg leading-5 hover:underline"
+            className="text-lg/5 hover:underline"
             onClick={() => void mutateAsync(form.getValues())}
           >
             RESEND EMAIL
@@ -98,10 +100,12 @@ const ForgotPasswordPage: NextPage = () => {
           }
           className="space-y-6"
         >
-          <div className="text-left text-lg leading-6 text-muted-foreground">
+          <div className="text-left text-lg/6 text-neutral-700 dark:text-slate-400">
             Enter your account&apos;s{" "}
-            <span className="font-bold">email or nickname</span> below. We will
-            send a link to reset your password to your inbox.
+            <span className="font-bold text-black dark:text-white">
+              email or nickname
+            </span>{" "}
+            below. We will send a link to reset your password to your inbox.
           </div>
 
           <FormField
@@ -120,7 +124,7 @@ const ForgotPasswordPage: NextPage = () => {
             )}
           />
 
-          <Button type="submit" className="min-w-full" align="center">
+          <Button justify="center" type="submit" full>
             Send reset link
           </Button>
         </form>

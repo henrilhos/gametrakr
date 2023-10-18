@@ -5,38 +5,31 @@ import { cn } from "~/utils/cn";
 import type { VariantProps } from "class-variance-authority";
 import type { PropsWithChildren } from "react";
 
-const headingVariants = cva("", {
-  variants: {
-    align: {
-      left: "text-left",
-      center: "text-center",
-      right: "text-right",
+const spanVariants = cva(
+  "bg-gradient-to-t from-yellow-200 from-45% to-0% px-1 font-serif font-bold text-black dark:from-yellow-800 dark:text-white",
+  {
+    variants: {
+      size: {
+        sm: "text-2xl md:text-3xl",
+        md: "text-3xl md:text-4xl",
+        lg: "text-2xl/none md:text-5xl",
+      },
+    },
+    defaultVariants: {
+      size: "md",
     },
   },
-  defaultVariants: {
-    align: "center",
-  },
-});
-
-const spanVariants = cva("bg-heading px-1 font-apfel font-bold", {
-  variants: {
-    size: {
-      sm: "text-2xl md:text-3xl",
-      md: "text-3xl md:text-4xl",
-      lg: "text-4xl md:text-5xl",
-    },
-  },
-  defaultVariants: {
-    size: "md",
-  },
-});
+);
 
 type HeadingProps = PropsWithChildren<
-  { className?: string } & VariantProps<typeof headingVariants> &
-    VariantProps<typeof spanVariants>
+  {
+    className?: { container?: string; children?: string };
+  } & VariantProps<typeof spanVariants>
 >;
-export const Heading = ({ align, children, className, size }: HeadingProps) => (
-  <h3 className={cn(headingVariants({ align }))}>
-    <span className={cn(spanVariants({ size }), className)}>{children}</span>
+export const Heading = ({ children, className, size }: HeadingProps) => (
+  <h3 className={cn(className?.container)}>
+    <span className={cn(spanVariants({ size }), className?.children)}>
+      {children}
+    </span>
   </h3>
 );

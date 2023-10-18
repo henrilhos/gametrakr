@@ -37,14 +37,14 @@ const ConfirmAccount = ({
 
             <Section className="text-center">
               <Button
-                className="min-w-[10rem] items-center rounded-2xl bg-[#f2a100] px-5 py-3 text-xl font-bold leading-6 text-[#121212]"
+                className="min-w-[10rem] items-center rounded-2xl bg-[#f2a100] px-5 py-3 text-xl/6 font-bold text-[#121212]"
                 href={href}
               >
                 Confirm Account
               </Button>
             </Section>
 
-            <Text className="text-sm leading-6 text-black">
+            <Text className="text-sm/6 text-black">
               If you didn&apos;t request this email, there&apos;s nothing to
               worry about - you can safely ignore it.
             </Text>

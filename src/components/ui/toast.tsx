@@ -18,10 +18,12 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-        neutral: "bg-neutral text-neutral-foreground",
-        success: "bg-success text-success-foreground",
-        error: "bg-error text-error-foreground",
-        info: "bg-info text-info-foreground",
+        neutral:
+          "bg-yellow-50 text-yellow-600 dark:bg-yellow-950 dark:text-yellow-300",
+        success:
+          "bg-green-50 text-green-600 dark:bg-green-950 dark:text-green-300",
+        error: "bg-red-50 text-red-500 dark:bg-red-950 dark:text-red-300",
+        info: "bg-blue-50 text-blue-500 dark:bg-blue-950 dark:text-blue-300",
       },
     },
     defaultVariants: {
@@ -51,7 +53,7 @@ export const Toast = ({ children, variant, visible }: ToastProps) => {
         !visible && "animate-leave",
       )}
     >
-      <div className="flex items-center px-6 py-3 text-lg leading-5">
+      <div className="flex items-center px-6 py-3 text-lg/5">
         <div>
           <FontAwesomeIcon
             icon={icons[variant ?? "neutral"]}

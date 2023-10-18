@@ -1,77 +1,46 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 
+import colors from "./src/styles/colors";
+
 import { type Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {
-      backgroundImage: {
-        heading: "linear-gradient(0, rgb(var(--heading)) 45%, transparent 0%)",
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
       },
+    },
+    extend: {
       colors: {
-        background: "rgb(var(--background))",
-        foreground: "rgb(var(--foreground))",
-        card: {
-          DEFAULT: "rgb(var(--card))",
-          foreground: "rgb(var(--card-foreground))",
-        },
-        popover: {
-          DEFAULT: "rgb(var(--popover))",
-          foreground: "rgb(var(--popover-foreground))",
-        },
-        primary: {
-          DEFAULT: "rgb(var(--primary))",
-          foreground: "rgb(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "rgb(var(--secondary))",
-          foreground: "rgb(var(--secondary-foreground))",
-        },
-        muted: {
-          DEFAULT: "rgb(var(--muted))",
-          foreground: "rgb(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "rgb(var(--accent))",
-          foreground: "rgb(var(--accent-foreground))",
-        },
-        destructive: {
-          DEFAULT: "rgb(var(--destructive))",
-          foreground: "rgb(var(--destructive-foreground))",
-        },
-        error: {
-          DEFAULT: "rgb(var(--error))",
-          foreground: "rgb(var(--error-foreground))",
-        },
-        success: {
-          DEFAULT: "rgb(var(--success))",
-          foreground: "rgb(var(--success-foreground))",
-        },
-        neutral: {
-          DEFAULT: "rgb(var(--neutral))",
-          foreground: "rgb(var(--neutral-foreground))",
-        },
-        info: {
-          DEFAULT: "rgb(var(--info))",
-          foreground: "rgb(var(--info-foreground))",
-        },
-        border: "rgb(var(--border))",
-        input: "rgb(var(--input))",
-        label: "rgb(var(--label))",
-        ring: "rgb(var(--ring))",
+        inherit: colors.inherit,
+        current: colors.current,
+        transparent: colors.transparent,
+        black: colors.black,
+        white: colors.white,
+        yellow: colors.yellow,
+        teal: colors.teal,
+        green: colors.green,
+        blue: colors.blue,
+        violet: colors.violet,
+        pink: colors.pink,
+        red: colors.red,
+        orange: colors.orange,
+        neutral: colors.neutral,
+        slate: colors.slate,
       },
       fontFamily: {
-        apfel: ["Apfel Grotezk", "sans-serif"],
         sans: ["Atkinson Hyperlegible", ...fontFamily.sans],
+        serif: ["Apfel Grotezk", ...fontFamily.serif],
+      },
+      borderRadius: {
+        "4xl": "2rem",
       },
       // TODO: Check if they're used
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

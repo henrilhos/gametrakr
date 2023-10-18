@@ -1,24 +1,22 @@
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
-import { faBars, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEllipsisVertical,
+  faMoon,
+  faRightToBracket,
+  faSun,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 
 import { Heading } from "~/components/heading";
 import { Button } from "~/components/ui/button";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "~/components/ui/sheet";
+import Menu from "./menu";
 
 export const Header = () => {
-  const router = useRouter();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, systemTheme, setTheme } = useTheme();
   const { data: sessionData } = useSession();
 
@@ -28,59 +26,37 @@ export const Header = () => {
   };
 
   return (
-    <header className="mx-8 my-6 flex justify-between md:mx-8 md:my-6">
+    <header className="mx-3 my-4 flex justify-between md:mx-8 md:my-6">
       <Link href="/">
         <Heading>gametrakr</Heading>
       </Link>
 
-      <div className="inline-flex items-center md:hidden">
-        <Sheet>
-          <SheetTrigger>
-            <FontAwesomeIcon size="2xl" icon={faBars} />
-          </SheetTrigger>
+      <div className="inline-flex items-center gap-2 md:hidden">
+        {!sessionData && (
+          <Button size="icon" onClick={() => void signIn()}>
+            <FontAwesomeIcon className="h-10 w-10" icon={faRightToBracket} />
+          </Button>
+        )}
 
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>
-                <Heading align="left" size="sm">
-                  gametrakr
-                </Heading>
-              </SheetTitle>
-            </SheetHeader>
-            <div className="full-height-sheet flex flex-col-reverse gap-4">
-              <SheetClose>
-                <Button
-                  className="min-w-full"
-                  onClick={() => void router.push("/auth/sign-up")}
-                >
-                  Sign Up
-                </Button>
-              </SheetClose>
-              <SheetClose>
-                <Button
-                  className="min-w-full"
-                  onClick={() => void signIn()}
-                  variant="secondary"
-                >
-                  Sign In
-                </Button>
-              </SheetClose>
-            </div>
-          </SheetContent>
-        </Sheet>
+        <Button size="icon" variant="icon" onClick={() => setIsMenuOpen(true)}>
+          <FontAwesomeIcon className="h-10 w-10" icon={faEllipsisVertical} />
+        </Button>
+
+        <Menu open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       </div>
 
       <div className="hidden gap-4 md:flex">
         <Button
           variant="secondary"
           onClick={sessionData ? () => void signOut() : () => void signIn()}
+          className="w-40"
         >
           {sessionData ? "Sign out" : "Sign in"}
         </Button>
 
         {!sessionData && (
-          <Button onClick={() => void router.push("/auth/sign-up")}>
-            Sign Up
+          <Button as="a" href="/auth/sign-up" className="w-40">
+            Sign up
           </Button>
         )}
 
@@ -91,11 +67,11 @@ export const Header = () => {
           onClick={toggleTheme}
         >
           <FontAwesomeIcon
-            className="h-6 w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+            className="h-12 w-12 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
             icon={faSun}
           />
           <FontAwesomeIcon
-            className="absolute h-6 w-6 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+            className="absolute h-12 w-12 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
             icon={faMoon}
           />
           <span className="sr-only">Toggle theme</span>

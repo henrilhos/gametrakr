@@ -114,7 +114,7 @@ const ResetPasswordAccount: NextPage = () => {
             />
           </div>
 
-          <Button className="mt-8 min-w-full" align="center">
+          <Button justify="center" type="submit" full className="mt-8">
             Reset Password
           </Button>
         </form>

@@ -30,7 +30,7 @@ type DialogLayoutProps = PropsWithChildren<{
 }>;
 export const DialogLayout = ({ className, children }: DialogLayoutProps) => {
   return (
-    <main className="flex min-h-screen min-w-full items-center justify-center bg-foreground/20 backdrop-blur-sm">
+    <main className="flex min-h-screen min-w-full items-center justify-center bg-black/20 backdrop-blur-sm dark:bg-white/20">
       <Card
         className={clsx(
           "min-h-[100vh] min-w-[100vw] rounded-none px-7 pb-5 pt-10 text-center md:my-8 md:min-h-fit md:min-w-[31rem] md:max-w-[31rem] md:rounded-[2rem] md:px-14 md:pb-10",
@@ -59,10 +59,10 @@ export const AuthPageLayout = ({
     <DialogLayout className={className}>
       <div>
         <CardHeader>
-          <div className="text-left">
+          <div className="text-left text-neutral-900 dark:text-slate-100">
             <button
               type="button"
-              className="inline-flex text-lg font-bold leading-5"
+              className="inline-flex text-lg/5 font-bold"
               onClick={() => void router.back()}
             >
               <FontAwesomeIcon icon={faCaretLeft} className="mr-1.5" />
@@ -70,7 +70,9 @@ export const AuthPageLayout = ({
             </button>
           </div>
 
-          <CardTitle className="mt-6 text-left">{title}</CardTitle>
+          <CardTitle className="mt-6 text-left text-black dark:text-white">
+            {title}
+          </CardTitle>
         </CardHeader>
 
         <CardContent>{children}</CardContent>
