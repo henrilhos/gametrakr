@@ -14,7 +14,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, label, state, ...props }, ref) => {
     return (
       <div ref={ref} className={clsx("relative w-full")}>
-        {/* {JSON.stringify(state)} */}
         <input
           {...props}
           type={type}
@@ -32,7 +31,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className={twMerge(
             "pointer-events-none absolute -top-1.5 left-0 flex h-full w-full select-none !overflow-visible truncate text-sm font-normal leading-tight text-neutral-800 transition-all dark:text-slate-300",
 
-            "before:content[' '] before:pointer-events-none before:mt-[6px] before:box-border before:block before:h-4 before:w-5 before:rounded-tl-2xl before:border-l-4 before:border-t-4 before:border-neutral-500 before:transition-all dark:before:border-slate-700",
+            "before:content[' '] before-mr-1 before:pointer-events-none before:mt-[6px] before:box-border before:block before:h-4 before:w-5 before:rounded-tl-2xl before:border-l-4 before:border-t-4 before:border-neutral-500 before:transition-all dark:before:border-slate-700",
 
             "after:content[' '] after:pointer-events-none after:ml-1 after:mt-[6px] after:box-border after:block after:h-4 after:w-5 after:flex-grow after:rounded-tr-2xl after:border-r-4 after:border-t-4 after:border-neutral-500 after:transition-all dark:after:border-slate-700",
 
@@ -42,7 +41,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
             !!state?.invalid &&
               "text-red-500 before:border-red-500 after:border-red-500 peer-placeholder-shown:text-red-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent dark:text-red-400 dark:before:border-red-400 dark:after:border-red-400 dark:peer-placeholder-shown:text-red-400 dark:peer-placeholder-shown:before:border-transparent dark:peer-placeholder-shown:after:border-transparent",
-            !!props.value && "before:mr-1",
           )}
         >
           {label}
