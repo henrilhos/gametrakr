@@ -38,17 +38,6 @@ model Token {
     userId String @db.Uuid
 }
 
-model Carousel {
-    id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    name        String   @unique
-    imageUrl    String
-    publisher   String
-    releaseDate DateTime
-    active      Boolean  @default(true)
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-}
-
 enum TokenType {
     EMAIL
     PASSWORD

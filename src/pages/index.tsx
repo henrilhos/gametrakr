@@ -5,14 +5,20 @@ import { PageLayout } from "~/components/layout";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
 import { Container } from "~/components/ui/container";
-import { api } from "~/utils/api";
 
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
+
+type Game = {
+  imageUrl: string;
+  name: string;
+  publisher: string;
+  releaseYear: string;
+};
 
 const GameHeading = (props: {
-  name?: string;
-  publisher?: string;
-  releaseYear?: number;
+  name: string;
+  publisher: string;
+  releaseYear: string;
 }) => {
   return (
     <>
@@ -25,16 +31,8 @@ const GameHeading = (props: {
   );
 };
 
-const HomePage: NextPage = () => {
+const HomePage: NextPage<{ game: Game }> = ({ game }) => {
   const { data: sessionData } = useSession();
-  const { data } = api.carousel.getRandomGame.useQuery(undefined, {
-    refetchOnWindowFocus: false,
-  });
-
-  // TODO: add skeleton loading
-  if (!data) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <PageLayout>
@@ -42,12 +40,12 @@ const HomePage: NextPage = () => {
         <Card
           className="flex max-w-full grow flex-col justify-between rounded-3xl bg-cover bg-center bg-no-repeat px-2 pb-2 pt-4 md:rounded-4xl md:p-6"
           style={{
-            backgroundImage: `url(${data.imageUrl})`,
+            backgroundImage: `url(${game.imageUrl})`,
           }}
         >
           {/* TODO: add link to game page */}
           <div className="px-8 text-center text-neutral-100/60 md:inline-flex md:gap-1 md:px-0 md:text-left">
-            <GameHeading {...data} />
+            <GameHeading {...game} />
           </div>
 
           <div className="flex flex-col items-center">
@@ -84,4 +82,32 @@ const HomePage: NextPage = () => {
     </PageLayout>
   );
 };
+
+export const getStaticProps: GetStaticProps = () => {
+  const games: Game[] = [
+    {
+      imageUrl:
+        "https://blog.br.playstation.com/tachyon/sites/4/2023/09/1e7bd7539e6c12744bec0368cc51d372761c22e4-scaled.jpeg",
+      name: "Marvel's Spider-Man 2",
+      publisher: "Insomniac Games",
+      releaseYear: "2023",
+    },
+    {
+      imageUrl:
+        "https://www.videogameschronicle.com/files/2023/02/alan-wake-2.jpg",
+      name: "Alan Wake II",
+      publisher: "Remedy Entertainment",
+      releaseYear: "2023",
+    },
+  ];
+
+  const game = games[Math.floor(Math.random() * games.length)]!;
+
+  return {
+    props: {
+      game,
+    },
+  };
+};
+
 export default HomePage;
