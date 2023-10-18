@@ -30,7 +30,7 @@ type DialogLayoutProps = PropsWithChildren<{
 }>;
 export const DialogLayout = ({ className, children }: DialogLayoutProps) => {
   return (
-    <main className="flex min-h-screen min-w-full items-center justify-center bg-foreground/20 backdrop-blur-sm">
+    <main className="flex min-h-screen min-w-full items-center justify-center bg-black/20 backdrop-blur-sm dark:bg-white/20">
       <Card
         className={clsx(
           "min-h-[100vh] min-w-[100vw] rounded-none px-7 pb-5 pt-10 text-center md:my-8 md:min-h-fit md:min-w-[31rem] md:max-w-[31rem] md:rounded-[2rem] md:px-14 md:pb-10",

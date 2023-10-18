@@ -3,17 +3,8 @@
 @tailwind utilities;
 
 @import "fonts.css";
-@import "colors.css";
-@import "theme.css";
 
 @layer base {
-  html {
-    min-height: -webkit-fill-available;
-  }
-
-  /* body {
-    @apply bg-background text-foreground;
-  } */
 }
 
 @layer components {

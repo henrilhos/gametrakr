@@ -27,7 +27,7 @@ const Menu = ({ open, onClose }: MenuProps) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-slate/20 backdrop-blur-sm dark:bg-white/20" />
+          <div className="fixed inset-0 bg-black/20 backdrop-blur-sm dark:bg-white/20" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -42,7 +42,7 @@ const Menu = ({ open, onClose }: MenuProps) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-100"
               >
-                <div className="bg-white px-3 py-4 dark:bg-slate">
+                <div className="bg-white px-3 py-4 dark:bg-black">
                   <div className="flex w-full flex-row-reverse items-center">
                     <Button
                       size="icon"
@@ -67,7 +67,7 @@ const Menu = ({ open, onClose }: MenuProps) => {
                 leaveFrom="scale-100"
                 leaveTo="scale-100 translate-y-[-192px]"
               >
-                <div className="-mt-4 rounded-b-[18px] bg-white px-3 py-4 dark:bg-slate">
+                <div className="-mt-4 rounded-b-[18px] bg-white px-3 py-4 dark:bg-black">
                   <div>
                     <div className="px-2">
                       <div className="flex flex-col gap-2">

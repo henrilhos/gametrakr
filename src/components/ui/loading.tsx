@@ -5,7 +5,7 @@ export const LoadingSpinner = ({ size = 16 }: LoadingSpinnerProps) => (
   <div role="status" className="flex justify-center">
     <svg
       aria-hidden="true"
-      className="animate-spin fill-secondary text-primary"
+      className="animate-spin fill-yellow-200 text-yellow-500 dark:fill-yellow-800 dark:text-yellow-400"
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
