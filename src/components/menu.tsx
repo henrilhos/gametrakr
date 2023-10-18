@@ -46,7 +46,7 @@ const Menu = ({ open, onClose }: MenuProps) => {
                   <div className="flex w-full flex-row-reverse items-center">
                     <Button
                       size="icon"
-                      className="bg-transparent text-neutral-600 dark:bg-transparent dark:text-white"
+                      className="bg-transparent text-neutral-600 dark:bg-transparent dark:text-slate-300"
                       onClick={onClose}
                     >
                       <FontAwesomeIcon
