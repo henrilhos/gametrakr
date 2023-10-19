@@ -25,7 +25,7 @@ export const ThemeSwitch = () => {
       checked={isChecked()}
       onChange={handleThemeChange}
       className={classNames(
-        "bg-neutral-100",
+        "bg-neutral-100 dark:bg-slate-900",
         "relative inline-flex h-10 w-[72px] flex-shrink-0 cursor-pointer rounded-xl p-1 transition-colors duration-200 ease-in-out",
       )}
     >

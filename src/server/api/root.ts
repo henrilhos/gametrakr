@@ -1,5 +1,4 @@
 import { authRouter } from "~/server/api/routers/auth";
-import { carouselRouter } from "~/server/api/routers/carousel";
 import { createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -9,7 +8,6 @@ import { createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   auth: authRouter,
-  carousel: carouselRouter,
 });
 
 // export type definition of API
