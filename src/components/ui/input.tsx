@@ -18,7 +18,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
           type={type}
           className={twMerge(
-            "peer h-full w-full rounded-2xl border-4 border-neutral-500 border-t-transparent bg-transparent px-4 py-2.5 font-sans text-lg font-normal text-black shadow-none outline outline-0 transition-all dark:border-slate-700 dark:border-t-transparent dark:text-white",
+            "peer h-full w-full rounded-2xl border-4 border-neutral-500 border-t-transparent bg-transparent px-4 py-2.5 text-lg text-black shadow-none outline outline-0 transition-all dark:border-slate-700 dark:border-t-transparent dark:text-white",
             "placeholder-shown:border-4 placeholder-shown:border-neutral-500 placeholder-shown:border-t-neutral-500 dark:placeholder-shown:border-slate-700 dark:placeholder-shown:border-t-slate-700",
             "focus:border-4 focus:border-yellow-500 focus:border-t-transparent focus:outline-0 dark:focus:border-yellow-400 dark:focus:border-t-transparent",
             !!state?.invalid &&
