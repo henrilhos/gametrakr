@@ -12,7 +12,7 @@ type MenuProps = {
   open: boolean;
   onClose: () => void;
 };
-const Menu = ({ open, onClose }: MenuProps) => {
+export const Menu = ({ open, onClose }: MenuProps) => {
   const { data: sessionData } = useSession();
 
   return (
@@ -103,4 +103,3 @@ const Menu = ({ open, onClose }: MenuProps) => {
     </Transition>
   );
 };
-export default Menu;
