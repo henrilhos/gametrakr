@@ -27,15 +27,18 @@ export const SearchInput = () => {
   return (
     <div
       className={cn(
-        "pointer-events-none h-full rounded-t-2xl p-2",
-        isFocused && "bg-white",
+        "pointer-events-none relative h-full rounded-t-2xl p-2",
+        isFocused &&
+          "border-x-2 border-t-2 border-neutral-100 bg-white dark:border-neutral-950 dark:bg-black",
       )}
+      // onBlur={() => setIsFocused(false)}
     >
       <form className={cn("relative h-full")} onSubmit={handleOnSubmit}>
         <input
           className={cn(
-            "peer pointer-events-auto h-full max-h-[48px] min-w-[510px] rounded-2xl bg-yellow-50  px-4 pr-12 text-lg placeholder-yellow-600 shadow-none outline outline-0 transition-all",
-            "hover:placeholder-yellow-700 focus:placeholder-yellow-700",
+            "peer pointer-events-auto h-full max-h-[48px] min-w-[510px] rounded-2xl px-4 pr-12 text-lg shadow-none outline outline-0 transition-all",
+            "bg-yellow-50 placeholder-yellow-600 hover:placeholder-yellow-700 focus:placeholder-yellow-700",
+            "dark:bg-yellow-950 dark:text-yellow-50 dark:placeholder-yellow-500 dark:hover:placeholder-yellow-400 dark:focus:placeholder-yellow-700",
           )}
           placeholder="Search for games, genres, lists, reviews or users."
           onChange={handleOnChange}
@@ -43,7 +46,11 @@ export const SearchInput = () => {
           onBlur={() => setIsFocused(false)}
         />
         <button
-          className="pointer-events-auto absolute inset-y-0 right-0 px-5 py-3 text-yellow-600 peer-hover:text-yellow-700 peer-focus:text-yellow-700"
+          className={cn(
+            "pointer-events-auto absolute inset-y-0 right-0 px-5 py-3 ",
+            "text-yellow-600 peer-hover:text-yellow-700 peer-focus:text-yellow-700",
+            "dark:text-yellow-500 dark:peer-hover:text-yellow-400 dark:peer-focus:text-yellow-50",
+          )}
           type="submit"
         >
           <FontAwesomeIcon icon={faSearch} />
@@ -52,21 +59,27 @@ export const SearchInput = () => {
       </form>
       <div
         className={cn(
-          "absolute z-10 -mx-2 hidden min-w-[526px] rounded-b-2xl px-6 pb-5 pt-6 text-neutral-700 ",
-          isFocused && "block bg-white",
+          "absolute z-10 -ml-2.5 hidden min-w-[530px] rounded-b-2xl border-x-2 border-b-2 border-neutral-100 bg-white px-6 pb-5 pt-6 text-neutral-700 dark:border-neutral-950 dark:bg-black dark:text-slate-300",
+          isFocused && "block",
         )}
       >
         Search{" "}
         {search && (
           <>
-            <span className="text-black">&quot;{search}&quot;</span>{" "}
+            <span className="text-black dark:text-yellow-50">
+              &quot;{search}&quot;
+            </span>{" "}
           </>
         )}
         {/* TODO: add specific search */}
         {/* in:
         <div>
-          <button onClick={() => console.log("OIIIIIII")}>Games</button> |
-          Genres | Lists // Reviews // Users
+          <button
+            className="pointer-events-auto"
+            onClick={() => console.log("OIIIIIII")}
+          >
+            Games
+          </button>
         </div> */}
       </div>
     </div>
