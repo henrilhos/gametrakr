@@ -12,8 +12,9 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 
 import { Heading } from "~/components/heading";
+import { Menu } from "~/components/menu";
+import { SearchInput } from "~/components/search-input";
 import { Button } from "~/components/ui/button";
-import Menu from "./menu";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,6 +44,10 @@ export const Header = () => {
         </Button>
 
         <Menu open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      </div>
+
+      <div className="-my-2 -mr-2 hidden md:block">
+        <SearchInput />
       </div>
 
       <div className="hidden gap-4 md:flex">

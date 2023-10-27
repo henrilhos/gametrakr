@@ -34,6 +34,20 @@ export const env = createEnv({
         (str) => !str.includes("YOUR_RESEND_EMAIL_HERE"),
         "You forgot to change the default email",
       ),
+    TWITCH_CLIENT_ID: z
+      .string()
+      .min(1)
+      .refine(
+        (str) => !str.includes("YOUR_TWITCH_CLIENT_ID_HERE"),
+        "You forgot to change the default client ID",
+      ),
+    TWITCH_SECRET_ID: z
+      .string()
+      .min(1)
+      .refine(
+        (str) => !str.includes("YOUR_TWITCH_SECRET_ID_HERE"),
+        "You forgot to change the default secret ID",
+      ),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -69,6 +83,8 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_EMAIL: process.env.RESEND_EMAIL,
+    TWITCH_CLIENT_ID: process.env.TWITCH_CLIENT_ID,
+    TWITCH_SECRET_ID: process.env.TWITCH_SECRET_ID,
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
