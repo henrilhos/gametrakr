@@ -6,7 +6,7 @@ import {
   limit,
   offset,
   search,
-  twitchAccessToken as TwitchAccessToken,
+  twitchAccessToken,
   where,
   whereIn,
   WhereInFlags,
@@ -19,7 +19,7 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import type { db as prismaDB } from "~/server/db";
 import type { proto } from "ts-igdb-client";
 
-const TWITCH_SECRETS = {
+export const TWITCH_SECRETS = {
   client_id: env.TWITCH_CLIENT_ID,
   client_secret: env.TWITCH_SECRET_ID,
 };
@@ -39,10 +39,9 @@ const filterUserForClient = (user: User) => {
 
 const filterGameForClient = (game: proto.IGame) => {
   return {
-    image: `https:${(game.cover?.url ?? "").replace(
-      "t_thumb",
-      "t_cover_small_2x",
-    )}`,
+    image: (game.cover?.url ?? "")
+      .replace("thumb", "cover_small_2x")
+      .replace("//", "https://"),
     name: game.name ?? "",
     rating: Math.round(game.aggregated_rating ?? 0),
     releaseYear: unixTimestampToYear(game.first_release_date ?? 0),
@@ -72,8 +71,8 @@ const searchForUsers = async ({ query, db }: SearchForUsersProps) => {
 };
 
 const searchForGames = async ({ query }: { query: string }) => {
-  const twitchAccessToken = await TwitchAccessToken(TWITCH_SECRETS);
-  const igdbClient = igdb(TWITCH_SECRETS.client_id, twitchAccessToken);
+  const accessToken = await twitchAccessToken(TWITCH_SECRETS);
+  const igdbClient = igdb(TWITCH_SECRETS.client_id, accessToken);
 
   return (
     await igdbClient
@@ -103,7 +102,7 @@ const searchForGames = async ({ query }: { query: string }) => {
 };
 
 export const searchRouter = createTRPCRouter({
-  search: publicProcedure
+  getAllByQuery: publicProcedure
     .meta({ description: "Search" })
     .input(z.object({ query: z.string() }))
     .query(async ({ ctx, input }) => {

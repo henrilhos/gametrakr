@@ -72,7 +72,7 @@ const SearchPage: NextPage = () => {
   const searchParams = useSearchParams();
   const query = searchParams?.get("q");
 
-  const { data, isLoading } = api.search.search.useQuery({
+  const { data, isLoading } = api.search.getAllByQuery.useQuery({
     query: query ?? "",
   });
 
