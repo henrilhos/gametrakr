@@ -44,9 +44,9 @@ const GamePage: NextPage<{ slug: string }> = ({ slug }) => {
           </div>
 
           <div className="mt-8 grid grid-cols-12">
-            <div className="col-span-7 col-start-4">
-              <div className="flex justify-between">
-                <div className="flex gap-2">
+            <div className="col-span-7 col-start-4 flex flex-col gap-8">
+              <div className="flex justify-between gap-2">
+                <div className="flex flex-wrap gap-2">
                   {data.genres.map((genre) => (
                     <div
                       key={genre}
@@ -57,7 +57,7 @@ const GamePage: NextPage<{ slug: string }> = ({ slug }) => {
                   ))}
                 </div>
 
-                <div className="flex">
+                <div className="flex flex-wrap gap-2">
                   {data.platforms.map((platform) => (
                     <div
                       key={platform}
@@ -69,11 +69,9 @@ const GamePage: NextPage<{ slug: string }> = ({ slug }) => {
                 </div>
               </div>
 
-              <div className="mt-14">
-                <Heading>{data.name}</Heading>
-              </div>
+              <Heading>{data.name}</Heading>
 
-              <div className="mt-10 flex justify-between text-xl">
+              <div className="flex justify-between text-xl">
                 <div>
                   {new Intl.DateTimeFormat("en-US", {
                     year: "numeric",
@@ -84,9 +82,7 @@ const GamePage: NextPage<{ slug: string }> = ({ slug }) => {
                 <div>{data.developers.join(", ")}</div>
               </div>
 
-              <div className="mt-14 text-xl text-neutral-700">
-                {data.summary}
-              </div>
+              <div className="text-xl text-neutral-700">{data.summary}</div>
             </div>
           </div>
         </div>

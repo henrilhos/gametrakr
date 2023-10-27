@@ -82,7 +82,7 @@ const SearchPage: NextPage = () => {
 
   return (
     <PageLayout>
-      <div className="px-8 py-6">
+      <div className="flex flex-col gap-8 px-8 py-6">
         {data?.games && data.games.length > 0 && (
           <div>
             <Heading title="Games" query={query} />
