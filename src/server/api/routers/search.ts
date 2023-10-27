@@ -4,10 +4,10 @@ import {
   fields,
   igdb,
   limit,
-  sort,
+  offset,
+  search,
   twitchAccessToken as TwitchAccessToken,
   where,
-  WhereFlags,
   whereIn,
   WhereInFlags,
 } from "ts-igdb-client";
@@ -39,14 +39,18 @@ const filterUserForClient = (user: User) => {
 
 const filterGameForClient = (game: proto.IGame) => {
   return {
-    image: (game.cover?.url ?? "").replace("t_thumb", "t_cover_small_2x"),
+    image: `https:${(game.cover?.url ?? "").replace(
+      "t_thumb",
+      "t_cover_small_2x",
+    )}`,
     name: game.name ?? "",
     rating: Math.round(game.aggregated_rating ?? 0),
-    releaeYear: unixTimestampToYear(game.first_release_date ?? 0),
+    releaseYear: unixTimestampToYear(game.first_release_date ?? 0),
     slug: game.slug ?? "",
-    publisher:
-      game.involved_companies?.filter((c) => c.publisher)[0]?.company?.name ??
-      "",
+    developer: game.involved_companies
+      ?.filter((c) => c.developer)
+      .map((c) => c.company?.name)
+      .join(", "),
   };
 };
 
@@ -62,6 +66,7 @@ const searchForUsers = async ({ query, db }: SearchForUsersProps) => {
           contains: query,
         },
       },
+      take: 4,
     })
   ).map(filterUserForClient);
 };
@@ -74,6 +79,7 @@ const searchForGames = async ({ query }: { query: string }) => {
     await igdbClient
       .request("games")
       .pipe(
+        search(query),
         fields([
           "name",
           "slug",
@@ -81,18 +87,19 @@ const searchForGames = async ({ query }: { query: string }) => {
           "aggregated_rating",
           "first_release_date",
           "involved_companies.company.name",
-          "involved_companies.publisher",
+          "involved_companies.developer",
         ]),
-        sort("aggregated_rating", "desc"),
         and(
-          where("name", "~", query, WhereFlags.CONTAINS),
           whereIn("category", [0, 8, 9, 10, 11], WhereInFlags.OR),
           where("aggregated_rating", "!=", null),
         ),
-        limit(10),
+        limit(4),
+        offset(0),
       )
       .execute()
-  ).data.map(filterGameForClient);
+  ).data
+    .map(filterGameForClient)
+    .sort((a, b) => b.rating - a.rating);
 };
 
 export const searchRouter = createTRPCRouter({
@@ -105,14 +112,16 @@ export const searchRouter = createTRPCRouter({
       const users = await searchForUsers({ query, db: ctx.db });
       const games = await searchForGames({ query });
 
-      let topResult;
-      if (games.length > 0) {
-        topResult = games.shift();
-      }
+      // let topResult;
+      // if (games.length > 0) {
+      //   topResult = games.shift();
+      // }
 
       return {
         message: `Searching for ${query}`,
-        data: { users, games, topResult },
+        users,
+        games,
+        // topResult,
       };
     }),
 });

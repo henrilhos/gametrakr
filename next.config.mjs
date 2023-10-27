@@ -8,6 +8,10 @@
 const config = {
   reactStrictMode: true,
 
+  images: {
+    domains: ["images.igdb.com", "fakeimg.pl"],
+  },
+
   /**
    * If you are using `appDir` then you must comment the below `i18n` config out.
    *
