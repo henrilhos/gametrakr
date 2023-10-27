@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { type GetStaticProps, type NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 
 import { Heading } from "../../components/heading";
 import { PageLayout } from "../../components/layout";
@@ -30,12 +31,47 @@ const GamePage: NextPage<{ slug: string }> = ({ slug }) => {
       <PageLayout>
         <div className="mx-8">
           <div
-            className="h-[320px] w-full rounded-2xl bg-center"
+            className="relative h-[320px] w-full rounded-2xl bg-center"
             style={{ backgroundImage: `url(${header})` }}
-          />
+          >
+            <Image
+              width={280}
+              height={372}
+              alt={data.name}
+              className="absolute left-0 top-0 ml-[36px] mt-[160px] rounded-2xl"
+              src={data.cover}
+            />
+          </div>
+
           <div className="mt-8 grid grid-cols-12">
-            <div className="col-span-6 col-start-4">
-              <Heading>{data.name}</Heading>
+            <div className="col-span-7 col-start-4">
+              <div className="flex justify-between">
+                <div className="flex gap-2">
+                  {data.genres.map((genre) => (
+                    <div
+                      key={genre}
+                      className="rounded-[40px] bg-yellow-100 px-4 py-2 text-sm uppercase text-yellow-600"
+                    >
+                      {genre}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex">
+                  {data.platforms.map((platform) => (
+                    <div
+                      key={platform}
+                      className="rounded-[40px] bg-yellow-100 px-4 py-2 text-sm uppercase text-yellow-600"
+                    >
+                      {platform}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-14">
+                <Heading>{data.name}</Heading>
+              </div>
 
               <div className="mt-10 flex justify-between text-xl">
                 <div>
