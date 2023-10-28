@@ -2,50 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-import { faCaretRight, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { GameCard } from "~/components/game-card";
 import { PageLayout } from "~/components/layout";
 import { api } from "~/utils/api";
 
 import type { NextPage } from "next";
-
-type GameCardProps = {
-  image: string;
-  name: string;
-  rating: number;
-  releaseYear: number;
-  slug: string;
-  developer?: string;
-};
-const GameCard = (props: GameCardProps) => {
-  return (
-    <Link
-      href={`/game/${props.slug}`}
-      className="flex gap-4 rounded-3xl border-2 border-neutral-100 bg-white p-4 dark:border-0 dark:bg-neutral-950"
-    >
-      <Image
-        src={props.image}
-        width={128}
-        height={184}
-        alt={props.name}
-        className="rounded-lg border-2 border-neutral-100 dark:border-neutral-900"
-      />
-      <div className="flex min-w-0 flex-col gap-4">
-        <div className="text-neutral-600 dark:text-neutral-700">
-          <FontAwesomeIcon icon={faStar} className="mr-1 text-yellow-500" />
-          <span className="font-bold">{props.rating}</span>
-          <span className="text-sm">/100</span>
-        </div>
-        <div className="font-bold dark:text-neutral-100">{props.name}</div>
-        <div className="text-sm text-neutral-700">
-          <div>{props.releaseYear}</div>
-          <div className="truncate">{props.developer}</div>
-        </div>
-      </div>
-    </Link>
-  );
-};
 
 type HeadingProps = {
   title: string;
@@ -53,17 +17,19 @@ type HeadingProps = {
 };
 const Heading = (props: HeadingProps) => {
   return (
-    <div className="flex">
+    <div className="flex items-center">
       <h2 className="grow font-serif text-2xl font-bold dark:text-neutral-100">
         {props.title}
       </h2>
-      <Link
-        href={`/${props.title.toLowerCase()}?q=${props.query}`}
-        className="text-sm font-bold uppercase text-neutral-600 hover:underline dark:text-neutral-700"
-      >
-        Show More
-        <FontAwesomeIcon icon={faCaretRight} className="ml-1" />
-      </Link>
+      {props.query && (
+        <Link
+          href={`/${props.title.toLowerCase()}?q=${props.query}`}
+          className="text-sm font-bold uppercase text-neutral-600 hover:underline dark:text-neutral-700"
+        >
+          Show More
+          <FontAwesomeIcon icon={faCaretRight} className="ml-1" />
+        </Link>
+      )}
     </div>
   );
 };
@@ -82,15 +48,25 @@ const SearchPage: NextPage = () => {
 
   return (
     <PageLayout>
-      <div className="flex flex-col gap-8 px-8 py-6">
+      <div className="flex flex-col gap-8 px-4 py-3 md:px-8 md:py-6">
         {data?.games && data.games.length > 0 && (
-          <div>
-            <Heading title="Games" query={query} />
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="col-span-1 flex flex-col">
+              <Heading title="Best result" />
 
-            <div className="mt-2 grid grid-cols-4 gap-4">
-              {data.games.map((game) => (
-                <GameCard key={game.slug} {...game} />
-              ))}
+              {data.bestResult && (
+                <GameCard primary className="mt-2" {...data.bestResult} />
+              )}
+            </div>
+
+            <div className="col-span-1 md:col-span-2">
+              <Heading title="Games" query={query} />
+
+              <div className="mt-2 grid gap-4 md:grid-cols-3">
+                {data.games.map((game) => (
+                  <GameCard key={game.slug} {...game} />
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -131,5 +107,4 @@ const SearchPage: NextPage = () => {
     </PageLayout>
   );
 };
-
 export default SearchPage;

@@ -1,7 +1,8 @@
 import { and, fields, igdb, twitchAccessToken, where } from "ts-igdb-client";
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+// TODO: put on a new file
 import { TWITCH_SECRETS } from "./search";
 
 import type { proto } from "ts-igdb-client";
