@@ -40,6 +40,9 @@ export default {
       borderRadius: {
         "4xl": "2rem",
       },
+      aspectRatio: {
+        "game-cover": "3 / 4",
+      },
       // TODO: Check if they're used
       keyframes: {
         "accordion-down": {
