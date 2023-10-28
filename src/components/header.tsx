@@ -46,7 +46,7 @@ export const Header = () => {
         <Menu open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       </div>
 
-      <div className="-my-2 -mr-2 hidden md:block">
+      <div className="hidden md:block">
         <SearchInput />
       </div>
 
