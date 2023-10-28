@@ -32,7 +32,7 @@ export const GameCard = ({
     >
       <div
         className={cn(
-          "aspect-game-cover relative min-w-fit overflow-hidden",
+          "relative aspect-game-cover min-w-fit overflow-hidden",
           primary && "max-h-[288px]",
         )}
       >
