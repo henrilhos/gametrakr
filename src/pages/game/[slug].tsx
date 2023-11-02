@@ -3,10 +3,10 @@ import { type GetStaticProps, type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 
-import { Heading } from "../../components/heading";
-import { PageLayout } from "../../components/layout";
-import { generateServerSideHelpers } from "../../server/helpers/ssgHelper";
-import { api } from "../../utils/api";
+import { Heading } from "~/components/heading";
+import { PageLayout } from "~/components/layout";
+import { generateServerSideHelpers } from "~/server/helpers/ssgHelper";
+import { api } from "~/utils/api";
 
 const GamePage: NextPage<{ slug: string }> = ({ slug }) => {
   const [header, setHeader] = useState("");
