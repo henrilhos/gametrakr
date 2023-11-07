@@ -27,7 +27,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="mx-3 my-4 flex justify-between md:mx-8 md:my-6">
+    <header className="absolute left-0 top-0 flex w-full justify-between px-3 py-4 md:gap-3 md:px-8 md:py-6">
       <Link href="/">
         <Heading>gametrakr</Heading>
       </Link>
@@ -46,11 +46,9 @@ export const Header = () => {
         <Menu open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       </div>
 
-      <div className="hidden md:block">
-        <SearchInput />
-      </div>
-
       <div className="hidden gap-4 md:flex">
+        <SearchInput />
+
         <Button
           variant="secondary"
           onClick={sessionData ? () => void signOut() : () => void signIn()}

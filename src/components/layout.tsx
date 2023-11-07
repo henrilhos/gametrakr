@@ -20,7 +20,7 @@ export const PageLayout = (props: PropsWithChildren) => {
   return (
     <>
       <Header />
-      <main>{props.children}</main>
+      <main className="h-full w-full pt-[72px] md:pt-24">{props.children}</main>
     </>
   );
 };
@@ -33,7 +33,7 @@ export const DialogLayout = ({ className, children }: DialogLayoutProps) => {
     <main className="flex min-h-screen min-w-full items-center justify-center bg-black/20 backdrop-blur-sm dark:bg-white/20">
       <Card
         className={clsx(
-          "min-h-[100vh] min-w-[100vw] rounded-none px-7 pb-5 pt-10 text-center md:my-8 md:min-h-fit md:min-w-[31rem] md:max-w-[31rem] md:rounded-[2rem] md:px-14 md:pb-10",
+          "h-screen w-screen rounded-none px-7 pb-7 pt-10 text-center md:m-8 md:h-fit md:max-w-lg md:rounded-4xl md:px-14 md:py-10",
           className?.card,
         )}
       >
@@ -56,9 +56,9 @@ export const AuthPageLayout = ({
   const router = useRouter();
 
   return (
-    <DialogLayout className={className}>
-      <div>
-        <CardHeader>
+    <DialogLayout className={{ card: clsx(className?.card, "flex gap-6") }}>
+      <div className="flex flex-col gap-12">
+        <CardHeader className="gap-6">
           <div className="text-left text-neutral-900 dark:text-slate-100">
             <button
               type="button"
@@ -70,7 +70,7 @@ export const AuthPageLayout = ({
             </button>
           </div>
 
-          <CardTitle className="mt-6 text-left text-black dark:text-white">
+          <CardTitle className="text-left text-black dark:text-white">
             {title}
           </CardTitle>
         </CardHeader>

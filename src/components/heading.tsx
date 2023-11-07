@@ -10,9 +10,10 @@ const spanVariants = cva(
   {
     variants: {
       size: {
-        sm: "text-2xl md:text-3xl",
-        md: "text-3xl md:text-4xl",
+        sm: "text-2xl/none md:text-3xl",
+        md: "text-3xl/none md:text-4xl",
         lg: "text-2xl/none md:text-5xl",
+        xl: "text-6xl/none",
       },
     },
     defaultVariants: {
@@ -27,9 +28,9 @@ type HeadingProps = PropsWithChildren<
   } & VariantProps<typeof spanVariants>
 >;
 export const Heading = ({ children, className, size }: HeadingProps) => (
-  <h3 className={cn(className?.container)}>
+  <div className={cn(className?.container)}>
     <span className={cn(spanVariants({ size }), className?.children)}>
       {children}
     </span>
-  </h3>
+  </div>
 );

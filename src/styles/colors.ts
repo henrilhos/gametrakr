@@ -2,7 +2,7 @@ const colors = {
   inherit: "inherit",
   current: "currentColor",
   transparent: "transparent",
-  black: "#141414",
+  black: "#121212",
   white: "#ffffff",
   yellow: {
     50: "#faf4e7",
