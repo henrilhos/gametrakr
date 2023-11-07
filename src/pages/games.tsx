@@ -43,7 +43,7 @@ const SearchGamesPage: NextPage = () => {
 
   return (
     <PageLayout>
-      <div className="mx-8 my-6">
+      <div className="px-8 py-6">
         <InfiniteScroller
           fetchNextPage={() => void fetchNextPage()}
           hasNextPage={hasNextPage ?? false}
