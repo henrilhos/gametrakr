@@ -99,15 +99,15 @@ const SignUpPage: NextPage = () => {
         title="Verify your account"
         className={{ card: "md:min-h-[706px]" }}
       >
-        <div className="text-left text-lg/6 text-neutral-700 dark:text-slate-400">
-          We&apos;ve just sent a verification link to{" "}
-          <span className="text-black dark:text-white">
-            {form.getValues("email")}
-          </span>
-          . Please check your inbox.
-        </div>
+        <div className="flex flex-col items-start gap-10 text-left">
+          <div className="text-lg/tight text-neutral-700 dark:text-slate-400">
+            We&apos;ve just sent a verification link to{" "}
+            <span className="font-bold text-black dark:text-white">
+              {form.getValues("email")}
+            </span>
+            . Please check your inbox.
+          </div>
 
-        <div className="mt-4 text-left">
           <button
             type="button"
             className="text-lg/5 text-black hover:underline dark:text-white"
@@ -130,9 +130,9 @@ const SignUpPage: NextPage = () => {
           onSubmit={(event) =>
             void form.handleSubmit(onValid, onInvalid)(event)
           }
-          className="space-y-8"
+          className="flex flex-col gap-8"
         >
-          <div className="space-y-6">
+          <div className="flex flex-col gap-6">
             <FormField
               control={form.control}
               name="username"
@@ -189,7 +189,7 @@ const SignUpPage: NextPage = () => {
             />
           </div>
 
-          <div>
+          <div className="flex flex-col gap-2">
             <div className="text-sm/4 text-neutral-700 dark:text-slate-400">
               By creating you agree to the{" "}
               <Link
@@ -200,7 +200,8 @@ const SignUpPage: NextPage = () => {
               </Link>
               .
             </div>
-            <Button type="submit" className="mt-2 min-w-full" justify="center">
+
+            <Button type="submit" className="min-w-full" justify="center">
               Sign Up
             </Button>
           </div>
