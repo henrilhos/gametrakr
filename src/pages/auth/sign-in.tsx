@@ -43,7 +43,7 @@ const SignInPage: NextPage = () => {
     return (
       <DialogLayout
         className={{
-          card: "flex flex-col justify-center md:min-h-[589px]",
+          card: "flex flex-col justify-center md:min-h-[622px]",
         }}
       >
         <LoadingSpinner size={48} />
@@ -56,9 +56,9 @@ const SignInPage: NextPage = () => {
       <Form {...form}>
         <form
           onSubmit={(event) => void form.handleSubmit(onValid)(event)}
-          className="space-y-8"
+          className="flex flex-col gap-8"
         >
-          <div className="space-y-6">
+          <div className="flex flex-col gap-6">
             <FormField
               control={form.control}
               name="credential"
@@ -70,13 +70,14 @@ const SignInPage: NextPage = () => {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <>
+                    <div className="flex flex-col gap-2">
                       <Input label="Password" type="password" {...field} />
                       <div className="text-right">
                         <Link
@@ -86,7 +87,7 @@ const SignInPage: NextPage = () => {
                           Forgot your password?
                         </Link>
                       </div>
-                    </>
+                    </div>
                   </FormControl>
                 </FormItem>
               )}
@@ -97,10 +98,8 @@ const SignInPage: NextPage = () => {
             Sign in
           </Button>
 
-          <div>
-            <div className="mb-2 text-lg/6 text-neutral-700 dark:text-slate-400">
-              New on gametrakr?
-            </div>
+          <div className="flex flex-col gap-2 text-lg/6 text-neutral-700 dark:text-slate-400">
+            New on gametrakr?
             <Button
               as="a"
               variant="secondary"
