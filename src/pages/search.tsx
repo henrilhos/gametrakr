@@ -51,18 +51,16 @@ const SearchPage: NextPage = () => {
       <div className="flex flex-col gap-8 px-4 py-3 md:px-8 md:py-6">
         {data?.games && data.games.length > 0 && (
           <div className="grid gap-4 md:grid-cols-3">
-            <div className="col-span-1 flex flex-col">
+            <div className="col-span-1 flex flex-col gap-2">
               <Heading title="Best result" />
 
-              {data.bestResult && (
-                <GameCard primary className="mt-2" {...data.bestResult} />
-              )}
+              {data.bestResult && <GameCard primary {...data.bestResult} />}
             </div>
 
-            <div className="col-span-1 md:col-span-2">
+            <div className="col-span-1 flex flex-col gap-2 md:col-span-2">
               <Heading title="Games" query={query} />
 
-              <div className="mt-2 grid gap-4 md:grid-cols-3">
+              <div className="grid gap-4 md:grid-cols-3">
                 {data.games.map((game) => (
                   <GameCard key={game.slug} {...game} />
                 ))}
