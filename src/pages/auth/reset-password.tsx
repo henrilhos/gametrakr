@@ -61,7 +61,7 @@ const ResetPasswordAccount: NextPage = () => {
   if (loading) {
     return (
       <DialogLayout
-        className={{ card: "flex flex-col justify-center md:min-h-[621px]" }}
+        className={{ card: "flex flex-col justify-center md:min-h-[605.5px]" }}
       >
         <LoadingSpinner size={48} />
       </DialogLayout>
@@ -69,17 +69,20 @@ const ResetPasswordAccount: NextPage = () => {
   }
 
   return (
-    <AuthPageLayout
-      title="Reset password"
-      className={{ card: "md:min-h-[621px]" }}
-    >
+    <AuthPageLayout title="Choose your new password">
       <Form {...form}>
         <form
+          className="flex flex-col gap-8"
           onSubmit={(event) =>
             void form.handleSubmit(onValid, onInvalid)(event)
           }
         >
-          <div className="space-y-8">
+          <div className="flex flex-col gap-6">
+            <div className="text-left text-lg/tight text-neutral-700 dark:text-neutral-300">
+              Make sure your new password is 8 characters or longer, and
+              includes numbers, letters, and punctuation marks.
+            </div>
+
             <FormField
               control={form.control}
               name="password"
@@ -96,6 +99,7 @@ const ResetPasswordAccount: NextPage = () => {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -114,7 +118,7 @@ const ResetPasswordAccount: NextPage = () => {
             />
           </div>
 
-          <Button justify="center" type="submit" full className="mt-8">
+          <Button justify="center" type="submit" full>
             Reset Password
           </Button>
         </form>

@@ -7,6 +7,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import { ThemeSwitch } from "~/components/theme-switch";
 import { Button } from "~/components/ui/button";
+import { SearchInput } from "./search-input";
 
 type MenuProps = {
   open: boolean;
@@ -43,7 +44,10 @@ export const Menu = ({ open, onClose }: MenuProps) => {
                 leaveTo="opacity-0 scale-100"
               >
                 <div className="bg-white px-3 py-4 dark:bg-black">
-                  <div className="flex w-full flex-row-reverse items-center">
+                  <div className="flex w-full items-center gap-2">
+                    <div className="h-[40px] w-full">
+                      <SearchInput placeholder="Search" />
+                    </div>
                     <Button
                       size="icon"
                       className="bg-transparent text-neutral-600 dark:bg-transparent dark:text-slate-300"
@@ -67,32 +71,26 @@ export const Menu = ({ open, onClose }: MenuProps) => {
                 leaveFrom="scale-100"
                 leaveTo="scale-100 translate-y-[-192px]"
               >
-                <div className="-mt-4 rounded-b-[18px] bg-white px-3 py-4 dark:bg-black">
-                  <div>
-                    <div className="px-2">
-                      <div className="flex flex-col gap-2">
-                        {!sessionData && (
-                          <Button as="a" href="/auth/sign-up" full>
-                            Sign Up
-                          </Button>
-                        )}
-                        <Button
-                          variant="secondary"
-                          full
-                          onClick={
-                            sessionData
-                              ? () => void signOut()
-                              : () => void signIn()
-                          }
-                        >
-                          {sessionData ? "Sign out" : "Sign in"}
-                        </Button>
-                      </div>
-                    </div>
+                <div className="-mt-4 flex flex-col gap-4 rounded-b-[18px] bg-white px-3 py-4 dark:bg-black">
+                  <div className="flex flex-col gap-2">
+                    {!sessionData && (
+                      <Button as="a" href="/auth/sign-up" full>
+                        Sign Up
+                      </Button>
+                    )}
+                    <Button
+                      variant="secondary"
+                      full
+                      onClick={
+                        sessionData ? () => void signOut() : () => void signIn()
+                      }
+                    >
+                      {sessionData ? "Sign out" : "Sign in"}
+                    </Button>
+                  </div>
 
-                    <div className="mt-4 flex w-full flex-row-reverse">
-                      <ThemeSwitch />
-                    </div>
+                  <div className="flex w-full flex-row-reverse">
+                    <ThemeSwitch />
                   </div>
                 </div>
               </Transition.Child>

@@ -32,7 +32,7 @@ const CardTitle = React.forwardRef<
   <h1
     ref={ref}
     className={cn(
-      "mb-12 font-serif text-4xl font-semibold leading-none tracking-tight",
+      "font-serif text-4xl font-semibold leading-none tracking-tight",
       className,
     )}
     {...props}
@@ -54,7 +54,7 @@ const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("mt-6 flex flex-col items-center", className)}
+    className={cn("flex flex-col items-center", className)}
     {...props}
   />
 ));

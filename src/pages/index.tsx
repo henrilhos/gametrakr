@@ -22,10 +22,10 @@ const GameHeading = (props: {
 }) => {
   return (
     <>
-      <div>{`${props.name} (${props.releaseYear})`.toUpperCase()}&nbsp;</div>
+      <div>{`${props.name} (${props.releaseYear})`}&nbsp;</div>
       <div className="inline-flex gap-1">
         <div>©</div>
-        <div>{`${props.publisher}`.toUpperCase()}</div>
+        <div>{`${props.publisher}`}</div>
       </div>
     </>
   );
@@ -44,7 +44,7 @@ const HomePage: NextPage<{ game: Game }> = ({ game }) => {
           }}
         >
           {/* TODO: add link to game page */}
-          <div className="px-8 text-center text-neutral-100/60 md:inline-flex md:gap-1 md:px-0 md:text-left">
+          <div className="px-8 text-center uppercase text-black/60 md:inline-flex  md:gap-1 md:px-0 md:text-left md:text-neutral-100/60">
             <GameHeading {...game} />
           </div>
 
@@ -58,7 +58,7 @@ const HomePage: NextPage<{ game: Game }> = ({ game }) => {
               </Heading>
 
               <div className="mx-1.5 mt-5 flex flex-col items-end justify-between md:mx-0 md:mt-10 md:flex-row">
-                <div className="max-w-2xl text-center text-sm md:text-left md:text-xl/6">
+                <div className="max-w-2xl text-center text-base/tight md:text-left md:text-xl/tight">
                   Show everyone what games you love, share your thoughts and
                   experiences and connect with a passionate gaming community.
                 </div>
@@ -86,17 +86,9 @@ const HomePage: NextPage<{ game: Game }> = ({ game }) => {
 export const getStaticProps: GetStaticProps = () => {
   const games: Game[] = [
     {
-      imageUrl:
-        "https://blog.br.playstation.com/tachyon/sites/4/2023/09/1e7bd7539e6c12744bec0368cc51d372761c22e4-scaled.jpeg",
-      name: "Marvel's Spider-Man 2",
-      publisher: "Insomniac Games",
-      releaseYear: "2023",
-    },
-    {
-      imageUrl:
-        "https://www.videogameschronicle.com/files/2023/02/alan-wake-2.jpg",
-      name: "Alan Wake II",
-      publisher: "Remedy Entertainment",
+      imageUrl: "https://i.imgur.com/d1SnqRH.jpg",
+      name: "Song of Nunu: A League of Legends Story",
+      publisher: "Tequila Works",
       releaseYear: "2023",
     },
   ];
