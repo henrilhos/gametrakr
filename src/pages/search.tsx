@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -7,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { GameCard } from "~/components/game-card";
 import { PageLayout } from "~/components/layout";
+import { ProfileCard } from "~/components/profile-card";
 import { api } from "~/utils/api";
 
 import type { NextPage } from "next";
@@ -74,29 +74,8 @@ const SearchPage: NextPage = () => {
             <Heading title="Users" query={query} />
 
             <div className="mt-2 grid grid-cols-4 gap-4">
-              {data.users.map((u) => (
-                <Link
-                  key={u.name}
-                  href={`/${u.name}`}
-                  className="flex flex-col items-center justify-center gap-2 rounded-3xl border-2 border-neutral-100 bg-white p-2 dark:border-0 dark:bg-neutral-950"
-                >
-                  <div className="relative flex h-full w-full flex-col items-center pb-[40px]">
-                    {/* <div className="h-20 w-full rounded-lg bg-[url('https://fakeimg.pl/80')]"> */}
-                    <div className="h-20 w-full rounded-lg bg-yellow-500">
-                      <div className="h-full w-full rounded-lg bg-gradient-to-t from-black/20 to-transparent"></div>
-                    </div>
-                    <Image
-                      className="absolute bottom-0 rounded-3xl border-4 border-green-300 dark:border-green-500"
-                      src="https://fakeimg.pl/80"
-                      width={80}
-                      height={80}
-                      alt={`@${u.name}'s profile picture`}
-                    />
-                  </div>
-                  <div className="text-font-bold text-lg font-bold text-green-600 dark:text-green-500">
-                    {u.name}
-                  </div>
-                </Link>
+              {data.users.map((user) => (
+                <ProfileCard key={user.name} {...user} />
               ))}
             </div>
           </div>

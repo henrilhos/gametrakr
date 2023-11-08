@@ -25,14 +25,14 @@ export const GameCard = ({ primary = false, ...props }: GameCardProps) => {
           "border-yellow-100 bg-yellow-100 p-5 dark:border-yellow-900 dark:bg-yellow-900",
       )}
     >
-      <div className={"relative aspect-game-cover min-w-fit overflow-hidden"}>
+      <div className="relative aspect-game-cover min-w-fit overflow-hidden">
         <Image
           src={props.image ? props.image : "https://fakeimg.pl/80"}
           alt={props.name}
           fill
           objectFit="cover"
           className={cn(
-            "relative rounded-lg border-2 border-neutral-100 dark:border-neutral-900",
+            "rounded-lg border-2 border-neutral-100 dark:border-neutral-900",
             primary && "border-yellow-200 dark:border-yellow-950",
           )}
         />
