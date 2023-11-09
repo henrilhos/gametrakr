@@ -48,6 +48,20 @@ export const env = createEnv({
         (str) => !str.includes("YOUR_TWITCH_SECRET_ID_HERE"),
         "You forgot to change the default secret ID",
       ),
+    UPLOADTHING_SECRET: z
+      .string()
+      .min(1)
+      .refine(
+        (str) => !str.includes("YOUR_UPLOADTHING_SECRET_HERE"),
+        "You forgot to change the default secret",
+      ),
+    UPLOADTHING_APP_ID: z
+      .string()
+      .min(1)
+      .refine(
+        (str) => !str.includes("YOUR_UPLOADTHING_APP_ID_HERE"),
+        "You forgot to change the default app ID",
+      ),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -85,6 +99,8 @@ export const env = createEnv({
     RESEND_EMAIL: process.env.RESEND_EMAIL,
     TWITCH_CLIENT_ID: process.env.TWITCH_CLIENT_ID,
     TWITCH_SECRET_ID: process.env.TWITCH_SECRET_ID,
+    UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
+    UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
