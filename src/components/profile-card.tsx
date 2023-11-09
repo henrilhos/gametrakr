@@ -14,19 +14,22 @@ export const ProfileCard = (props: ProfileCardProps) => {
   return (
     <div className="rounded-2xl border-2 border-neutral-100 bg-white p-3 dark:border-neutral-950 dark:bg-neutral-950">
       <div className="relative h-20 w-full">
-        <Image
+        {/* <Image
           alt={`${props.name}'s cover picture`}
-          src="https://fakeimg.pl/80"
+          src="/not-found.png"
           objectFit="cover"
           className="z-0 rounded-lg"
           fill
-        />
+        /> */}
+        <div className="h-full w-full rounded-lg bg-yellow-500 dark:bg-yellow-400">
+          &nbsp;
+        </div>
       </div>
       <div className="mx-2 flex flex-row gap-2">
         <div className="relative z-10 -mt-8 h-[104px] w-[104px]">
           <Image
             alt={`${props.name}'s profile picture`}
-            src={props.image ? props.image : "https://fakeimg.pl/80"}
+            src={props.image ? props.image : "/not-found.png"}
             objectFit="cover"
             className="z-0 rounded-3xl border-4 border-white dark:border-neutral-950"
             fill

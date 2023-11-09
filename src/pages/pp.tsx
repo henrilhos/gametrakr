@@ -10,7 +10,7 @@ import type { NextPage } from "next";
 
 // TODO: delete after creating profile page
 const ProfilePage: NextPage = () => {
-  const [img, setImg] = useState("https://fakeimg.pl/80");
+  const [img, setImg] = useState("/not-found.png");
 
   const { startUpload } = useUploadThing("profileImageUploader", {
     onClientUploadComplete: (data) => {
@@ -19,7 +19,7 @@ const ProfilePage: NextPage = () => {
     },
     onUploadError: (err) => {
       console.log(err.message);
-      setImg("https://fakeimg.pl/80");
+      setImg("/not-found.png");
     },
   });
 

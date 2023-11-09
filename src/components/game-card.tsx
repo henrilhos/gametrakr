@@ -26,7 +26,7 @@ export const GameCard = ({ primary = false, ...props }: GameCardProps) => {
     >
       <div className="relative aspect-game-cover min-w-fit overflow-hidden">
         <Image
-          src={props.image ? props.image : "https://fakeimg.pl/80"}
+          src={props.image ? props.image : "/not-found.png"}
           alt={props.name}
           fill
           objectFit="cover"
