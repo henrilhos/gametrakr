@@ -1,7 +1,6 @@
-import { useRouter } from "next/router";
-
 import { faCaretLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/router";
 
 import { Header } from "~/components/header";
 import { Heading } from "~/components/heading";

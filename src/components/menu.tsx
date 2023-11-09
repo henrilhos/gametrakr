@@ -1,9 +1,8 @@
-import { Fragment } from "react";
-
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Transition } from "@headlessui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { Fragment } from "react";
 
 import { ThemeSwitch } from "~/components/theme-switch";
 import { Button } from "~/components/ui/button";

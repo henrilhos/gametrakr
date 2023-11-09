@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-
-import { signIn } from "next-auth/react";
+import { useCallback, useEffect, useState } from "react";
 
 import { signInSchema } from "~/common/validation/auth";
 import { AuthPageLayout, DialogLayout } from "~/components/layout";

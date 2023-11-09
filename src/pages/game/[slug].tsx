@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { type GetStaticProps, type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 
@@ -7,6 +6,8 @@ import { Heading } from "~/components/heading";
 import { PageLayout } from "~/components/layout";
 import { ssgHelper } from "~/server/api/ssgHelper";
 import { api } from "~/utils/api";
+
+import type { GetStaticProps, NextPage } from "next";
 
 const GamePage: NextPage<{ slug: string }> = ({ slug }) => {
   const [header, setHeader] = useState("");

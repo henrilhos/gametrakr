@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
 import Link from "next/link";
+import { useCallback, useState } from "react";
 
 import { signUpSchema } from "~/common/validation/auth";
 import { AuthPageLayout, DialogLayout } from "~/components/layout";

@@ -1,8 +1,7 @@
-import { useCallback, useEffect } from "react";
+import { TokenType } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-
-import { TokenType } from "@prisma/client";
+import { useCallback, useEffect } from "react";
 
 import { DialogLayout } from "~/components/layout";
 import { LoadingSpinner } from "~/components/ui/loading";
