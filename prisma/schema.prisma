@@ -23,19 +23,21 @@ model User {
     updatedAt DateTime @updatedAt
 
     // Relation fileds
-    tokens Token[]
+    tokens    Token[]
+    followers User[]  @relation(name: "Followers")
+    follows   User[]  @relation(name: "Followers")
 }
 
 model Token {
     id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     type      TokenType
     valid     Boolean   @default(true)
+    userId    String    @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
 
     // Relation fields
-    user   User   @relation(fields: [userId], references: [id])
-    userId String @db.Uuid
+    user User @relation(fields: [userId], references: [id])
 }
 
 enum TokenType {

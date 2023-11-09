@@ -1,4 +1,3 @@
-import { type User } from "@prisma/client";
 import {
   and,
   fields,
@@ -30,11 +29,20 @@ const unixTimestampToYear = (unixTimestamp?: number | null) => {
   return date.getFullYear();
 };
 
+type User = {
+  username: string;
+  image: string | null;
+  _count: {
+    followers: number;
+    follows: number;
+  };
+};
 const filterUserForClient = (user: User) => {
   return {
     image: user.image ?? "",
     name: user.username ?? "",
-    slug: user.username ?? "",
+    followersCount: user._count.followers ?? 0,
+    followsCount: user._count.follows ?? 0,
   };
 };
 
@@ -63,10 +71,11 @@ type SearchForUsersProps = {
 const searchForUsers = async ({ query, db }: SearchForUsersProps) => {
   return (
     await db.user.findMany({
-      where: {
-        username: {
-          contains: query,
-        },
+      where: { username: { contains: query } },
+      select: {
+        username: true,
+        image: true,
+        _count: { select: { followers: true, follows: true } },
       },
       take: 4,
     })

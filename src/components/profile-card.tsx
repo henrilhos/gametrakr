@@ -1,10 +1,16 @@
 import Image from "next/image";
 
+import { pluralize } from "~/utils/presentation";
+
 type ProfileCardProps = {
   name: string;
   image: string;
+  followersCount: number;
+  followsCount: number;
 };
 export const ProfileCard = (props: ProfileCardProps) => {
+  const followers = pluralize("followers", "follower");
+
   return (
     <div className="rounded-2xl border-2 border-neutral-100 bg-white p-3 dark:border-neutral-950 dark:bg-neutral-950">
       <div className="relative h-20 w-full">
@@ -30,10 +36,12 @@ export const ProfileCard = (props: ProfileCardProps) => {
           <div className="text-lg font-bold">henrilhos</div>
           <div className="flex gap-4 text-sm text-neutral-600 dark:text-neutral-400">
             <div>
-              <span className="font-bold">13</span> <span>followers</span>
+              <span className="font-bold">{props.followersCount}</span>{" "}
+              <span>{followers(props.followersCount)}</span>
             </div>
             <div>
-              <span className="font-bold">13</span> <span>following</span>
+              <span className="font-bold">{props.followsCount}</span>{" "}
+              <span>following</span>
             </div>
           </div>
         </div>
