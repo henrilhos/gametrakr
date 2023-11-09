@@ -1,6 +1,3 @@
-import { useState } from "react";
-import Link from "next/link";
-
 import {
   faEllipsisVertical,
   faMoon,
@@ -10,6 +7,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
+import Link from "next/link";
+import { useState } from "react";
 
 import { Heading } from "~/components/heading";
 import { Menu } from "~/components/menu";

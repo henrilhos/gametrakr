@@ -53,6 +53,8 @@ jobs:
           echo "NEXTAUTH_SECRET=supersecret" >> .env
           echo "TWITCH_CLIENT_ID=supersecret" >> .env
           echo "TWITCH_SECRET_ID=supersecret" >> .env
+          echo "UPLOADTHING_SECRET=supersecret" >> .env
+          echo "UPLOADTHING_APP_ID=supersecret" >> .env
 
       - name: Build application
         run: pnpm build

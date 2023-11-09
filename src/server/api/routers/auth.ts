@@ -1,8 +1,6 @@
 import { TokenType } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { hash } from "argon2";
-import { Resend } from "resend";
-import { randomUUID } from "crypto";
 
 import {
   forgotPasswordSchema,
@@ -13,42 +11,34 @@ import {
 } from "~/common/validation/auth";
 import ConfirmAccount from "~/emails/confirm-account";
 import ResetPassword from "~/emails/reset-password";
-import { env } from "~/env.mjs";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { getBaseUrl } from "~/utils/get-base-url";
+import { sendEmail } from "../../emails";
 
 import type { User } from "@prisma/client";
 import type { db as prismaDB } from "~/server/db";
 
-const resend = new Resend(env.RESEND_API_KEY);
-
-type SendEmailProps = {
-  email: string;
-  type: TokenType;
-  verifyUrl: string;
+type SendEmail = {
+  to: string[];
+  props: {
+    href: string;
+  };
 };
-const sendEmail = async ({ email, type, verifyUrl }: SendEmailProps) => {
-  try {
-    const subject =
-      type === "EMAIL"
-        ? "Confirm your gametrakr account"
-        : "Reset your gametrakr password";
-    const react = type === "EMAIL" ? ConfirmAccount : ResetPassword;
-    const data = await resend.emails.send({
-      from: `gametrakr <${env.RESEND_EMAIL}>`,
-      to: [email],
-      subject,
-      react: react({ href: verifyUrl }),
-      headers: { "X-Entity-Ref-ID": randomUUID() },
-    });
 
-    return data;
-  } catch (err) {
-    throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: "Unable to send the email",
-    });
-  }
+const sendAccountEmail = async ({ to, props }: SendEmail) => {
+  await sendEmail({
+    subject: "Confirm your gametrakr account",
+    to,
+    react: ConfirmAccount({ ...props }),
+  });
+};
+
+const sendPasswordEmail = async ({ to, props }: SendEmail) => {
+  await sendEmail({
+    subject: "Reset your gametrakr password",
+    to,
+    react: ResetPassword({ ...props }),
+  });
 };
 
 type CreateTokenProps = {
@@ -70,9 +60,14 @@ const createAndSendToken = async ({ user, db, type }: CreateTokenProps) => {
       type === TokenType.EMAIL
         ? `${getBaseUrl()}/auth/confirm-account`
         : `${getBaseUrl()}/auth/reset-password`;
-    const verifyUrl = `${url}?token=${token.id}&email=${user.email}`;
+    const props = { href: `${url}?token=${token.id}&email=${user.email}` };
 
-    await sendEmail({ email: user.email, type, verifyUrl });
+    if (type === "EMAIL") {
+      await sendAccountEmail({ to: [user.email], props });
+    }
+    if (type === "PASSWORD") {
+      await sendPasswordEmail({ to: [user.email], props });
+    }
   } catch (error) {
     throw error;
   }

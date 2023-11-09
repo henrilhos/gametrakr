@@ -9,7 +9,11 @@ const config = {
   reactStrictMode: true,
 
   images: {
-    domains: ["images.igdb.com", "fakeimg.pl"],
+    domains: [
+      "utfs.io", // uploadthing
+      "images.igdb.com",
+      "fakeimg.pl",
+    ],
   },
 
   /**

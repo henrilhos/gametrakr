@@ -26,7 +26,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
         <div className="relative z-10 -mt-8 h-[104px] w-[104px]">
           <Image
             alt={`${props.name}'s profile picture`}
-            src="https://fakeimg.pl/80"
+            src={props.image ? props.image : "https://fakeimg.pl/80"}
             objectFit="cover"
             className="z-0 rounded-3xl border-4 border-white dark:border-neutral-950"
             fill

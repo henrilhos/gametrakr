@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
-import { type GetStaticProps, type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import { Heading } from "~/components/heading";
 import { PageLayout } from "~/components/layout";
-import { generateServerSideHelpers } from "~/server/helpers/ssgHelper";
+import { ssgHelper } from "~/server/api/ssgHelper";
 import { api } from "~/utils/api";
+
+import type { GetStaticProps, NextPage } from "next";
 
 const GamePage: NextPage<{ slug: string }> = ({ slug }) => {
   const [header, setHeader] = useState("");
@@ -92,16 +93,16 @@ const GamePage: NextPage<{ slug: string }> = ({ slug }) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const ssh = generateServerSideHelpers();
+  const ssg = ssgHelper();
   const slug = context.params?.slug;
 
   if (typeof slug !== "string") throw new Error("no slug");
 
-  await ssh.game.getBySlug.prefetch({ slug });
+  await ssg.game.getBySlug.prefetch({ slug });
 
   return {
     props: {
-      trpcState: ssh.dehydrate(),
+      trpcState: ssg.dehydrate(),
       slug,
     },
   };

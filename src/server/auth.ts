@@ -1,5 +1,3 @@
-import { type GetServerSidePropsContext } from "next";
-
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { verify } from "argon2";
 import { getServerSession } from "next-auth";
@@ -9,6 +7,7 @@ import { signInSchema } from "~/common/validation/auth";
 import { env } from "~/env.mjs";
 import { db } from "~/server/db";
 
+import type { GetServerSidePropsContext } from "next";
 import type { DefaultSession, DefaultUser, NextAuthOptions } from "next-auth";
 
 /**

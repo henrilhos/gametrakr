@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
 
 import { resetPasswordSchema } from "~/common/validation/auth";
 import { AuthPageLayout, DialogLayout } from "~/components/layout";

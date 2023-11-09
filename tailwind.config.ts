@@ -1,10 +1,9 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
+import { withUt } from "uploadthing/tw";
 
 import colors from "./src/styles/colors";
 
-import { type Config } from "tailwindcss";
-
-export default {
+export default withUt({
   darkMode: ["class"],
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -80,4 +79,4 @@ export default {
     require("tailwindcss-animate"),
     require("tailwindcss-inner-border"),
   ],
-} satisfies Config;
+});
