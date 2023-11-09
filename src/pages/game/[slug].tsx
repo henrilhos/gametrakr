@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import { Heading } from "~/components/heading";
 import { PageLayout } from "~/components/layout";
