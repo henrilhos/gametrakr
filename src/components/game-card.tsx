@@ -14,64 +14,70 @@ type GameCardProps = {
   releaseYear?: number;
   slug: string;
   primary?: boolean;
-  className?: string;
 };
-export const GameCard = ({
-  primary = false,
-  className,
-  ...props
-}: GameCardProps) => {
+export const GameCard = ({ primary = false, ...props }: GameCardProps) => {
   return (
     <Link
       href={`/game/${props.slug}`}
       className={cn(
-        "flex grow gap-4 rounded-3xl border-2 border-neutral-100 bg-white p-4 dark:border-0 dark:bg-neutral-950",
-        primary && "border-0 dark:bg-yellow-950",
-        className,
+        "flex h-full w-full grow gap-4 rounded-2xl border-2 border-neutral-100 bg-white p-3 dark:border-neutral-950 dark:bg-neutral-950",
+        primary &&
+          "border-yellow-100 bg-yellow-100 p-5 dark:border-yellow-900 dark:bg-yellow-900",
       )}
     >
-      <div
-        className={cn(
-          "relative aspect-game-cover min-w-fit overflow-hidden",
-          primary && "max-h-[288px]",
-        )}
-      >
+      <div className="relative aspect-game-cover min-w-fit overflow-hidden">
         <Image
           src={props.image ? props.image : "https://fakeimg.pl/80"}
           alt={props.name}
           fill
           objectFit="cover"
-          className="rounded-lg border-2 border-neutral-100 dark:border-neutral-900"
+          className={cn(
+            "rounded-lg border-2 border-neutral-100 dark:border-neutral-900",
+            primary && "border-yellow-200 dark:border-yellow-950",
+          )}
         />
       </div>
 
-      <div className="flex h-full min-w-0 flex-col justify-between">
-        <div>
+      <div
+        className={cn(
+          "flex h-full min-w-0 flex-col justify-between",
+          primary && "py-2",
+          !primary && "gap-6",
+        )}
+      >
+        <div className={cn("flex flex-col gap-2", primary && "gap-4")}>
           <div
             className={cn(
-              "text-neutral-600 dark:text-neutral-700",
+              "text-neutral-600 dark:text-neutral-400",
               primary && "text-lg",
             )}
           >
             <FontAwesomeIcon
               icon={faStar}
-              className="mr-1 text-yellow-500 dark:text-yellow-400"
+              className={"mr-1 text-yellow-500 dark:text-yellow-400"}
             />
-            <span className="font-bold">{props.rating}</span>
+            <span className="font-bold">96</span>
             <span className={cn("text-sm", primary && "text-base")}>/100</span>
           </div>
+
           <div
             className={cn(
-              "my-4 truncate font-bold dark:text-neutral-100",
-              primary && "whitespace-break-spaces text-3xl",
+              "font-serif font-bold",
+              primary && "text-3xl/tight",
+              !primary && "truncate",
             )}
           >
             {props.name}
           </div>
         </div>
 
-        <div className={cn("text-sm text-neutral-700", primary && "text-base")}>
-          {props.releaseYear ?? "N/A"}
+        <div
+          className={cn(
+            "text-sm text-neutral-700 dark:text-neutral-300",
+            primary && "text-base",
+          )}
+        >
+          <div className="truncate">{props.releaseYear ?? "N/A"}</div>
           <div className="truncate">{props.developer ?? "N/A"}</div>
         </div>
       </div>
