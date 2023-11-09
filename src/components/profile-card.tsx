@@ -3,6 +3,8 @@ import Image from "next/image";
 type ProfileCardProps = {
   name: string;
   image: string;
+  followersCount: number;
+  followsCount: number;
 };
 export const ProfileCard = (props: ProfileCardProps) => {
   return (
@@ -30,10 +32,12 @@ export const ProfileCard = (props: ProfileCardProps) => {
           <div className="text-lg font-bold">henrilhos</div>
           <div className="flex gap-4 text-sm text-neutral-600 dark:text-neutral-400">
             <div>
-              <span className="font-bold">13</span> <span>followers</span>
+              <span className="font-bold">{props.followersCount}</span>{" "}
+              <span>followers</span>
             </div>
             <div>
-              <span className="font-bold">13</span> <span>following</span>
+              <span className="font-bold">{props.followsCount}</span>{" "}
+              <span>following</span>
             </div>
           </div>
         </div>
