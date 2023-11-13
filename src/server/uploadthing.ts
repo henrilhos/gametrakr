@@ -1,25 +1,24 @@
-import { type NextApiRequest, type NextApiResponse } from "next";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UTApi } from "uploadthing/server";
-import { getServerAuthSession } from "~/server/auth";
+import { getCurrentUser } from "~/lib/session";
 import { db, eq, users } from "~/server/db";
 
 const f = createUploadthing();
 
 export const appFileRouter = {
+  // TODO: search how to update session with the uploaded image
   profileImageUploader: f({
     image: { maxFileSize: "4MB", maxFileCount: 1 },
   })
-    .middleware(async ({ req, res }) => {
-      const session = await getServerAuthSession(
-        req as unknown as NextApiRequest,
-        res as unknown as NextApiResponse,
-      );
+    .middleware(async () => {
+      console.log("Middleware");
 
-      if (!session?.user) throw new Error("Unauthorized");
+      const user = await getCurrentUser();
+
+      if (!user) throw new Error("Unauthorized");
 
       return {
-        userId: session.user.id,
+        userId: user.id,
       };
     })
     .onUploadComplete(async ({ metadata, file }) => {
