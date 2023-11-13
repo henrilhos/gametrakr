@@ -1,0 +1,89 @@
+import Image from "next/image";
+import Link from "next/link";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { cn } from "~/lib/utils";
+
+type Props = {
+  game: {
+    name: string;
+    rating: number;
+    releaseYear: number | undefined;
+    slug: string;
+    developers: string[];
+    image: string;
+  };
+  primary?: boolean;
+};
+
+export default function GameCard({ game, primary = false }: Props) {
+  return (
+    <Link
+      href={`/games/${game.slug}`}
+      className={cn(
+        "flex h-full w-full grow gap-4 rounded-2xl border-2 border-neutral-100 bg-white p-3 dark:border-neutral-950 dark:bg-neutral-950",
+        primary &&
+          "border-yellow-100 bg-yellow-100 p-5 dark:border-yellow-900 dark:bg-yellow-900",
+      )}
+    >
+      <div className="relative aspect-game-cover min-w-fit overflow-hidden">
+        <Image
+          fill
+          src={game.image ? game.image : "/images/not-found.png"}
+          alt={game.name}
+          objectFit="cover"
+          className={cn(
+            "rounded-lg border-2 border-neutral-100 dark:border-neutral-900",
+            primary && "border-yellow-200 dark:border-yellow-950",
+          )}
+        />
+      </div>
+
+      <div
+        className={cn(
+          "flex h-full min-w-0 flex-col justify-between",
+          primary && "py-2",
+          !primary && "gap-6",
+        )}
+      >
+        <div className={cn("flex flex-col gap-2", primary && "gap-4")}>
+          <div
+            className={cn(
+              "text-neutral-600 dark:text-neutral-400",
+              primary && "text-lg",
+            )}
+          >
+            <FontAwesomeIcon
+              icon={faStar}
+              className={"mr-1 text-yellow-500 dark:text-yellow-400"}
+            />
+            <span className="font-bold">96</span>
+            <span className={cn("text-sm", primary && "text-base")}>/100</span>
+          </div>
+
+          <div
+            className={cn(
+              "font-apfel-grotezk font-bold",
+              primary && "text-3xl/tight",
+              !primary && "truncate",
+            )}
+          >
+            {game.name}
+          </div>
+        </div>
+
+        <div
+          className={cn(
+            "text-sm text-neutral-700 dark:text-neutral-300",
+            primary && "text-base",
+          )}
+        >
+          <div className="truncate">{game.releaseYear ?? "N/A"}</div>
+          <div className="truncate">
+            {game.developers.length > 0 ? game.developers.join(", ") : "N/A"}
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
