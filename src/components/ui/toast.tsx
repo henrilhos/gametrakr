@@ -1,3 +1,4 @@
+import { type PropsWithChildren } from "react";
 import {
   faCircleCheck,
   faCircleExclamation,
@@ -5,13 +6,9 @@ import {
   faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import { toast as baseToast } from "react-hot-toast";
-
-import { cn } from "~/utils/cn";
-
-import type { VariantProps } from "class-variance-authority";
-import type { PropsWithChildren } from "react";
+import { cn } from "~/lib/utils";
 
 const toastVariants = cva(
   "pointer-events-none max-w-md select-none rounded-2xl text-center",
@@ -32,12 +29,13 @@ const toastVariants = cva(
   },
 );
 
-type ToastProps = PropsWithChildren<
-  {
-    visible?: boolean;
-  } & VariantProps<typeof toastVariants>
->;
-export const Toast = ({ children, variant, visible }: ToastProps) => {
+interface ToastProps
+  extends PropsWithChildren,
+    VariantProps<typeof toastVariants> {
+  visible?: boolean;
+}
+
+function Toast({ children, variant, visible }: ToastProps) {
   const icons = {
     neutral: faTriangleExclamation,
     success: faCircleCheck,
@@ -64,10 +62,10 @@ export const Toast = ({ children, variant, visible }: ToastProps) => {
       </div>
     </div>
   );
-};
+}
 
 const createToastHandler =
-  (variant: "error" | "success" | "neutral" | "info") => (message: string) =>
+  (variant: ToastProps["variant"]) => (message: string) =>
     baseToast.custom((t) => (
       <Toast variant={variant} visible={t.visible}>
         {message}
@@ -81,4 +79,4 @@ const toast = {
   info: createToastHandler("info"),
 };
 
-export { toast as default, toast };
+export default toast;

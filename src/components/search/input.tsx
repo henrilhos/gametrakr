@@ -1,39 +1,37 @@
+"use client";
+
+import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import { cn } from "~/lib/utils";
 
-import { cn } from "~/utils/cn";
+// Search for games, genres, lists, reviews or users
+const PLACEHOLDER = "Search for games or users";
 
-import type { ChangeEvent, FormEvent } from "react";
-
-export const SearchInput = ({
-  placeholder = "Search for games, genres, lists, reviews or users",
-}: {
+type Props = {
   placeholder?: string;
-}) => {
-  const [search, setSearch] = useState("");
+};
+
+export default function SearchInput({ placeholder = PLACEHOLDER }: Props) {
+  const [value, setValue] = useState("");
   const router = useRouter();
 
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-  };
+  function onChange(e: ChangeEvent<HTMLInputElement>) {
+    setValue(e.target.value);
+  }
 
-  const handleOnSubmit = (e?: FormEvent<HTMLFormElement>) => {
+  function onSubmit(e?: FormEvent<HTMLFormElement>) {
     e?.preventDefault();
-    if (search) {
-      void router.push(`/search?q=${search}`);
-    }
-  };
+    if (value) void router.push(`/search/${value}`);
+  }
 
   return (
-    <form
-      className={cn("relative inline-block h-full w-full")}
-      onSubmit={handleOnSubmit}
-    >
+    <form className="relative h-full w-full" onSubmit={onSubmit}>
       <div className="invisible h-0 w-full pl-5 pr-[68px] text-lg">
         {placeholder}
       </div>
+
       <input
         className={cn(
           "peer pointer-events-auto h-full max-h-[48px] w-full rounded-xl px-5 pr-[68px] text-lg shadow-none outline outline-0 transition-all md:rounded-2xl",
@@ -41,7 +39,7 @@ export const SearchInput = ({
           "dark:bg-yellow-950 dark:text-yellow-50 dark:placeholder-yellow-500 dark:hover:placeholder-yellow-400 dark:focus:placeholder-yellow-700",
         )}
         placeholder={placeholder}
-        onChange={handleOnChange}
+        onChange={onChange}
       />
       <button
         className={cn(
@@ -49,11 +47,10 @@ export const SearchInput = ({
           "text-yellow-600 peer-hover:text-yellow-700 peer-focus:text-yellow-700",
           "dark:text-yellow-500 dark:peer-hover:text-yellow-400 dark:peer-focus:text-yellow-50",
         )}
-        type="submit"
       >
-        <FontAwesomeIcon icon={faSearch} />
         <span className="sr-only">Search</span>
+        <FontAwesomeIcon icon={faSearch} />
       </button>
     </form>
   );
-};
+}

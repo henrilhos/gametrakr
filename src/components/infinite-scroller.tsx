@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 interface InfiniteScrollProps extends React.HTMLAttributes<HTMLDivElement> {
   fetchNextPage: () => void;
@@ -19,9 +19,9 @@ export const InfiniteScroller = React.forwardRef<
     children,
     ...props
   }) => {
-    const observerTarget = React.useRef(null);
+    const observerTarget = useRef(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
       const observer = new IntersectionObserver(
         (entries) => {
           if (entries[0]?.isIntersecting) fetchNextPage();
@@ -39,11 +39,12 @@ export const InfiniteScroller = React.forwardRef<
 
     return (
       <section {...props} style={{ overflowAnchor: "none" }}>
-        <ul className="grid grid-cols-4 gap-4">{children}</ul>
+        <ul className="grid gap-4 md:grid-cols-4">{children}</ul>
         <div ref={observerTarget} />
         {hasNextPage ? loadingMessage : endingMessage}
       </section>
     );
   },
 );
+
 InfiniteScroller.displayName = "InfiniteScroller";

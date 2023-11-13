@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Body,
   Button,
@@ -10,28 +11,24 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
-import * as React from "react";
 
-type ConfirmAccountProps = {
+type Props = {
   href?: string;
 };
-const ConfirmAccount = ({
-  href = "https://google.com",
-}: ConfirmAccountProps) => {
+export default function ResetPassword({ href = "https://gametra.kr" }: Props) {
   return (
     <Html>
       <Head />
-      <Preview>Confirm your gametrakr account</Preview>
+      <Preview>Reset your gametrakr password</Preview>
       <Tailwind>
         <Body className="mx-auto bg-white font-sans">
           <Container className="mx-auto max-w-[600px]">
             <Heading className="my-[30px] p-0 text-4xl font-bold text-[#1d1c1d]">
-              Confirm your account
+              Reset your password
             </Heading>
 
             <Text className="mb-[30px] text-xl">
-              Thank you for signing up for gametrakr. To confirm your acount,
-              please follow the button below.
+              Follow the button to reset the password for your user.
             </Text>
 
             <Section className="text-center">
@@ -39,7 +36,7 @@ const ConfirmAccount = ({
                 className="min-w-[10rem] items-center rounded-2xl bg-[#f2a100] px-5 py-3 text-xl/6 font-bold text-[#121212]"
                 href={href}
               >
-                Confirm Account
+                Reset Password
               </Button>
             </Section>
 
@@ -56,6 +53,4 @@ const ConfirmAccount = ({
       </Tailwind>
     </Html>
   );
-};
-
-export default ConfirmAccount;
+}

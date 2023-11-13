@@ -1,8 +1,7 @@
-import clsx from "clsx";
 import React from "react";
-import { twMerge } from "tailwind-merge";
-
+import clsx from "clsx";
 import type { ControllerFieldState } from "react-hook-form";
+import { twMerge } from "tailwind-merge";
 
 type InputProps = {
   label?: string;
