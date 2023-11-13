@@ -15,6 +15,7 @@ import {
 type Props = {
   href?: string;
 };
+
 export default function ResetPassword({ href = "https://gametra.kr" }: Props) {
   return (
     <Html>

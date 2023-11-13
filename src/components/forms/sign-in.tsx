@@ -18,19 +18,16 @@ export default function SignInForm() {
     defaultValues: { credential: "", password: "" },
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>();
   const searchParams = useSearchParams();
+
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
+  const error = searchParams.get("error");
 
   useEffect(() => {
     if (error) {
       toast.error("Invalid credentials");
     }
   }, [error]);
-
-  if (!searchParams) return;
-
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
-  setError(searchParams.get("error"));
 
   const onSubmit = form.handleSubmit(async (data) => {
     setIsLoading(true);
