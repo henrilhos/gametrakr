@@ -1,14 +1,19 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import {
+  type GetServerSidePropsContext,
+  type NextApiRequest,
+  type NextApiResponse,
+} from "next";
 import { verify } from "argon2";
-import { getServerSession } from "next-auth";
+import {
+  getServerSession,
+  type DefaultSession,
+  type DefaultUser,
+  type NextAuthOptions,
+} from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-
-import { signInSchema } from "~/common/validation/auth";
 import { env } from "~/env.mjs";
+import { SignInSchema } from "~/server/api/schemas/auth";
 import { db } from "~/server/db";
-
-import type { GetServerSidePropsContext } from "next";
-import type { DefaultSession, DefaultUser, NextAuthOptions } from "next-auth";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -18,16 +23,18 @@ import type { DefaultSession, DefaultUser, NextAuthOptions } from "next-auth";
  */
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: DefaultSession["user"] & {
+    user: {
       id: string;
       username: string;
       // ...other properties
       // role: UserRole;
-    };
+    } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
-    username?: string | null;
+    id: string;
+    username: string;
+    image: string | null;
     // ...other properties
     // role: UserRole;
   }
@@ -41,29 +48,28 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt: ({ token, user }) => {
-      // TODO: add user image
       if (user) {
         token.sub = user.id;
         token.email = user.email;
         token.name = user.name;
         token.username = user.username;
+        token.picture = user.image;
       }
 
       return token;
     },
     session: ({ session, token }) => {
-      // TODO: Add user image
       if (token?.sub) {
         session.user.id = token.sub;
         session.user.email = token.email;
         session.user.name = token.name;
         session.user.username = token.username as string;
+        session.user.image = token.picture;
       }
 
       return session;
     },
   },
-  adapter: PrismaAdapter(db),
   providers: [
     Credentials({
       name: "credentials",
@@ -77,45 +83,47 @@ export const authOptions: NextAuthOptions = {
       authorize: async (credentials) => {
         try {
           const { credential, password } =
-            await signInSchema.parseAsync(credentials);
+            await SignInSchema.parseAsync(credentials);
 
-          const result = await db.user.findFirst({
-            where: {
-              OR: [
-                { email: { equals: credential, mode: "insensitive" } },
-                { username: { equals: credential, mode: "insensitive" } },
-              ],
+          const user = await db.query.users.findFirst({
+            where: (user, { eq, ilike, or, and }) =>
+              and(
+                or(
+                  ilike(user.email, credential),
+                  ilike(user.username, credential),
+                ),
+                eq(user.active, true),
+              ),
+            columns: {
+              id: true,
+              email: true,
+              username: true,
+              password: true,
+              profileImage: true,
             },
           });
-          if (!result) return null;
+          if (!user) return null;
 
-          const isPasswordValid = await verify(result.password, password);
+          const isPasswordValid = await verify(user.password, password);
           if (!isPasswordValid) return null;
 
           return {
-            id: result.id,
-            email: result.email,
-            name: result.name,
-            username: result.username,
+            id: user.id,
+            email: user.email,
+            name: user.username,
+            username: user.username,
+            image: user.profileImage,
           };
-        } catch (error) {
+        } catch (err) {
+          console.error(err);
           return null;
         }
       },
     }),
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
   ],
   pages: {
-    signIn: "/auth/sign-in",
-    newUser: "/auth/sign-up",
+    signIn: "/sign-in",
+    newUser: "/sign-up",
   },
   secret: env.NEXTAUTH_SECRET,
   jwt: {
@@ -131,9 +139,9 @@ export const authOptions: NextAuthOptions = {
  *
  * @see https://next-auth.js.org/configuration/nextjs
  */
-export const getServerAuthSession = (ctx: {
-  req: GetServerSidePropsContext["req"];
-  res: GetServerSidePropsContext["res"];
-}) => {
-  return getServerSession(ctx.req, ctx.res, authOptions);
-};
+export const getServerAuthSession = (
+  ...args:
+    | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+    | [NextApiRequest, NextApiResponse]
+    | []
+) => getServerSession(...args, authOptions);

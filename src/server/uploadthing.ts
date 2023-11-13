@@ -1,51 +1,44 @@
-import { getServerSession } from "next-auth";
-import { createUploadthing } from "uploadthing/next-legacy";
+import { type NextApiRequest, type NextApiResponse } from "next";
+import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UTApi } from "uploadthing/server";
-
-import { authOptions } from "~/server/auth";
-import { db } from "~/server/db";
-
-import type { NextApiRequest, NextApiResponse } from "next";
-import type { FileRouter } from "uploadthing/next-legacy";
+import { getServerAuthSession } from "~/server/auth";
+import { db, eq, users } from "~/server/db";
 
 const f = createUploadthing();
-
-const auth = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getServerSession(req, res, authOptions);
-
-  return session?.user;
-};
 
 export const appFileRouter = {
   profileImageUploader: f({
     image: { maxFileSize: "4MB", maxFileCount: 1 },
   })
     .middleware(async ({ req, res }) => {
-      const user = await auth(req, res);
+      const session = await getServerAuthSession(
+        req as unknown as NextApiRequest,
+        res as unknown as NextApiResponse,
+      );
 
-      if (!user) throw new Error("Unauthorized");
+      if (!session?.user) throw new Error("Unauthorized");
 
-      return { userId: user.id };
+      return {
+        userId: session.user.id,
+      };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      const user = await db.user.findFirst({
-        where: { id: metadata.userId },
-        select: { image: true },
+      const profile = await db.query.users.findFirst({
+        where: (user, { eq }) => eq(user.id, metadata.userId),
+        columns: { profileImage: true },
       });
 
-      if (user === null) return;
-
-      const { image } = user;
-
-      if (image) {
+      if (profile?.profileImage) {
         const utapi = new UTApi();
-        await utapi.deleteFiles(image.split("/").pop()!);
+        await utapi.deleteFiles(profile.profileImage.split("/").pop()!);
       }
 
-      await db.user.update({
-        where: { id: metadata.userId },
-        data: { image: file.url },
-      });
+      await db
+        .update(users)
+        .set({
+          profileImage: file.url,
+        })
+        .where(eq(users.id, metadata.userId));
     }),
 } satisfies FileRouter;
 
