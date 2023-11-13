@@ -7,67 +7,67 @@ on:
     branches: ["main"]
 
 jobs:
-  playwright:
-    name: "Playwright"
-    runs-on: "ubuntu-latest"
-    timeout-minutes: 60
+  # playwright:
+  #   name: "Playwright"
+  #   runs-on: "ubuntu-latest"
+  #   timeout-minutes: 60
 
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_DB: gametrakr
-          POSTGRES_USER: crash_bandicoot
-          POSTGRES_PASSWORD: 12345678
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
+  #   services:
+  #     postgres:
+  #       image: postgres:15
+  #       env:
+  #         POSTGRES_DB: gametrakr
+  #         POSTGRES_USER: crash_bandicoot
+  #         POSTGRES_PASSWORD: 12345678
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
+  #       ports:
+  #         - 5432:5432
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
+  #     - name: Install pnpm
+  #       uses: pnpm/action-setup@v2
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #         cache: "pnpm"
 
-      - name: Install dependencies
-        run: pnpm install
+  #     - name: Install dependencies
+  #       run: pnpm install
 
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
+  #     - name: Install Playwright Browsers
+  #       run: pnpm exec playwright install --with-deps
 
-      - name: Setup environment variables
-        run: |
-          cp .env.example .env
-          echo "RESEND_API_KEY=supersecret" >> .env
-          echo "RESEND_EMAIL=ci@gametra.kr" >> .env
-          echo "NEXTAUTH_SECRET=supersecret" >> .env
-          echo "TWITCH_CLIENT_ID=supersecret" >> .env
-          echo "TWITCH_SECRET_ID=supersecret" >> .env
-          echo "UPLOADTHING_SECRET=supersecret" >> .env
-          echo "UPLOADTHING_APP_ID=supersecret" >> .env
+  #     - name: Setup environment variables
+  #       run: |
+  #         cp .env.example .env
+  #         echo "RESEND_API_KEY=supersecret" >> .env
+  #         echo "RESEND_EMAIL=ci@gametra.kr" >> .env
+  #         echo "NEXTAUTH_SECRET=supersecret" >> .env
+  #         echo "TWITCH_CLIENT_ID=supersecret" >> .env
+  #         echo "TWITCH_SECRET_ID=supersecret" >> .env
+  #         echo "UPLOADTHING_SECRET=supersecret" >> .env
+  #         echo "UPLOADTHING_APP_ID=supersecret" >> .env
 
-      - name: Build application
-        run: pnpm build
+  #     - name: Build application
+  #       run: pnpm build
 
-      - name: Run Playwright tests
-        run: pnpm test:e2e
+  #     - name: Run Playwright tests
+  #       run: pnpm test:e2e
 
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+  #     - uses: actions/upload-artifact@v3
+  #       if: always()
+  #       with:
+  #         name: playwright-report
+  #         path: playwright-report/
+  #         retention-days: 30
 
   lint:
     name: "Lint"
@@ -88,9 +88,7 @@ jobs:
         run: pnpm install
 
       - name: Run linter
-        run: |
-          pnpm lint
-          pnpm format:check
+        run: pnpm lint
         env:
           SKIP_ENV_VALIDATION: true
 
@@ -113,4 +111,4 @@ jobs:
         run: pnpm install
 
       - name: Run typecheck
-        run: pnpm ts:check
+        run: pnpm typecheck

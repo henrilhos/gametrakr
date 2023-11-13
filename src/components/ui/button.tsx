@@ -1,10 +1,7 @@
-import { Slot } from "@radix-ui/react-slot";
-import { cva } from "class-variance-authority";
 import React from "react";
-
-import { cn } from "~/utils/cn";
-
-import type { VariantProps } from "class-variance-authority";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "~/lib/utils";
 
 const buttonVariants = cva(
   "inline-flex cursor-pointer items-center rounded-xl text-lg font-bold ring-offset-white transition-all hover:scale-105 hover:bg-white hover:text-black hover:inner-border-4 hover:inner-border-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 active:scale-95 active:bg-yellow-200 active:text-yellow-500 active:inner-border-0 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:hover:bg-black dark:hover:text-white dark:hover:inner-border-white dark:focus-visible:ring-slate-300 dark:active:bg-yellow-800 dark:active:text-yellow-400 md:rounded-2xl md:text-xl",
@@ -36,42 +33,40 @@ const buttonVariants = cva(
   },
 );
 
-type ButtonProps = {
-  as?: "a" | "button";
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
   full?: boolean;
   asChild?: boolean;
-} & React.ButtonHTMLAttributes<HTMLButtonElement> &
-  React.AnchorHTMLAttributes<HTMLAnchorElement> &
-  VariantProps<typeof buttonVariants>;
-export const Button = React.forwardRef<
-  HTMLButtonElement | HTMLAnchorElement,
-  ButtonProps
->(
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
       variant,
       size,
       justify,
-      as = "button",
       full = false,
       asChild = false,
       ...props
     },
     ref,
   ) => {
-    const Component = asChild ? Slot : as;
-    const btnProps = { ...ref, ...props };
+    const Comp = asChild ? Slot : "button";
 
     return (
-      <Component
+      <Comp
         className={cn(
           buttonVariants({ variant, size, justify, className }),
           full && "w-full",
         )}
-        {...btnProps}
+        ref={ref}
+        {...props}
       />
     );
   },
 );
 Button.displayName = "Button";
+
+export { Button, buttonVariants };

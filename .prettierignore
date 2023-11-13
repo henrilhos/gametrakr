@@ -2,3 +2,5 @@
 .vercel/
 node_modules/
 pnpm-lock.yaml
+
+src/server/db/drizzle

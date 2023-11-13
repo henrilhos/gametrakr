@@ -1,9 +1,9 @@
-import { Resend } from "resend";
+"use server";
+
 import { randomUUID } from "crypto";
-
+import { type ReactElement } from "react";
+import { Resend } from "resend";
 import { env } from "~/env.mjs";
-
-import type { ReactElement } from "react";
 
 const resend = new Resend(env.RESEND_API_KEY);
 
@@ -14,10 +14,9 @@ export interface Email {
   from?: string;
 }
 
-export const sendEmail = (email: Email) => {
-  return resend.emails.send({
+export const sendEmail = (email: Email) =>
+  resend.emails.send({
     headers: { "X-Entity-Ref-ID": randomUUID() },
     from: `gametrakr <${env.RESEND_EMAIL}>`,
     ...email,
   });
-};
