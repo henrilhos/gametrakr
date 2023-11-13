@@ -33,8 +33,7 @@ export default function UserCard({ user }: Props) {
           <Image
             alt={`${user.username}'s profile picture`}
             src={user.profileImage ?? "/images/not-found.png"}
-            objectFit="cover"
-            className="z-0 rounded-3xl border-4 border-white dark:border-neutral-950"
+            className="z-0 rounded-3xl border-4 border-white object-cover dark:border-neutral-950"
             fill
           />
         </div>

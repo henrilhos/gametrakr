@@ -31,9 +31,8 @@ export default function GameCard({ game, primary = false }: Props) {
           fill
           src={game.image ? game.image : "/images/not-found.png"}
           alt={game.name}
-          objectFit="cover"
           className={cn(
-            "rounded-lg border-2 border-neutral-100 dark:border-neutral-900",
+            "rounded-lg border-2 border-neutral-100 object-cover dark:border-neutral-900",
             primary && "border-yellow-200 dark:border-yellow-950",
           )}
         />
