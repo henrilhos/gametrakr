@@ -39,7 +39,7 @@ export default function UserCard({ user }: Props) {
           />
         </div>
         <div className="mt-2 flex flex-col gap-1">
-          <div className="text-lg font-bold">henrilhos</div>
+          <div className="text-lg font-bold">{user.username}</div>
           <div className="flex gap-4 text-sm text-neutral-600 dark:text-neutral-400">
             <div>
               <span className="font-bold">{user.followersCount}</span>{" "}
