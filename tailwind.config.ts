@@ -1,10 +1,10 @@
+import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 import { withUt } from "uploadthing/tw";
-
 import colors from "./src/styles/colors";
 
 export default withUt({
-  darkMode: ["class"],
+  darkMode: "class",
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     container: {
@@ -15,6 +15,10 @@ export default withUt({
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-atkinson-hyperlegible)", ...fontFamily.sans],
+        "apfel-grotezk": ["var(--font-apfel-grotezk)"],
+      },
       colors: {
         inherit: colors.inherit,
         current: colors.current,
@@ -32,17 +36,13 @@ export default withUt({
         neutral: colors.neutral,
         slate: colors.slate,
       },
-      fontFamily: {
-        sans: ["Atkinson Hyperlegible", ...fontFamily.sans],
-        serif: ["Apfel Grotezk", ...fontFamily.serif],
-      },
       borderRadius: {
         "4xl": "2rem",
       },
       aspectRatio: {
         "game-cover": "3 / 4",
       },
-      // TODO: Check if they're used
+      // TODO: check if they're used
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -52,31 +52,16 @@ export default withUt({
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        enter: {
-          "0%": { transform: "scale(0.9)", opacity: "0" },
-          "100%": { transform: "scale(1)", opacity: "1" },
-        },
-        leave: {
-          "0%": { transform: "scale(1)", opacity: "1" },
-          "100%": { transform: "scale(0.9)", opacity: "0" },
-        },
-        "slide-in": {
-          "0%": { transform: "translateY(-100%)" },
-          "100%": { transform: "translateY(0)" },
-        },
       },
       animation: {
-        enter: "enter 200ms ease-out",
-        leave: "leave 150ms ease-in forwards",
-        "slide-in": "slide-in 1.2s cubic-bezier(.41,.73,.51,1.02)",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
   plugins: [
-    require("@tailwindcss/typography"),
     require("tailwindcss-animate"),
+    require("@tailwindcss/typography"),
     require("tailwindcss-inner-border"),
   ],
-});
+}) satisfies Config;

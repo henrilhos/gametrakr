@@ -17,19 +17,21 @@
     "incremental": true,
     "noUncheckedIndexedAccess": true,
     "baseUrl": ".",
-    "plugins": [{ "name": "next" }],
     "paths": {
-      "~/*": ["./src/*"]
-    }
+      "~/*": ["./src/*"],
+      "~/public/*": ["./public/*"]
+    },
+    "plugins": [{ "name": "next" }]
   },
   "include": [
+    ".eslintrc.cjs",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    ".eslintrc.cjs",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "src/server/db/migrate.mts"
   ],
   "exclude": ["node_modules"]
 }
