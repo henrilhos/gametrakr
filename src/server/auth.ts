@@ -32,9 +32,7 @@ declare module "next-auth" {
   }
 
   interface User extends DefaultUser {
-    id: string;
     username: string;
-    image: string | null;
     // ...other properties
     // role: UserRole;
   }
