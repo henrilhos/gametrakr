@@ -9,12 +9,7 @@ const config = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**.igdb.com",
-      },
-    ],
+    domains: ["uploadthing.com", "utfs.io", "images.igdb.com"],
   },
   experimental: {},
   eslint: { ignoreDuringBuilds: true },
