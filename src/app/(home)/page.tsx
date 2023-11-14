@@ -8,10 +8,45 @@ import { getCurrentUser } from "~/lib/session";
 export function getGame() {
   const games = [
     {
-      imageUrl: "https://i.imgur.com/d1SnqRH.jpg",
-      name: "Song of Nunu: A League of Legends Story",
-      slug: "song-of-nunu-a-league-of-legends-story",
-      publisher: "Tequila Works",
+      imageUrl: "/images/goty/alan-wake-ii.webp",
+      name: "Alan Wake II",
+      slug: "alan-wake-ii",
+      publisher: "Remedy Entertainment",
+      releaseYear: "2023",
+    },
+    {
+      imageUrl: "/images/goty/baldurs-gate-3.webp",
+      name: "Baldur's Gate 3",
+      slug: "baldurs-gate-3",
+      publisher: "Larian Studios",
+      releaseYear: "2023",
+    },
+    {
+      imageUrl: "/images/goty/marvels-spider-man-2.webp",
+      name: "Marvel's Spider-Man 2",
+      slug: "marvels-spider-man-2",
+      publisher: "Insomniac Games",
+      releaseYear: "2023",
+    },
+    {
+      imageUrl: "/images/goty/resident-evil-4--1.webp",
+      name: "Resident Evil 4",
+      slug: "resident-evil-4--1",
+      publisher: "Capcom Development Division 1",
+      releaseYear: "2023",
+    },
+    {
+      imageUrl: "/images/goty/super-mario-bros-wonder.webp",
+      name: "Super Mario Bros. Wonder",
+      slug: "super-mario-bros-wonder",
+      publisher: "Nintendo EPD",
+      releaseYear: "2023",
+    },
+    {
+      imageUrl: "/images/goty/the-legend-of-zelda-tears-of-the-kingdom.webp",
+      name: "The Legend of Zelda: Tears of the Kingdom",
+      slug: "the-legend-of-zelda-tears-of-the-kingdom",
+      publisher: "Nintendo EPD Production Group No. 3",
       releaseYear: "2023",
     },
   ];
@@ -32,7 +67,7 @@ function GameInfo({
 }) {
   return (
     <Link href={`/games/${slug}`}>
-      <div className="px-8 text-center uppercase text-black/60 md:inline-flex  md:gap-1 md:px-0 md:text-left md:text-neutral-100/60">
+      <div className="px-8 text-center uppercase text-black/60 hover:underline  md:inline-flex md:gap-1 md:px-0 md:text-left md:text-neutral-100/60">
         <div>{`${name} (${releaseYear})`}&nbsp;</div>
         <div className="inline-flex gap-1">
           <div>©</div>
