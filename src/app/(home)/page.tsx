@@ -67,7 +67,7 @@ function GameInfo({
 }) {
   return (
     <Link href={`/games/${slug}`}>
-      <div className="px-8 text-center uppercase text-black/60 hover:underline  md:inline-flex md:gap-1 md:px-0 md:text-left md:text-neutral-100/60">
+      <div className="px-8 text-center uppercase text-neutral-100/60  hover:underline md:inline-flex md:gap-1 md:px-0 md:text-left">
         <div>{`${name} (${releaseYear})`}&nbsp;</div>
         <div className="inline-flex gap-1">
           <div>©</div>
