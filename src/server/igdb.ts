@@ -8,6 +8,7 @@ import {
   offset,
   search,
   twitchAccessToken,
+  where,
   whereIn,
   WhereInFlags,
   type proto,
@@ -78,4 +79,72 @@ export const getGames = async ({
     .execute();
 
   return data.map(gameMapper);
+};
+
+export const getGameBySlug = async ({ slug }: { slug: string }) => {
+  const client = await getClient();
+
+  const { data: response } = await client
+    .request("games")
+    .pipe(
+      fields([
+        "name",
+        "summary",
+        "first_release_date",
+        "genres.name",
+        "platforms.name",
+        "involved_companies.company.name",
+        "involved_companies.developer",
+        "themes.name",
+        "cover.url",
+        "screenshots.url",
+        "aggregated_rating",
+      ]),
+      where("slug", "=", slug),
+    )
+    .execute();
+
+  const [data] = response.map((game) => {
+    const themes =
+      game.themes?.map((t) => t.name ?? "").filter((t) => !!t) ?? [];
+
+    const genres =
+      game.genres?.map((g) => g.name ?? "").filter((g) => !!g) ?? [];
+
+    const platforms =
+      game.platforms
+        ?.map((p) => ({ name: p.name ?? "" }))
+        .filter((p) => !!p.name) ?? [];
+
+    const developers =
+      game.involved_companies
+        ?.filter((c) => c.developer)
+        .map((c) => c.company?.name ?? "")
+        .filter((d) => !!d) ?? [];
+
+    const images =
+      game.screenshots?.map(
+        (s) => s.url?.replace("thumb", "1080p").replace("//", "https://") ?? "",
+      ) ?? [];
+
+    const cover = (game.cover?.url ?? "")
+      .replace("thumb", "cover_big_2x")
+      .replace("//", "https://");
+
+    return {
+      name: game.name,
+      summary: game.summary,
+      releaseDate: new Date((game.first_release_date ?? 0) * 1000),
+      genres: [...genres, ...themes],
+      criticScore: game.aggregated_rating
+        ? Math.round(game.aggregated_rating)
+        : undefined,
+      platforms,
+      developers,
+      images,
+      cover,
+    };
+  });
+
+  return data;
 };
