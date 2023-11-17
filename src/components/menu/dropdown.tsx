@@ -6,6 +6,7 @@ import { type User } from "next-auth";
 import SignInButton from "~/components/auth/sign-in-button";
 import SignOutButton from "~/components/auth/sign-out-button";
 import SignUpButton from "~/components/auth/sign-up-button";
+import SearchInput from "~/components/search/input";
 import ThemeSwitch from "~/components/theme/switch";
 import { Button } from "~/components/ui/button";
 
@@ -46,10 +47,11 @@ export default function Dropdown({ user, open, onClose }: Props) {
               <div className="bg-white px-3 py-4 dark:bg-black">
                 <div className="flex w-full items-center gap-2">
                   <div className="h-[40px] w-full">
-                    {/* <SearchInput placeholder="Search" */}
+                    <SearchInput placeholder="Search" />
                   </div>
 
                   <Button
+                    aria-label="Close menu"
                     size="icon"
                     justify="center"
                     className="bg-transparent text-neutral-600 dark:bg-transparent dark:text-neutral-300"

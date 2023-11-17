@@ -5,7 +5,7 @@ import LoadingGames from "~/app/search/[query]/games/_components/loading";
 
 export default function Page() {
   return (
-    <div className="flex flex-col gap-8 px-8">
+    <div className="flex flex-col gap-8 px-3 md:px-8">
       <Explorer />
 
       <Suspense fallback={<LoadingGames />}>

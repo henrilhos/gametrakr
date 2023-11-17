@@ -24,7 +24,13 @@ export default function Menu({ user }: Props) {
 
   return (
     <>
-      <Button size="icon" variant="icon" justify="center" onClick={handleOpen}>
+      <Button
+        aria-label="Open menu"
+        size="icon"
+        variant="icon"
+        justify="center"
+        onClick={handleOpen}
+      >
         <FontAwesomeIcon className="h-5" icon={faEllipsisVertical} />
       </Button>
 

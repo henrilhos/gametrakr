@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import BestResultCard from "~/app/search/_components/cards/best-result";
 import GameCard from "~/app/search/_components/cards/game";
 import Heading from "~/app/search/_components/heading";
 import { api } from "~/trpc/react";
@@ -22,17 +23,15 @@ export default function Games() {
     <div className="grid gap-4 md:grid-cols-3">
       <div className="col-span-1 flex flex-col gap-2">
         <Heading>Best result</Heading>
-
-        <GameCard primary game={{ ...bestResult }} />
+        <BestResultCard {...bestResult} />
       </div>
 
       {games.length > 0 && (
         <div className="col-span-1 flex flex-col gap-2 md:col-span-2">
           <Heading href={`/search/${query}/games`}>Games</Heading>
-
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid grow gap-4 md:grid-cols-3">
             {games.map((game) => (
-              <GameCard key={game.slug} game={{ ...game }} />
+              <GameCard key={game.slug} {...game} />
             ))}
           </div>
         </div>
