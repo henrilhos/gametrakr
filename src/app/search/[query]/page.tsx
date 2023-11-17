@@ -16,7 +16,7 @@ function Loading() {
 
 export default function Page() {
   return (
-    <div className="flex flex-col gap-8 px-8">
+    <div className="flex flex-col gap-8 px-3 md:px-8">
       <Explorer />
 
       <Suspense fallback={<Loading />}>

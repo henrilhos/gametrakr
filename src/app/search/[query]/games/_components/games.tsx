@@ -76,7 +76,7 @@ export default function Games() {
         endingMessage=""
       >
         {aggregateGames().map((game) => (
-          <GameCard key={game.slug} game={{ ...game }} />
+          <GameCard key={game.slug} {...game} />
         ))}
       </InfiniteScroller>
     </div>
