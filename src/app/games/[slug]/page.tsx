@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import GameContainer from "~/app/games/_components/game";
 import { getCurrentUser } from "~/lib/session";
 
@@ -7,9 +6,7 @@ export default async function Page() {
 
   return (
     <div className="flex flex-col gap-8 px-8">
-      <Suspense fallback={<span>Loading...</span>}>
-        <GameContainer user={user} />
-      </Suspense>
+      <GameContainer user={user} />
     </div>
   );
 }
