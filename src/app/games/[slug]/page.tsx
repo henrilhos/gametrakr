@@ -5,7 +5,7 @@ export default async function Page() {
   const user = await getCurrentUser();
 
   return (
-    <div className="flex flex-col gap-8 px-8">
+    <div className="flex flex-col gap-8 px-3 md:px-8">
       <GameContainer user={user} />
     </div>
   );
