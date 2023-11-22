@@ -11,7 +11,7 @@ export default function Metadata({ releaseDate, developers }: Props) {
   }).format(releaseDate);
 
   return (
-    <div className="inline-flex gap-20 dark:text-neutral-200">
+    <div className="w-full gap-20 dark:text-neutral-200 md:inline-flex">
       <div>{formattedDate}</div>
       <div>{developers.join(", ")}</div>
     </div>

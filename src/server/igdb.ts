@@ -11,8 +11,8 @@ import {
   where,
   whereIn,
   WhereInFlags,
-  type proto,
 } from "ts-igdb-client";
+import type { proto } from "ts-igdb-client";
 import { env } from "~/env.mjs";
 import { unixTimestampToYear } from "~/lib/utils";
 
@@ -131,14 +131,16 @@ export const getGameBySlug = async ({ slug }: { slug: string }) => {
       .replace("thumb", "cover_big_2x")
       .replace("//", "https://");
 
+    const criticRating = !!game.aggregated_rating
+      ? Math.round(game.aggregated_rating)
+      : undefined;
+
     return {
       name: game.name,
       summary: game.summary,
       releaseDate: new Date((game.first_release_date ?? 0) * 1000),
       genres: [...genres, ...themes],
-      criticScore: game.aggregated_rating
-        ? Math.round(game.aggregated_rating)
-        : undefined,
+      criticRating,
       platforms,
       developers,
       images,

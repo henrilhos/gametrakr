@@ -1,8 +1,9 @@
 "use client";
 
+import { type User } from "next-auth";
 import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
-import { type User } from "next-auth";
+
 import GameCard from "~/app/games/_components/game-card";
 import Metadata from "~/app/games/_components/metadata";
 import Tags from "~/app/games/_components/tags";
@@ -54,7 +55,7 @@ export default function GameContainer({ user }: Props) {
         </div>
 
         <div className="col-span-12 w-full md:col-span-3 2xl:col-span-2">
-          <GameCard user={user} criticRating={game.criticScore} />
+          <GameCard user={user} criticRating={game.criticRating} />
         </div>
 
         <div className="col-span-12 md:hidden">
