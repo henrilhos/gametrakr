@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { getGames } from "~/server/igdb";
+import { getGameBySlug, getGames } from "~/server/igdb";
 
 const GamesByQuerySchema = z.object({
   query: z.string(),
@@ -18,5 +18,14 @@ export const gameRouter = createTRPCRouter({
       const games = await getGames({ query: decodedQuery, limit, cursor });
 
       return { games, limit, nextCursor: cursor + limit };
+    }),
+  getBySlug: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(async ({ input }) => {
+      const { slug } = input;
+
+      const data = await getGameBySlug({ slug });
+
+      return { ...data };
     }),
 });
