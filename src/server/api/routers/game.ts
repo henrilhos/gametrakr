@@ -9,7 +9,7 @@ const GamesByQuerySchema = z.object({
 });
 
 export const gameRouter = createTRPCRouter({
-  getByQuery: publicProcedure
+  findManyByQuery: publicProcedure
     .input(GamesByQuerySchema)
     .query(async ({ input }) => {
       const { query, limit, cursor } = input;
@@ -19,7 +19,7 @@ export const gameRouter = createTRPCRouter({
 
       return { games, limit, nextCursor: cursor + limit };
     }),
-  getBySlug: publicProcedure
+  findFirstBySlug: publicProcedure
     .input(z.object({ slug: z.string() }))
     .query(async ({ input }) => {
       const { slug } = input;

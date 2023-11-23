@@ -23,7 +23,7 @@ export default function Page() {
   });
 
   const { mutateAsync: sendResetPasswordEmail } =
-    api.user.sendResetPasswordEmail.useMutation();
+    api.auth.sendResetPasswordEmail.useMutation();
 
   const onSubmit = form.handleSubmit(
     async (data) => {

@@ -9,7 +9,10 @@ import { api } from "~/trpc/react";
 export default function Games() {
   const { query } = useParams<{ query: string }>();
 
-  const [response] = api.game.getByQuery.useSuspenseQuery({ query, limit: 7 });
+  const [response] = api.game.findManyByQuery.useSuspenseQuery({
+    query,
+    limit: 7,
+  });
 
   if (!response.games || response.games.length <= 0) return null;
 

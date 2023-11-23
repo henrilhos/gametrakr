@@ -11,7 +11,7 @@ export default function Page() {
   const email = searchParams.get("email");
 
   const { mutateAsync: resendEmail } =
-    api.user.resendAccountVerificationEmail.useMutation();
+    api.auth.resendAccountVerificationEmail.useMutation();
 
   if (!email) {
     notFound();

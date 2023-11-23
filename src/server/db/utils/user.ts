@@ -78,7 +78,7 @@ export const updateUserPassword = async ({
     .where(eq(users.id, userId));
 };
 
-export const getAllUsersByQuery = async ({
+export const findManyUsersByQuery = async ({
   query,
   limit = 10,
   offset = 0,
@@ -98,3 +98,20 @@ export const getAllUsersByQuery = async ({
     offset,
   });
 };
+
+export const findFirstUserByUsername = (username: string) =>
+  db.query.users.findFirst({
+    where: (user, { and, eq }) =>
+      and(eq(user.username, username), eq(user.active, true)),
+    with: {
+      followers: true,
+      following: true,
+    },
+    columns: {
+      active: false,
+      email: false,
+      password: false,
+      updatedAt: false,
+      verified: false,
+    },
+  });

@@ -41,6 +41,7 @@ export default withUt({
       },
       aspectRatio: {
         "game-cover": "3 / 4",
+        cover: "4 / 1",
       },
       // TODO: check if they're used
       keyframes: {

@@ -28,7 +28,7 @@ export default function SignUpForm() {
     },
   });
 
-  const { mutateAsync: createUser } = api.user.signUp.useMutation();
+  const { mutateAsync: createUser } = api.auth.signUp.useMutation();
 
   const onSubmit = form.handleSubmit(
     async (data) => {

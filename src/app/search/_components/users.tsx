@@ -8,7 +8,10 @@ import { api } from "~/trpc/react";
 export default function Users() {
   const { query } = useParams<{ query: string }>();
 
-  const [response] = api.user.getByQuery.useSuspenseQuery({ query, limit: 4 });
+  const [response] = api.user.findManyByQuery.useSuspenseQuery({
+    query,
+    limit: 4,
+  });
 
   if (!response.users || response.users.length <= 0) return null;
 

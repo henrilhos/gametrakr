@@ -19,7 +19,7 @@ type Props = {
 export default function Dropdown({ user, open, onClose }: Props) {
   return (
     <Transition appear show={open} as={Fragment}>
-      <Dialog onClose={onClose} as="div" className="relative z-10">
+      <Dialog onClose={onClose} as="div" className="relative z-50">
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -33,7 +33,6 @@ export default function Dropdown({ user, open, onClose }: Props) {
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-          {/* <div> */}
           <Dialog.Panel>
             <Transition.Child
               as={Fragment}
@@ -89,7 +88,6 @@ export default function Dropdown({ user, open, onClose }: Props) {
               </div>
             </Transition.Child>
           </Dialog.Panel>
-          {/* </div> */}
         </div>
       </Dialog>
     </Transition>

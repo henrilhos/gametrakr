@@ -11,12 +11,6 @@ import { getCurrentUser } from "~/lib/session";
 
 export default async function Navbar() {
   const user = await getCurrentUser();
-  // const { theme, systemTheme, setTheme } = useTheme();
-
-  // const toggleTheme = () => {
-  //   const currentTheme = theme === "system" ? systemTheme : theme;
-  //   setTheme(currentTheme === "dark" ? "light" : "dark");
-  // };
 
   return (
     <header className="flex w-full justify-between px-3 py-4 md:gap-3 md:px-8 md:py-6">
