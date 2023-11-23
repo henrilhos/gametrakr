@@ -9,8 +9,13 @@ import {
   ResetPasswordSchema,
   SignUpSchema,
 } from "~/server/api/schemas/auth";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
+import {
+  addFollow,
   canCreateUser,
   createAccountToken,
   createPasswordToken,
@@ -22,6 +27,8 @@ import {
   getUserByEmail,
   getUserIdByEmail,
   invalidateTokens,
+  isFollowing,
+  removeFollow,
   updateUserPassword,
   verifyUser,
 } from "~/server/db";
@@ -195,5 +202,23 @@ export const userRouter = createTRPCRouter({
       }));
 
       return { users, limit, nextCursor: cursor + limit };
+    }),
+
+  toggleFollow: protectedProcedure
+    .meta({ description: "Toggle follow" })
+    .input(z.object({ userId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { userId } = input;
+      const currentUserId = ctx.session.user.id;
+
+      const isUserFollowing = await isFollowing(currentUserId, userId);
+
+      if (isUserFollowing) {
+        await removeFollow(currentUserId, userId);
+        return { addedFollow: false };
+      } else {
+        await addFollow(currentUserId, userId);
+        return { addedFollow: true };
+      }
     }),
 });
