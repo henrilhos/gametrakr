@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
 import { User } from "next-auth";
+import EditProfile from "~/app/(user)/_components/edit-profile";
 import ToggleFollowButton from "~/app/(user)/_components/toggle-follow-button";
-import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 
 type Props = {
@@ -17,32 +17,30 @@ export default function UserContainer({ user: currentUser }: Props) {
 
   if (!user) return notFound();
 
-  const updateFollowing = (addedFollow: boolean) => {
-    if (addedFollow && !user.isFollowed) {
-      user.isFollowed = true;
-      user.followers += 1;
-    }
-
-    if (!addedFollow && user.isFollowed) {
-      user.isFollowed = false;
-      user.followers -= 1;
-    }
-  };
-
   return (
     <div className="flex flex-col gap-8">
-      <div className="aspect-cover w-full rounded-4xl bg-yellow-500" />
+      <div className="aspect-cover relative -z-10 w-full rounded-4xl bg-yellow-500 dark:bg-yellow-400">
+        {user.coverImage && (
+          <Image
+            alt={`${user.username}'s cover picture`}
+            src={user.coverImage}
+            objectFit="cover"
+            className="rounded-4xl"
+            fill
+          />
+        )}
+      </div>
 
       <div className="-mt-20 grid grid-cols-10 gap-4 px-8">
         <div className="col-span-3 flex h-fit flex-col items-center rounded-2xl p-4 dark:bg-neutral-950">
           <div className="relative -mt-24 flex w-full justify-center">
             <div className="aspect-square h-auto w-1/2 rounded-[40px] bg-neutral-950 p-2">
               <Image
-                alt={user.username}
+                alt={`${user.username}'s profile picture`}
                 src={user.profileImage ?? "/images/not-found.png"}
                 width={200}
                 height={200}
-                className="h-full w-full rounded-[40px] object-cover"
+                className="h-full w-full rounded-[32px] object-cover"
               />
             </div>
           </div>
@@ -52,6 +50,10 @@ export default function UserContainer({ user: currentUser }: Props) {
           </div>
 
           <div className="mt-4 flex flex-col gap-4">
+            {currentUser && currentUser.id === user.id && (
+              <EditProfile user={user} />
+            )}
+
             {currentUser && currentUser.id !== user.id && (
               <ToggleFollowButton
                 userId={user.id}

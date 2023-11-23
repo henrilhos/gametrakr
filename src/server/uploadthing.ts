@@ -11,31 +11,53 @@ export const appFileRouter = {
     image: { maxFileSize: "4MB", maxFileCount: 1 },
   })
     .middleware(async () => {
-      console.log("Middleware");
-
       const user = await getCurrentUser();
+      if (!user) throw Error("Unauthorized");
 
-      if (!user) throw new Error("Unauthorized");
-
-      return {
-        userId: user.id,
-      };
+      return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      const profile = await db.query.users.findFirst({
+      const user = await db.query.users.findFirst({
         where: (user, { eq }) => eq(user.id, metadata.userId),
         columns: { profileImage: true },
       });
 
-      if (profile?.profileImage) {
-        const utapi = new UTApi();
-        await utapi.deleteFiles(profile.profileImage.split("/").pop()!);
+      if (user?.profileImage) {
+        const utApi = new UTApi();
+        await utApi.deleteFiles(user.profileImage.split("/").pop()!);
       }
 
       await db
         .update(users)
         .set({
           profileImage: file.url,
+        })
+        .where(eq(users.id, metadata.userId));
+    }),
+  coverImageUploader: f({
+    image: { maxFileSize: "4MB", maxFileCount: 1 },
+  })
+    .middleware(async () => {
+      const user = await getCurrentUser();
+      if (!user) throw Error("Unauthorized");
+
+      return { userId: user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      const user = await db.query.users.findFirst({
+        where: (user, { eq }) => eq(user.id, metadata.userId),
+        columns: { coverImage: true },
+      });
+
+      if (user?.coverImage) {
+        const utApi = new UTApi();
+        await utApi.deleteFiles(user.coverImage.split("/").pop()!);
+      }
+
+      await db
+        .update(users)
+        .set({
+          coverImage: file.url,
         })
         .where(eq(users.id, metadata.userId));
     }),

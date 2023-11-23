@@ -13,7 +13,7 @@ import { type User } from "next-auth";
 import { cn } from "~/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center bg-yellow-500 px-4 py-3 text-lg font-bold first:rounded-t-2xl last:rounded-b-2xl focus:z-10 focus:ring-2",
+  "inline-flex items-center bg-yellow-500 px-4 py-3 text-lg font-bold first:rounded-t-2xl last:rounded-b-2xl focus:ring-2",
   {
     variants: {
       variant: {
