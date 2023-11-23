@@ -11,7 +11,7 @@ export default function Page() {
   const credential = searchParams.get("email");
 
   const { mutateAsync: resendEmail } =
-    api.user.sendResetPasswordEmail.useMutation();
+    api.auth.sendResetPasswordEmail.useMutation();
 
   if (!credential) {
     notFound();

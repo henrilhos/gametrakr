@@ -1,9 +1,8 @@
 "use client";
 
-import { type User } from "next-auth";
 import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
-
+import { type User } from "next-auth";
 import GameCard from "~/app/games/_components/game-card";
 import Metadata from "~/app/games/_components/metadata";
 import Tags from "~/app/games/_components/tags";
@@ -16,7 +15,7 @@ type Props = {
 
 export default function GameContainer({ user }: Props) {
   const { slug } = useParams<{ slug: string }>();
-  const [game] = api.game.getBySlug.useSuspenseQuery({ slug });
+  const [game] = api.game.findFirstBySlug.useSuspenseQuery({ slug });
 
   if (!game) return notFound();
 

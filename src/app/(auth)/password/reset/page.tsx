@@ -23,7 +23,7 @@ export default function Page() {
   const token = searchParams.get("token");
   const email = searchParams.get("email");
 
-  const { mutateAsync: resetPassword } = api.user.resetPassword.useMutation();
+  const { mutateAsync: resetPassword } = api.auth.resetPassword.useMutation();
 
   if (!token || !email) {
     notFound();

@@ -78,7 +78,7 @@ export const updateUserPassword = async ({
     .where(eq(users.id, userId));
 };
 
-export const getAllUsersByQuery = async ({
+export const findManyUsersByQuery = async ({
   query,
   limit = 10,
   offset = 0,

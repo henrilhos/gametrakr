@@ -29,21 +29,22 @@ function Loading() {
 export default function Users() {
   const { query } = useParams<{ query: string }>();
 
-  const [data, allUsersQuery] = api.user.getByQuery.useSuspenseInfiniteQuery(
-    {
-      query,
-      limit: 40,
-    },
-    {
-      getNextPageParam: (lastPage) => {
-        if (lastPage.users.length >= 39) {
-          return lastPage.nextCursor;
-        }
-        return undefined;
+  const [data, allUsersQuery] =
+    api.user.findManyByQuery.useSuspenseInfiniteQuery(
+      {
+        query,
+        limit: 40,
       },
-      initialCursor: 0,
-    },
-  );
+      {
+        getNextPageParam: (lastPage) => {
+          if (lastPage.users.length >= 39) {
+            return lastPage.nextCursor;
+          }
+          return undefined;
+        },
+        initialCursor: 0,
+      },
+    );
 
   const { hasNextPage, fetchNextPage } = allUsersQuery;
 

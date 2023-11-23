@@ -12,7 +12,7 @@ export default function Page() {
   const token = searchParams.get("token");
   const email = searchParams.get("email");
 
-  const { mutateAsync: confirmAccount } = api.user.confirmAccount.useMutation();
+  const { mutateAsync: confirmAccount } = api.auth.confirmAccount.useMutation();
 
   if (!token || !email) {
     notFound();

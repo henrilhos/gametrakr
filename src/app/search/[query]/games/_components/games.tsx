@@ -30,21 +30,22 @@ function Loading() {
 export default function Games() {
   const { query } = useParams<{ query: string }>();
 
-  const [data, allGamesQuery] = api.game.getByQuery.useSuspenseInfiniteQuery(
-    {
-      query,
-      limit: 40,
-    },
-    {
-      getNextPageParam: (lastPage) => {
-        if (lastPage.games.length >= 39) {
-          return lastPage.nextCursor;
-        }
-        return undefined;
+  const [data, allGamesQuery] =
+    api.game.findManyByQuery.useSuspenseInfiniteQuery(
+      {
+        query,
+        limit: 40,
       },
-      initialCursor: 0,
-    },
-  );
+      {
+        getNextPageParam: (lastPage) => {
+          if (lastPage.games.length >= 39) {
+            return lastPage.nextCursor;
+          }
+          return undefined;
+        },
+        initialCursor: 0,
+      },
+    );
 
   const { hasNextPage, fetchNextPage } = allGamesQuery;
 
