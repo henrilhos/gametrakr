@@ -98,3 +98,20 @@ export const findManyUsersByQuery = async ({
     offset,
   });
 };
+
+export const findFirstUserByUsername = (username: string) =>
+  db.query.users.findFirst({
+    where: (user, { and, eq }) =>
+      and(eq(user.username, username), eq(user.active, true)),
+    with: {
+      followers: true,
+      following: true,
+    },
+    columns: {
+      active: false,
+      email: false,
+      password: false,
+      updatedAt: false,
+      verified: false,
+    },
+  });

@@ -59,4 +59,27 @@ export const userRouter = createTRPCRouter({
         return { addedFollow: true };
       }
     }),
+
+  findFirstByUsername: publicProcedure
+    .meta({
+      description: "Find user by username",
+    })
+    .input(z.object({ username: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { username } = input;
+      const currentUserId = ctx.session?.user.id;
+
+      const user = await findFirstUserByUsername(username);
+
+      if (!user) return;
+
+      return {
+        ...user,
+        followers: user.followers.length,
+        following: user.following.length,
+        isFollowed:
+          user.followers.filter((f) => f.followingUserId === currentUserId)
+            .length > 0,
+      };
+    }),
 });

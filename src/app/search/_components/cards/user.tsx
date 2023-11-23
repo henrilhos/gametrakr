@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { pluralize } from "~/lib/utils";
 
 type Props = {
@@ -15,7 +16,10 @@ export default function UserCard({ user }: Props) {
   const followers = pluralize("followers", "follower");
 
   return (
-    <div className="rounded-2xl border-2 border-neutral-100 bg-white p-3 dark:border-neutral-950 dark:bg-neutral-950">
+    <Link
+      href={`/${user.username}`}
+      className="rounded-2xl border-2 border-neutral-100 bg-white p-3 dark:border-neutral-950 dark:bg-neutral-950"
+    >
       <div className="relative h-20 w-full">
         {/* <Image
           alt={`${user.username}'s cover picture`}
@@ -51,6 +55,6 @@ export default function UserCard({ user }: Props) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
