@@ -1,41 +1,34 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type FileWithPath } from "@uploadthing/react";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { generateClientDropzoneAccept } from "uploadthing/client";
-import toast from "~/components/ui/toast";
-import { useUploadThing } from "~/lib/uploadthing";
 
 type Props = {
   currentImage?: string;
+  handleFileChange: (file: FileWithPath) => void;
 };
 
-export default function CoverPictureUploader({ currentImage }: Props) {
+export default function CoverPictureUploader({
+  currentImage,
+  handleFileChange,
+}: Props) {
   const [image, setImage] = useState<string | undefined>(currentImage);
 
   useEffect(() => {
-    setImage(currentImage);
+    if (currentImage) {
+      setImage(currentImage);
+    }
   }, [currentImage]);
 
-  const { startUpload } = useUploadThing("coverImageUploader", {
-    onClientUploadComplete: (data) => {
-      if (!data?.[0]) return;
-      setImage(data[0].url);
-    },
-    onUploadError: (err) => {
-      toast.error(err.message);
-    },
-  });
+  const onDrop = (acceptedFiles: FileWithPath[]) => {
+    const file = acceptedFiles[0]!;
 
-  const onDrop = useCallback(
-    (acceptedFiles: FileWithPath[]) => {
-      void startUpload(acceptedFiles);
-      setImage(URL.createObjectURL(acceptedFiles[0]!));
-    },
-    [startUpload],
-  );
+    handleFileChange(file);
+    setImage(URL.createObjectURL(file));
+  };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
