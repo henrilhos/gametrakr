@@ -20,7 +20,7 @@ export default function UserCard({ user }: Props) {
       href={`/${user.username}`}
       className="rounded-2xl border-2 border-neutral-100 bg-white p-3 dark:border-neutral-950 dark:bg-neutral-950"
     >
-      <div className="aspect-cover relative w-full rounded-lg bg-yellow-500 dark:bg-yellow-400">
+      <div className="relative aspect-cover w-full rounded-lg bg-yellow-500 dark:bg-yellow-400">
         {user.coverImage && (
           <Image
             alt={`${user.username}'s cover picture`}

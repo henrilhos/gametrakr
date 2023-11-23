@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FileWithPath } from "@uploadthing/react";
+import { type FileWithPath } from "@uploadthing/react";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import toast from "~/components/ui/toast";
@@ -43,7 +43,7 @@ export default function CoverPictureUploader({ currentImage }: Props) {
   });
 
   return (
-    <div className="aspect-cover relative w-full rounded-lg bg-yellow-500">
+    <div className="relative aspect-cover w-full rounded-lg bg-yellow-500">
       {image && (
         <Image
           alt="Cover picture"

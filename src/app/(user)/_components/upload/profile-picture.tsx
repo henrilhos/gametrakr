@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FileWithPath } from "@uploadthing/react";
+import { type FileWithPath } from "@uploadthing/react";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import toast from "~/components/ui/toast";
