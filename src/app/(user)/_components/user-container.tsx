@@ -19,50 +19,53 @@ export default function UserContainer({ user: currentUser }: Props) {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="aspect-cover relative -z-10 w-full rounded-4xl bg-yellow-500 dark:bg-yellow-400">
+      <div className="aspect-cover relative -z-10 w-full rounded-t-lg bg-yellow-500 dark:bg-yellow-400 md:rounded-4xl">
         {user.coverImage && (
           <Image
             alt={`${user.username}'s cover picture`}
             src={user.coverImage}
             objectFit="cover"
-            className="rounded-4xl"
+            className=" rounded-t-lg md:rounded-4xl"
             fill
           />
         )}
       </div>
 
-      <div className="-mt-20 grid grid-cols-10 gap-4 px-8">
-        <div className="col-span-3 flex h-fit flex-col items-center rounded-2xl p-4 dark:bg-neutral-950">
-          <div className="relative -mt-24 flex w-full justify-center">
-            <div className="aspect-square h-auto w-1/2 rounded-[40px] bg-neutral-950 p-2">
-              <Image
-                alt={`${user.username}'s profile picture`}
-                src={user.profileImage ?? "/images/not-found.png"}
-                width={200}
-                height={200}
-                className="h-full w-full rounded-[32px] object-cover"
-              />
+      <div className="-mt-8 grid grid-cols-10 gap-4 md:-mt-20 md:px-8">
+        <div className="col-span-10 flex h-fit flex-col rounded-b-lg p-4 dark:bg-neutral-950 md:col-span-3 md:rounded-2xl">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="relative col-span-1 -mt-14 flex aspect-square w-1/2 md:-mt-24 md:w-full">
+              <div className="h-auto w-full rounded-4xl bg-neutral-950 p-2 md:rounded-[40px]">
+                <Image
+                  alt={`${user.username}'s profile picture`}
+                  src={user.profileImage ?? "/images/not-found.png"}
+                  width={200}
+                  height={200}
+                  className="h-full w-full rounded-3xl object-cover md:rounded-4xl"
+                />
+              </div>
+            </div>
+            <div className="col-span-1 flex justify-end">
+              {currentUser && currentUser.id === user.id && (
+                <EditProfile user={user} />
+              )}
+
+              {currentUser && currentUser.id !== user.id && (
+                <ToggleFollowButton
+                  userId={user.id}
+                  isFollowed={user.isFollowed}
+                />
+              )}
             </div>
           </div>
 
-          <div className="text-xl font-bold dark:text-yellow-400">
-            {user.username}
-          </div>
+          <div className="mt-2 flex flex-col gap-4">
+            <div className="text-xl font-bold dark:text-yellow-400">
+              {user.username}
+            </div>
 
-          <div className="mt-4 flex flex-col gap-4">
-            {currentUser && currentUser.id === user.id && (
-              <EditProfile user={user} />
-            )}
-
-            {currentUser && currentUser.id !== user.id && (
-              <ToggleFollowButton
-                userId={user.id}
-                isFollowed={user.isFollowed}
-              />
-            )}
-
-            <div className="grid w-full gap-2 md:grid-cols-2 xl:grid-cols-4">
-              <div className="col-span-1" />
+            <div className="grid w-full grid-cols-2 gap-2 xl:grid-cols-4">
+              <div className="col-span-1 hidden md:block" />
               <div className="col-span-1 flex flex-col items-center justify-center rounded-2xl p-2 dark:bg-neutral-900">
                 <div className="text-xl font-bold">{user.following}</div>
                 <div className="text-sm dark:text-neutral-600">Following</div>

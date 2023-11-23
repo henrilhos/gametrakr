@@ -43,17 +43,17 @@ export default function ProfilePictureUploader({ currentImage }: Props) {
   });
 
   return (
-    <div className="relative aspect-square h-auto w-1/4 rounded-[40px] p-2 dark:bg-neutral-950">
+    <div className="relative aspect-square h-auto w-1/4 rounded-4xl p-2 dark:bg-neutral-950">
       <Image
         alt="Profile picture"
         src={image}
         width={100}
         height={100}
-        className="h-full w-full rounded-4xl object-cover"
+        className="h-full w-full rounded-3xl object-cover"
       />
 
       <div className="absolute left-0 top-0 h-full w-full p-2">
-        <div className="flex h-full w-full items-center justify-center rounded-4xl bg-black/20">
+        <div className="flex h-full w-full items-center justify-center rounded-3xl bg-black/20">
           <div
             className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-black"
             {...getRootProps()}

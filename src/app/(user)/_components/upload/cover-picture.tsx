@@ -43,19 +43,19 @@ export default function CoverPictureUploader({ currentImage }: Props) {
   });
 
   return (
-    <div className="aspect-cover relative w-full rounded-4xl bg-yellow-500">
+    <div className="aspect-cover relative w-full rounded-lg bg-yellow-500">
       {image && (
         <Image
           alt="Cover picture"
           src={image}
           width={500}
           height={125}
-          className="h-full w-full rounded-4xl object-cover"
+          className="h-full w-full rounded-lg object-cover"
         />
       )}
 
       <div className="absolute left-0 top-0 h-full w-full">
-        <div className="flex h-full w-full items-center justify-center rounded-4xl bg-black/20">
+        <div className="flex h-full w-full items-center justify-center rounded-lg bg-black/20">
           <div
             className="flex aspect-square h-10 w-10 cursor-pointer items-center justify-center rounded-full dark:bg-black"
             {...getRootProps()}
