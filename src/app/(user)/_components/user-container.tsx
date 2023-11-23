@@ -19,7 +19,7 @@ export default function UserContainer({ user: currentUser }: Props) {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="aspect-cover relative -z-10 w-full rounded-t-lg bg-yellow-500 dark:bg-yellow-400 md:rounded-4xl">
+      <div className="aspect-cover relative w-full rounded-t-lg bg-yellow-500 dark:bg-yellow-400 md:rounded-4xl">
         {user.coverImage && (
           <Image
             alt={`${user.username}'s cover picture`}
@@ -31,11 +31,11 @@ export default function UserContainer({ user: currentUser }: Props) {
         )}
       </div>
 
-      <div className="-mt-8 grid grid-cols-10 gap-4 md:-mt-20 md:px-8">
-        <div className="col-span-10 flex h-fit flex-col rounded-b-lg p-4 dark:bg-neutral-950 md:col-span-3 md:rounded-2xl">
+      <div className="z-0 -mt-8 grid grid-cols-10 gap-4 md:-mt-20 md:px-8">
+        <div className="col-span-10 flex h-fit flex-col rounded-b-lg bg-neutral-50 p-4 dark:bg-neutral-950 md:col-span-3 md:rounded-2xl">
           <div className="grid grid-cols-2 gap-4">
             <div className="relative col-span-1 -mt-14 flex aspect-square w-1/2 md:-mt-24 md:w-full">
-              <div className="h-auto w-full rounded-4xl bg-neutral-950 p-2 md:rounded-[40px]">
+              <div className="h-auto w-full rounded-4xl bg-neutral-50 p-2 dark:bg-neutral-950 md:rounded-[40px]">
                 <Image
                   alt={`${user.username}'s profile picture`}
                   src={user.profileImage ?? "/images/not-found.png"}
@@ -60,18 +60,22 @@ export default function UserContainer({ user: currentUser }: Props) {
           </div>
 
           <div className="mt-2 flex flex-col gap-4">
-            <div className="text-xl font-bold dark:text-yellow-400">
+            <div className="text-xl font-bold text-yellow-500 dark:text-yellow-400">
               {user.username}
             </div>
 
             <div className="grid w-full grid-cols-2 gap-2 xl:grid-cols-4">
               <div className="col-span-1 hidden md:block" />
-              <div className="col-span-1 flex flex-col items-center justify-center rounded-2xl p-2 dark:bg-neutral-900">
-                <div className="text-xl font-bold">{user.following}</div>
+              <div className="col-span-1 flex flex-col items-center justify-center rounded-2xl bg-white p-2 text-neutral-700 dark:bg-neutral-900">
+                <div className="text-xl font-bold dark:text-white">
+                  {user.following}
+                </div>
                 <div className="text-sm dark:text-neutral-600">Following</div>
               </div>
-              <div className="col-span-1 flex flex-col items-center justify-center rounded-2xl p-2 dark:bg-neutral-900">
-                <div className="text-xl font-bold">{user.followers}</div>
+              <div className="col-span-1 flex flex-col items-center justify-center rounded-2xl bg-white p-2 text-neutral-700 dark:bg-neutral-900">
+                <div className="text-xl font-bold dark:text-white">
+                  {user.followers}
+                </div>
                 <div className="text-sm dark:text-neutral-600">Following</div>
               </div>
             </div>

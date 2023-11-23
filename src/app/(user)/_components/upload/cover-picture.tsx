@@ -55,9 +55,9 @@ export default function CoverPictureUploader({ currentImage }: Props) {
       )}
 
       <div className="absolute left-0 top-0 h-full w-full">
-        <div className="flex h-full w-full items-center justify-center rounded-lg bg-black/20">
+        <div className="flex h-full w-full items-center justify-center rounded-lg bg-white/20 dark:bg-black/20">
           <div
-            className="flex aspect-square h-10 w-10 cursor-pointer items-center justify-center rounded-full dark:bg-black"
+            className="flex aspect-square h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white dark:bg-black"
             {...getRootProps()}
           >
             <FontAwesomeIcon className="dark:text-white" icon={faCamera} />

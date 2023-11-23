@@ -58,7 +58,7 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
                     currentImage={user.coverImage ?? undefined}
                   />
 
-                  <div className="-mt-16 px-3">
+                  <div className="-mt-14 px-3 md:-mt-16">
                     <ProfilePictureUploader
                       currentImage={user.profileImage ?? undefined}
                     />
