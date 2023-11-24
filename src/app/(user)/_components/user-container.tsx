@@ -58,8 +58,20 @@ export default function UserContainer({ user: currentUser }: Props) {
           </div>
 
           <div className="mt-2 flex flex-col gap-4">
-            <div className="text-xl font-bold text-yellow-500 dark:text-yellow-400">
-              {user.username}
+            <div>
+              <div className="text-xl/none font-bold text-yellow-500 dark:text-yellow-400">
+                {user.username}
+              </div>
+
+              {user.location && (
+                <div className="mt-2 text-base/none dark:text-neutral-700">
+                  {user.location}
+                </div>
+              )}
+
+              {user.bio && (
+                <div className="mt-6 text-neutral-600">{user.bio}</div>
+              )}
             </div>
 
             <div className="grid w-full grid-cols-2 gap-2 xl:grid-cols-4">

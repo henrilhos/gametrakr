@@ -36,7 +36,7 @@ export default function ProfilePictureUploader({
   });
 
   return (
-    <div className="relative aspect-square h-auto w-1/4 rounded-4xl bg-white p-1 dark:bg-neutral-950">
+    <div className="relative aspect-square h-auto w-1/4 rounded-4xl bg-white p-1 dark:bg-black">
       <Image
         alt="Profile picture"
         src={image}
