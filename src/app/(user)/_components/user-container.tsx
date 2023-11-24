@@ -99,7 +99,7 @@ export default function UserContainer({ user: currentUser }: Props) {
             <BasicInformation {...user} />
 
             <div className="grid w-full grid-cols-2 gap-2 xl:grid-cols-4">
-              <div className="col-span-1 hidden md:block" />
+              <div className="col-span-1 hidden xl:block" />
 
               <Follows
                 followers={user.followers}
