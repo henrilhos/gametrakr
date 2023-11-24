@@ -5,6 +5,7 @@ import { notFound, useParams } from "next/navigation";
 import { type User } from "next-auth";
 import EditProfile from "~/app/(user)/_components/edit-profile";
 import ToggleFollowButton from "~/app/(user)/_components/toggle-follow-button";
+import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 type Props = { user?: User };
@@ -17,7 +18,12 @@ export default function UserContainer({ user: currentUser }: Props) {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="relative aspect-cover w-full rounded-t-lg bg-yellow-500 dark:bg-yellow-400 md:rounded-4xl">
+      <div
+        className={cn(
+          "relative aspect-cover w-full rounded-t-lg bg-yellow-500 dark:bg-yellow-400 md:rounded-4xl",
+          user.coverImage && "bg-transparent dark:bg-transparent",
+        )}
+      >
         {user.coverImage && (
           <Image
             alt={`${user.username}'s cover picture`}
