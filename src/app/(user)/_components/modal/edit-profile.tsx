@@ -3,9 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { type FileWithPath } from "@uploadthing/react";
 import CoverPictureUploader from "~/app/(user)/_components/upload/cover-picture";
 import ProfilePictureUploader from "~/app/(user)/_components/upload/profile-picture";
-import { Icons } from "~/components/icons";
 import BackButton from "~/components/ui/back-button";
-import { Button } from "~/components/ui/button";
 import { Card, CardHeader, CardTitle } from "~/components/ui/card";
 import { Form, FormControl, FormField, FormItem } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
@@ -144,6 +142,7 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
                       <button
                         type="button"
                         onClick={handleOnClick}
+                        disabled={isLoading}
                         className={cn(
                           "inline-flex h-fit items-center justify-center rounded-xl bg-transparent px-3 py-1 text-lg font-bold text-yellow-500 transition-all inner-border-2 inner-border-yellow-500 hover:scale-105 hover:text-black hover:inner-border-black active:scale-95 active:bg-yellow-200 active:text-yellow-500 active:inner-border-0 dark:text-yellow-400 dark:inner-border-yellow-400 dark:hover:text-white dark:hover:inner-border-white dark:active:bg-yellow-800 dark:active:text-yellow-400",
                         )}
@@ -200,22 +199,6 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
                       />
                     </div>
                   </Form>
-                </div>
-
-                <div className="mt-2 flex justify-end">
-                  <Button
-                    size="sm"
-                    onClick={handleOnClick}
-                    disabled={isLoading}
-                  >
-                    {isLoading && (
-                      <Icons.spinner
-                        aria-label="Loading"
-                        className="animate-spin"
-                      />
-                    )}
-                    {!isLoading && "Save changes"}
-                  </Button>
                 </div>
               </Card>
             </Transition.Child>
