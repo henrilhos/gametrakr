@@ -2,7 +2,7 @@
 
 ## Setup
 
-For development we use [Node.js](https://nodejs.org) as our runtime and [pnpm](https://pnpm.io) as our package manager, to check out the versions we're using, please check the [`.tool-versions`](../.tool-versions) file.
+For development we use [Node.js](https://nodejs.org) as our runtime and [pnpm](https://pnpm.io) as our package manager, to check out the versions we're using, please check the [`.tool-versions`](.tool-versions) file.
 
 ### Getting started
 
