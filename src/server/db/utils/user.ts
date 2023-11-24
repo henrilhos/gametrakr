@@ -105,10 +105,6 @@ export const findFirstUserByUsername = (username: string) =>
   db.query.users.findFirst({
     where: (user, { and, ilike, eq }) =>
       and(ilike(user.username, username), eq(user.active, true)),
-    with: {
-      followers: true,
-      following: true,
-    },
     columns: {
       active: false,
       email: false,

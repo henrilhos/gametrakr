@@ -16,9 +16,7 @@ import { UserPersonalInfoSchema } from "~/server/api/schemas/user";
 import { api } from "~/trpc/react";
 
 type User = {
-  followers: number;
-  following: number;
-  isFollowed: boolean;
+  isFollowing: boolean;
   username: string;
   id: string;
   profileImage: string | null;

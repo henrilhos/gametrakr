@@ -4,9 +4,7 @@ import { cn } from "~/lib/utils";
 
 type Props = {
   user: {
-    followers: number;
-    following: number;
-    isFollowed: boolean;
+    isFollowing: boolean;
     username: string;
     id: string;
     profileImage: string | null;
