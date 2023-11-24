@@ -36,7 +36,7 @@ function ToggleFollowButton({
       className={cn(
         "inline-flex h-8 w-24 items-center justify-center rounded-xl px-3 py-1 text-base/none font-bold transition-all hover:scale-105 hover:inner-border-2 active:scale-95",
         following
-          ? "inner-border-2 before:content-['Following'] hover:bg-transparent hover:text-red-500 hover:inner-border-red-500 hover:before:content-['Unfollow'] dark:text-neutral-600 dark:inner-border-neutral-600 dark:hover:bg-transparent dark:hover:text-red-400 dark:hover:inner-border-red-400"
+          ? "text-neutral-600 inner-border-2 inner-border-neutral-600 before:content-['Following'] hover:bg-transparent hover:text-red-500 hover:inner-border-red-500 hover:before:content-['Unfollow'] dark:text-neutral-600 dark:inner-border-neutral-600 dark:hover:bg-transparent dark:hover:text-red-400 dark:hover:inner-border-red-400"
           : "bg-yellow-500 text-white before:content-['Follow'] hover:bg-transparent hover:text-black hover:inner-border-black active:bg-yellow-200 active:text-yellow-500 active:inner-border-0 dark:bg-yellow-400 dark:text-black dark:hover:bg-transparent dark:hover:text-white dark:hover:inner-border-white dark:active:bg-yellow-800 dark:active:text-yellow-400",
       )}
     />
@@ -53,9 +53,9 @@ function Card({ user, username, currentUserId }: CardProps) {
   return (
     <Link
       href={`/${user.username}`}
-      className="flex cursor-pointer gap-2 rounded-3xl p-2 dark:bg-neutral-900"
+      className="flex cursor-pointer gap-2 rounded-3xl bg-white p-2 dark:bg-neutral-900"
     >
-      <div className="relative aspect-square h-16 w-16 rounded-2xl p-0.5 dark:bg-neutral-800">
+      <div className="relative aspect-square h-16 w-16 rounded-2xl bg-neutral-100 p-0.5 dark:bg-neutral-800">
         <Image
           alt={`${user.username}`}
           src={user.profileImage ?? "/images/not-found.png"}
@@ -69,7 +69,7 @@ function Card({ user, username, currentUserId }: CardProps) {
           {user.username}
         </div>
 
-        <div className="text-sm/tight dark:text-neutral-600">{user.bio}</div>
+        <div className="text-sm/tight text-neutral-600">{user.bio}</div>
       </div>
 
       <div className="flex pr-2 pt-2">
@@ -145,7 +145,7 @@ export default function FollowsModal({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <div className="h-screen w-screen bg-white dark:bg-neutral-950 md:h-fit md:max-w-lg md:rounded-3xl">
+              <div className="h-screen w-screen bg-neutral-50 dark:bg-neutral-950 md:h-fit md:max-w-lg md:rounded-3xl">
                 <Tab.Group
                   selectedIndex={selectedIndex}
                   onChange={setSelectedIndex}
@@ -156,7 +156,7 @@ export default function FollowsModal({
                         cn(
                           "w-full rounded-t-3xl px-6 py-3 text-left text-lg font-bold text-neutral-700",
                           "focus:outline-none",
-                          selected ? "bg-white dark:bg-neutral-950" : "",
+                          selected ? "bg-neutral-50 dark:bg-neutral-950" : "",
                         )
                       }
                     >
@@ -167,7 +167,7 @@ export default function FollowsModal({
                         cn(
                           "w-full rounded-t-3xl px-6 py-3 text-left text-lg font-bold text-neutral-700",
                           "focus:outline-none",
-                          selected ? "bg-white dark:bg-neutral-950" : "",
+                          selected ? "bg-neutral-50 dark:bg-neutral-950" : "",
                         )
                       }
                     >
@@ -183,7 +183,7 @@ export default function FollowsModal({
                       />
                     </button>
                   </Tab.List>
-                  <Tab.Panels className="bg-white pt-2 dark:bg-neutral-950 md:rounded-b-3xl">
+                  <Tab.Panels className="bg-neutral-50 pt-2 dark:bg-neutral-950 md:rounded-b-3xl">
                     <Tab.Panel
                       className={cn(
                         "flex flex-col gap-2 overflow-y-auto p-4 md:h-[480px] md:p-6",
