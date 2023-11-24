@@ -33,13 +33,13 @@ export default function UserContainer({ user: currentUser }: Props) {
         <div className="col-span-10 flex h-fit flex-col rounded-b-lg bg-neutral-50 p-4 dark:bg-neutral-950 md:col-span-3 md:rounded-2xl">
           <div className="grid grid-cols-2 gap-4">
             <div className="relative col-span-1 -mt-14 flex aspect-square w-1/2 md:-mt-24 md:w-full">
-              <div className="h-auto w-full rounded-4xl bg-neutral-50 p-2 dark:bg-neutral-950 md:rounded-[40px]">
+              <div className="h-auto w-full rounded-4xl bg-neutral-50 p-1 dark:bg-neutral-950">
                 <Image
                   alt={`${user.username}'s profile picture`}
                   src={user.profileImage ?? "/images/not-found.png"}
                   width={200}
                   height={200}
-                  className="h-full w-full rounded-3xl object-cover md:rounded-4xl"
+                  className="h-full w-full rounded-[28px] object-cover"
                 />
               </div>
             </div>
