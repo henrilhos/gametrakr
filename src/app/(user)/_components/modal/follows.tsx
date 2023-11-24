@@ -184,7 +184,11 @@ export default function FollowsModal({
                     </button>
                   </Tab.List>
                   <Tab.Panels className="bg-white pt-2 dark:bg-neutral-950 md:rounded-b-3xl">
-                    <Tab.Panel className={cn("flex flex-col gap-2 p-4 md:p-6")}>
+                    <Tab.Panel
+                      className={cn(
+                        "flex flex-col gap-2 overflow-y-auto p-4 md:h-[480px] md:p-6",
+                      )}
+                    >
                       {following.map((follow) => (
                         <Card
                           key={follow.id}
@@ -194,7 +198,11 @@ export default function FollowsModal({
                         />
                       ))}
                     </Tab.Panel>
-                    <Tab.Panel className={cn("flex flex-col gap-2 p-6")}>
+                    <Tab.Panel
+                      className={cn(
+                        "flex flex-col gap-2 overflow-y-auto p-4 md:h-[480px] md:p-6",
+                      )}
+                    >
                       {followers.map((follow) => (
                         <Card
                           key={follow.id}
