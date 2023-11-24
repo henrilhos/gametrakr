@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import EditProfileModal from "~/app/(user)/_components/modal/edit-profile";
 import { cn } from "~/lib/utils";
@@ -13,6 +11,8 @@ type Props = {
     id: string;
     profileImage: string | null;
     coverImage: string | null;
+    location: string | null;
+    bio: string | null;
     createdAt: Date | null;
   };
 };
@@ -40,7 +40,7 @@ export default function EditProfile({ user }: Props) {
         Edit profile
       </button>
 
-      <EditProfileModal open={isOpen} onClose={handleClose} user={user} />
+      <EditProfileModal open={isOpen} user={user} onClose={handleClose} />
     </>
   );
 }

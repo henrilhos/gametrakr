@@ -1,12 +1,14 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import Link from "next/link";
 import { Button, type ButtonProps } from "~/components/ui/button";
 
 export default function SignInButton(props: ButtonProps) {
   return (
-    <Button variant="secondary" onClick={() => void signIn()} {...props}>
-      Sign in
+    <Button variant="secondary" {...props}>
+      <Link href="/sign-in" passHref>
+        Sign in
+      </Link>
     </Button>
   );
 }

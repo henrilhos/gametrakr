@@ -79,7 +79,12 @@ export default function Dropdown({ user, open, onClose }: Props) {
                       <SignUpButton full />
                     </>
                   )}
-                  {user && <SignOutButton full />}
+                  {user && (
+                    <SignOutButton
+                      full
+                      className="before:content-['Sign_out']"
+                    />
+                  )}
                 </div>
 
                 <div className="flex w-full flex-row-reverse">

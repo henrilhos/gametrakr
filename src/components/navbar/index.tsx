@@ -7,6 +7,7 @@ import Heading from "~/components/heading";
 import Menu from "~/components/menu";
 import SearchInput from "~/components/search/input";
 import ThemeButton from "~/components/theme/button";
+import { Button } from "~/components/ui/button";
 import { getCurrentUser } from "~/lib/session";
 
 export default async function Navbar() {
@@ -35,7 +36,16 @@ export default async function Navbar() {
             <SignUpButton className="w-40" />
           </>
         )}
-        {user && <SignOutButton className="w-40" />}
+        {user && (
+          <>
+            <Button variant="secondary">
+              <Link href={`/${user.username}`} passHref>
+                My profile
+              </Link>
+            </Button>
+            <SignOutButton />
+          </>
+        )}
 
         <ThemeButton />
       </div>
