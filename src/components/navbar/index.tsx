@@ -15,11 +15,9 @@ export default async function Navbar() {
 
   return (
     <header className="flex w-full justify-between px-3 py-4 md:gap-3 md:px-8 md:py-6">
-      <Heading>
-        <Link href="/" passHref>
-          gametrakr
-        </Link>
-      </Heading>
+      <Link href="/" passHref>
+        <Heading>gametrakr</Heading>
+      </Link>
 
       <div className="flex items-center gap-2 md:hidden">
         {!user && <MobileSignInButton />}
@@ -38,11 +36,9 @@ export default async function Navbar() {
         )}
         {user && (
           <>
-            <Button variant="secondary">
-              <Link href={`/${user.username}`} passHref>
-                My profile
-              </Link>
-            </Button>
+            <Link href={`/${user.username}`} passHref>
+              <Button variant="secondary">My profile</Button>
+            </Link>
             <SignOutButton />
           </>
         )}

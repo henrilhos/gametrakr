@@ -8,10 +8,8 @@ export default function SignUpButton({
   ...props
 }: ButtonProps) {
   return (
-    <Button {...props}>
-      <Link href="/sign-up" passHref>
-        {content}
-      </Link>
-    </Button>
+    <Link href="/sign-up" passHref>
+      <Button {...props}>{content}</Button>
+    </Link>
   );
 }

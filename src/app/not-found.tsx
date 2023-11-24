@@ -27,11 +27,11 @@ export default function NotFound() {
               Click the button below to go back to the homepage.
             </div>
 
-            <Button variant="secondary" className="mt-8 md:max-w-fit">
-              <Link href="/" passHref>
+            <Link href="/" passHref>
+              <Button variant="secondary" className="mt-8 md:max-w-fit">
                 Go to homepage
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

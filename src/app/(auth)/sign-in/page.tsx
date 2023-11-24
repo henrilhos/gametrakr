@@ -17,11 +17,11 @@ export default function Page() {
 
         <div className="flex flex-col gap-2 text-lg/6 text-neutral-700 dark:text-neutral-400">
           New on gametrakr?
-          <Button variant="secondary" justify="center" full>
-            <Link href="/sign-up" passHref>
+          <Link href="/sign-up" passHref>
+            <Button variant="secondary" justify="center" full>
               Create an account
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       </CardContent>
     </div>
