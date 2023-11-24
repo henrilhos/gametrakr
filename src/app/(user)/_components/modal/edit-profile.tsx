@@ -7,8 +7,14 @@ import { Icons } from "~/components/icons";
 import BackButton from "~/components/ui/back-button";
 import { Button } from "~/components/ui/button";
 import { Card, CardHeader, CardTitle } from "~/components/ui/card";
+import { Form, FormControl, FormField, FormItem } from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Textarea } from "~/components/ui/textarea";
 import toast from "~/components/ui/toast";
+import { useZodForm } from "~/hooks/use-zod-form";
 import { useUploadThing } from "~/lib/uploadthing";
+import { cn } from "~/lib/utils";
+import { UserPersonalInfoSchema } from "~/server/api/schemas/user";
 import { api } from "~/trpc/react";
 
 type User = {
@@ -19,6 +25,8 @@ type User = {
   id: string;
   profileImage: string | null;
   coverImage: string | null;
+  location: string | null;
+  bio: string | null;
   createdAt: Date | null;
 };
 
@@ -33,7 +41,23 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
   const [profileFile, setProfileFile] = useState<FileWithPath>();
   const [coverFile, setCoverFile] = useState<FileWithPath>();
 
+  const form = useZodForm({
+    schema: UserPersonalInfoSchema,
+    defaultValues: {
+      bio: user.bio ?? "",
+      location: user.location ?? "",
+    },
+  });
+
   const utils = api.useUtils();
+  const { mutateAsync: updatePersonalInformation } =
+    api.user.updatePersonalInformation.useMutation({
+      onSuccess: async () => {
+        await utils.user.findFirstByUsername.invalidate({
+          username: user.username,
+        });
+      },
+    });
 
   const handleProfileFileChange = (file: FileWithPath) => {
     setProfileFile(file);
@@ -44,29 +68,20 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
   };
 
   const handleOnClick = async () => {
+    const input = form.getValues();
     setIsLoading(true);
 
-    const newUser = { ...user };
-
     if (profileFile) {
-      const res = await startUploadProfile([profileFile]);
-
-      if (res?.[0]?.url) {
-        newUser.profileImage = res[0].url;
-      }
+      await startUploadProfile([profileFile]);
     }
 
     if (coverFile) {
-      const res = await startUploadCover([coverFile]);
-      if (res?.[0]?.url) {
-        newUser.coverImage = res[0].url;
-      }
+      await startUploadCover([coverFile]);
     }
 
-    await utils.user.findFirstByUsername.invalidate({
-      username: user.username,
-    });
+    await updatePersonalInformation({ ...input });
 
+    setIsLoading(false);
     onClose();
   };
 
@@ -124,7 +139,18 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
                 <div>
                   <CardHeader className="mb-5 gap-3">
                     <BackButton className="md:hidden" onClick={handleOnClose} />
-                    <CardTitle className="text-2xl">Edit profile</CardTitle>
+                    <CardTitle className="flex justify-between text-2xl">
+                      Edit profile
+                      <button
+                        type="button"
+                        onClick={handleOnClick}
+                        className={cn(
+                          "inline-flex h-fit items-center justify-center rounded-xl bg-transparent px-3 py-1 text-lg font-bold text-yellow-500 transition-all inner-border-2 inner-border-yellow-500 hover:scale-105 hover:text-black hover:inner-border-black active:scale-95 active:bg-yellow-200 active:text-yellow-500 active:inner-border-0 dark:text-yellow-400 dark:inner-border-yellow-400 dark:hover:text-white dark:hover:inner-border-white dark:active:bg-yellow-800 dark:active:text-yellow-400",
+                        )}
+                      >
+                        Save changes
+                      </button>
+                    </CardTitle>
                   </CardHeader>
 
                   <CoverPictureUploader
@@ -138,6 +164,42 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
                       handleFileChange={handleProfileFileChange}
                     />
                   </div>
+
+                  <Form {...form}>
+                    <div className="mt-4 flex flex-col gap-4">
+                      <FormField
+                        control={form.control}
+                        name="bio"
+                        render={({ field, fieldState }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Textarea
+                                label="Bio"
+                                state={fieldState}
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="location"
+                        render={({ field, fieldState }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                label="Location"
+                                state={fieldState}
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </Form>
                 </div>
 
                 <div className="mt-2 flex justify-end">

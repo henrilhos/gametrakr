@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { UserPersonalInfoSchema } from "~/server/api/schemas/user";
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -10,6 +11,7 @@ import {
   findManyUsersByQuery,
   isFollowing,
   removeFollow,
+  updateUserPersonalInformation,
 } from "~/server/db";
 
 export const userRouter = createTRPCRouter({
@@ -81,5 +83,15 @@ export const userRouter = createTRPCRouter({
           user.followers.filter((f) => f.followingUserId === currentUserId)
             .length > 0,
       };
+    }),
+
+  updatePersonalInformation: protectedProcedure
+    .meta({ description: "Update user basic information" })
+    .input(UserPersonalInfoSchema)
+    .mutation(async ({ ctx, input }) => {
+      const currentUserId = ctx.session.user.id;
+      const user = await updateUserPersonalInformation(currentUserId, input);
+
+      return { ...user };
     }),
 });

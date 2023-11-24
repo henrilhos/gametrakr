@@ -1,4 +1,6 @@
 import { hash } from "argon2";
+import { type z } from "zod";
+import { type UserPersonalInfoSchema } from "~/server/api/schemas/user";
 import { db, eq, users } from "~/server/db";
 
 export const canCreateUser = async ({
@@ -115,3 +117,16 @@ export const findFirstUserByUsername = (username: string) =>
       verified: false,
     },
   });
+
+export const updateUserPersonalInformation = async (
+  id: string,
+  input: z.infer<typeof UserPersonalInfoSchema>,
+) => {
+  const [response] = await db
+    .update(users)
+    .set({ ...input })
+    .where(eq(users.id, id))
+    .returning({ bio: users.bio, location: users.location });
+
+  return response;
+};

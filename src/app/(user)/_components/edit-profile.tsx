@@ -11,6 +11,8 @@ type Props = {
     id: string;
     profileImage: string | null;
     coverImage: string | null;
+    location: string | null;
+    bio: string | null;
     createdAt: Date | null;
   };
 };
