@@ -58,7 +58,7 @@ function Card({ user, username, currentUserId }: CardProps) {
       <div className="relative aspect-square h-16 w-16 rounded-2xl bg-neutral-100 p-0.5 dark:bg-neutral-800">
         <Image
           alt={`${user.username}`}
-          src={user.profileImage ?? "/images/not-found.png"}
+          src={user.profileImage ?? "/images/not-found-square.png"}
           width={80}
           height={80}
           className="aspect-square h-full w-full rounded-[14px] object-cover"

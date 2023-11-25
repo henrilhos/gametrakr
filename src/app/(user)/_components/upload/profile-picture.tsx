@@ -15,7 +15,9 @@ export default function ProfilePictureUploader({
   currentImage,
   handleFileChange,
 }: Props) {
-  const [image, setImage] = useState(currentImage ?? "/images/not-found.png");
+  const [image, setImage] = useState(
+    currentImage ?? "/images/not-found-square.png",
+  );
 
   useEffect(() => {
     if (currentImage) {

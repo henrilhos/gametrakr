@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import Link from "next/link";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Transition } from "@headlessui/react";
@@ -80,10 +81,17 @@ export default function Dropdown({ user, open, onClose }: Props) {
                     </>
                   )}
                   {user && (
-                    <SignOutButton
-                      full
-                      className="before:content-['Sign_out']"
-                    />
+                    <>
+                      <Link href={`/${user.username}`} passHref>
+                        <Button justify="center" full variant="secondary">
+                          My profile
+                        </Button>
+                      </Link>
+                      <SignOutButton
+                        full
+                        className="before:content-['Sign_out']"
+                      />
+                    </>
                   )}
                 </div>
 

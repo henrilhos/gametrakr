@@ -74,7 +74,7 @@ export default function UserContainer({ user: currentUser }: Props) {
               <div className="h-auto w-full rounded-4xl bg-neutral-50 p-1 dark:bg-neutral-950">
                 <Image
                   alt={`${user.username}'s profile picture`}
-                  src={user.profileImage ?? "/images/not-found.png"}
+                  src={user.profileImage ?? "/images/not-found-square.png"}
                   width={200}
                   height={200}
                   className="h-full w-full rounded-[28px] object-cover"
