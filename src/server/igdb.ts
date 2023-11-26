@@ -1,5 +1,6 @@
 "use server";
 
+import type { proto } from "ts-igdb-client";
 import {
   and,
   fields,
@@ -12,9 +13,9 @@ import {
   whereIn,
   WhereInFlags,
 } from "ts-igdb-client";
-import type { proto } from "ts-igdb-client";
 import { env } from "~/env.mjs";
 import { unixTimestampToYear } from "~/lib/utils";
+import { createGame, gameExists } from "~/server/db";
 
 const TWITCH_SECRETS = {
   client_id: env.TWITCH_CLIENT_ID,
@@ -104,7 +105,7 @@ export const getGameBySlug = async ({ slug }: { slug: string }) => {
     )
     .execute();
 
-  const [data] = response.map((game) => {
+  const [igdbData] = response.map((game) => {
     const themes =
       game.themes?.map((t) => t.name ?? "").filter((t) => !!t) ?? [];
 
@@ -148,5 +149,11 @@ export const getGameBySlug = async ({ slug }: { slug: string }) => {
     };
   });
 
-  return data;
+  const game = await gameExists(slug);
+
+  if (!game) {
+    await createGame(slug, igdbData?.name ?? "");
+  }
+
+  return igdbData;
 };

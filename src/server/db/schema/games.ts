@@ -12,7 +12,9 @@ export const games = pgTable(
   "games",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+
     slug: text("slug").unique().notNull(),
+    name: text("name").notNull(),
 
     createdAt: timestamp("created_at", { withTimezone: false })
       .notNull()
