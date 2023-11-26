@@ -11,7 +11,9 @@ export const follows = pgTable(
     followedUserId: uuid("followed_user_id")
       .references(() => users.id)
       .notNull(),
-    createdAt: timestamp("created_at", { withTimezone: false }).defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: false })
+      .notNull()
+      .defaultNow(),
   },
   (follows) => ({
     uniqueFollow: primaryKey(follows.followingUserId, follows.followedUserId),

@@ -7,6 +7,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
+import { reviews } from "~/server/db/schema/reviews";
 import { follows } from "./follows";
 import { tokens } from "./tokens";
 
@@ -28,8 +29,12 @@ export const users = pgTable(
     verified: boolean("verified").notNull().default(false),
     active: boolean("active").notNull().default(true),
 
-    createdAt: timestamp("created_at", { withTimezone: false }).defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: false }).defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: false })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: false })
+      .notNull()
+      .defaultNow(),
   },
   (users) => ({
     emailIdx: uniqueIndex("email_idx").on(users.email),
@@ -45,4 +50,5 @@ export const usersRelations = relations(users, ({ many }) => ({
     relationName: "following",
   }),
   tokens: many(tokens),
+  reviews: many(reviews),
 }));
