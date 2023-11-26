@@ -15,6 +15,13 @@
       "when": 1700784122480,
       "tag": "0001_luxuriant_groot",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1701021045586,
+      "tag": "0002_right_wild_pack",
+      "breakpoints": true
     }
   ]
 }
