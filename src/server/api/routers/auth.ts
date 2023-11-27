@@ -1,6 +1,6 @@
 import ConfirmAccount from "~/components/emails/confirm-account";
 import ResetPassword from "~/components/emails/reset-password";
-import { getBaseUrl } from "~/lib/utils";
+import { getBaseUrl, passwordMatches } from "~/lib/utils";
 import {
   ConfirmEmailSchema,
   ForgotPasswordSchema,
@@ -29,8 +29,7 @@ export const authRouter = createTRPCRouter({
   signUp: publicProcedure.input(SignUpSchema).mutation(async ({ input }) => {
     const { confirmPassword, email, password, username } = input;
 
-    const isPasswordValid = password === confirmPassword;
-    if (!isPasswordValid) {
+    if (!passwordMatches(password, confirmPassword)) {
       throw Error("Passwords don't match");
     }
 

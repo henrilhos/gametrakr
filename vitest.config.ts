@@ -7,6 +7,13 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
+      exclude: [
+        "**/server/api/trpc.ts",
+        "**/server/auth.ts",
+        "**/server/db/utils/**",
+        "**/server/emails.ts",
+        "**/server/igdb.ts",
+      ],
     },
   },
   resolve: {
