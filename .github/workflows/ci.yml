@@ -112,3 +112,24 @@ jobs:
 
       - name: Run typecheck
         run: pnpm typecheck
+
+  unit:
+    name: "Unit tests"
+    runs-on: ubunut-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run unit tests
+        run: pnpm test:run
