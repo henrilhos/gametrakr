@@ -7,11 +7,7 @@ import * as db from "~/server/db";
 vi.mock("~/server/db");
 
 describe("review router", async () => {
-  const session = {
-    user: { id: "42", username: "henrilhos" },
-    expires: "1",
-  };
-
+  const session = { user: { id: "42", username: "henrilhos" }, expires: "1" };
   const ctx = await createInnerTRPCContext({ session });
   const caller = appRouter.createCaller(ctx);
 
