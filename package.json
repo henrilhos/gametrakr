@@ -11,6 +11,9 @@
     "start": "next start",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "coverage": "vitest run --coverage",
     "db:generate": "dotenv drizzle-kit generate:pg",
     "db:push": "dotenv drizzle-kit push:pg",
     "db:migrate": "node --loader ts-node/esm src/server/db/migrate.mts",
@@ -67,6 +70,7 @@
     "@types/react-dom": "^18.2.14",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.12.0",
+    "@vitest/coverage-v8": "^0.34.6",
     "autoprefixer": "^10.4.14",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
@@ -83,7 +87,9 @@
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-inner-border": "^0.2.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "vite": "^5.0.2",
+    "vitest": "^0.34.6"
   },
   "ct3aMetadata": {
     "initVersion": "7.23.1"

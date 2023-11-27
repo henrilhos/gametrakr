@@ -1,9 +1,12 @@
 import { createEnv } from "@t3-oss/env-nextjs";
+import { config } from "dotenv";
 import { z } from "zod";
 
 const toggle = z
   .enum(["true", "false", "0", "1"])
   .transform((v) => v === "true" || v === "1");
+
+config();
 
 export const env = createEnv({
   /**
