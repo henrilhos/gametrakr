@@ -74,13 +74,15 @@ export const authRouter = createTRPCRouter({
         throw Error("Token not created");
       }
 
-      return await sendEmail({
+      await sendEmail({
         subject: "Welcome to gametrakr 👋",
         to: [email],
         react: ConfirmAccount({
           href: `${getBaseUrl()}/confirm?token=${token.id}&email=${email}`,
         }),
       });
+
+      return { message: "Email sent successfully" };
     }),
 
   confirmAccount: publicProcedure
@@ -107,6 +109,8 @@ export const authRouter = createTRPCRouter({
 
       await invalidateTokens({ userId: user.id, tokenType: "account" });
       await verifyUser({ id: user.id });
+
+      return { message: "Account verified successfully" };
     }),
 
   sendResetPasswordEmail: publicProcedure
@@ -142,9 +146,8 @@ export const authRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const { confirmPassword, email, password, token: tokenId } = input;
 
-      const isPasswordValid = password === confirmPassword;
-      if (!isPasswordValid) {
-        throw Error("Password don't match");
+      if (!passwordMatches(password, confirmPassword)) {
+        throw Error("Passwords don't match");
       }
 
       const user = await getUserByEmail({ email });
@@ -160,7 +163,9 @@ export const authRouter = createTRPCRouter({
         throw Error("Token not found");
       }
 
-      await invalidateTokens({ userId: user.id, tokenType: "account" });
+      await invalidateTokens({ userId: user.id, tokenType: "password" });
       await updateUserPassword({ userId: user.id, password });
+
+      return { message: "Email sent successfully" };
     }),
 });
