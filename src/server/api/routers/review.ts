@@ -20,6 +20,7 @@ export const reviewRouter = createTRPCRouter({
         userId,
         gameId,
       });
+
       return response;
     }),
 });
