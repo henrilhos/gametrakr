@@ -1,3 +1,4 @@
+import { NextRequest } from "next/server";
 import { type inferProcedureInput, type TRPCError } from "@trpc/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as utils from "~/lib/utils";
@@ -5,12 +6,14 @@ import { appRouter, type AppRouter } from "~/server/api/root";
 import { createInnerTRPCContext } from "~/server/api/trpc";
 import * as db from "~/server/db";
 
-vi.mock("~/server/db");
 vi.mock("~/lib/utils");
+vi.mock("~/server/auth");
+vi.mock("~/server/db");
 vi.mock("~/server/emails");
 
 describe("auth router", async () => {
-  const ctx = await createInnerTRPCContext({ session: null });
+  const req = new NextRequest("https://gametra.kr");
+  const ctx = await createInnerTRPCContext(req);
   const caller = appRouter.createCaller(ctx);
 
   describe("sign up mutation", () => {

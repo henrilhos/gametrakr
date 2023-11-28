@@ -1,14 +1,17 @@
+import { NextRequest } from "next/server";
 import { type inferProcedureInput } from "@trpc/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { appRouter, type AppRouter } from "~/server/api/root";
 import { createInnerTRPCContext } from "~/server/api/trpc";
 import * as igdb from "~/server/igdb";
 
+vi.mock("~/server/auth");
 vi.mock("~/server/db");
 vi.mock("~/server/igdb");
 
 describe("game router", async () => {
-  const ctx = await createInnerTRPCContext({ session: null });
+  const req = new NextRequest("https://gametra.kr");
+  const ctx = await createInnerTRPCContext(req);
   const caller = appRouter.createCaller(ctx);
 
   describe("find many by query query", async () => {
@@ -64,6 +67,10 @@ describe("game router", async () => {
       platforms: [{ name: "playstation" }],
       releaseDate: new Date(),
       summary: "super amazing summary",
+      createdAt: new Date(),
+      id: "super-amazing-id",
+      slug: "crash-bandicoot",
+      updatedAt: new Date(),
     };
 
     beforeEach(() => {

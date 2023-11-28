@@ -1,14 +1,20 @@
+import { NextRequest } from "next/server";
 import { type inferProcedureInput } from "@trpc/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { appRouter, type AppRouter } from "~/server/api/root";
 import { createInnerTRPCContext } from "~/server/api/trpc";
+import * as auth from "~/server/auth";
 import * as db from "~/server/db";
 
+vi.mock("~/server/auth");
 vi.mock("~/server/db");
 
 describe("review router", async () => {
   const session = { user: { id: "42", username: "henrilhos" }, expires: "1" };
-  const ctx = await createInnerTRPCContext({ session });
+  vi.mocked(auth.getServerAuthSession).mockResolvedValue(session);
+
+  const req = new NextRequest("https://gametra.kr");
+  const ctx = await createInnerTRPCContext(req);
   const caller = appRouter.createCaller(ctx);
 
   describe("create or update mutation", () => {
