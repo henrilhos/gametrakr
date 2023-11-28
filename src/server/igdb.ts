@@ -149,11 +149,15 @@ export const getGameBySlug = async ({ slug }: { slug: string }) => {
     };
   });
 
-  const game = await gameExists(slug);
+  let dbData = await gameExists(slug);
 
-  if (!game) {
-    await createGame(slug, igdbData?.name ?? "");
+  if (!dbData) {
+    [dbData] = await createGame(slug, igdbData?.name ?? "");
   }
 
-  return igdbData;
+  if (!dbData) {
+    throw Error("Game not created at local db");
+  }
+
+  return { ...igdbData, ...dbData };
 };
