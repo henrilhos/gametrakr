@@ -115,7 +115,7 @@ jobs:
 
   unit:
     name: "Unit tests"
-    runs-on: ubunut-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
