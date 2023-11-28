@@ -132,4 +132,8 @@ jobs:
         run: pnpm install
 
       - name: Run unit tests
-        run: pnpm test:run
+        run: npx vitest --coverage
+
+      - name: Report coverage
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2

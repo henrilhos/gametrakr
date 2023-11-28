@@ -6,7 +6,7 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, "**/e2e/**"],
     coverage: {
       provider: "v8",
-      reporter: ["text", "json", "html"],
+      reporter: ["html", "json-summary", "json", "text"],
       exclude: [
         "**/server/api/trpc.ts",
         "**/server/auth.ts",
