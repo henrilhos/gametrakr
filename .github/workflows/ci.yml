@@ -129,18 +129,6 @@ jobs:
           node-version: 20
           cache: "pnpm"
 
-      - name: Setup environment variables
-        run: |
-          cp .env.example .env
-          echo "DATABASE_URL=supersecret" >> .env
-          echo "NEXTAUTH_SECRET=supersecret" >> .env
-          echo "RESEND_API_KEY=supersecret" >> .env
-          echo "RESEND_EMAIL=ci@gametra.kr" >> .env
-          echo "TWITCH_CLIENT_ID=supersecret" >> .env
-          echo "TWITCH_SECRET_ID=supersecret" >> .env
-          echo "UPLOADTHING_SECRET=supersecret" >> .env
-          echo "UPLOADTHING_APP_ID=supersecret" >> .env
-
       - name: Install dependencies
         run: pnpm install
 
