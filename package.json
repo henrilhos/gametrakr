@@ -72,7 +72,7 @@
     "@next/eslint-plugin-next": "^14.0.3",
     "@tailwindcss/typography": "^0.5.10",
     "@types/eslint": "^8.44.7",
-    "@types/node": "^18.16.0",
+    "@types/node": "^20.10.0",
     "@types/react": "^18.2.33",
     "@types/react-dom": "^18.2.14",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
