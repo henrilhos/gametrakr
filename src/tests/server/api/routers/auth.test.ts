@@ -10,6 +10,7 @@ vi.mock("~/lib/utils");
 vi.mock("~/server/auth");
 vi.mock("~/server/db");
 vi.mock("~/server/emails");
+vi.mock("resend");
 
 describe("auth router", async () => {
   const req = new NextRequest("https://gametra.kr");
