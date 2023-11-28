@@ -5,13 +5,15 @@ import { users } from "./users";
 export const follows = pgTable(
   "follows",
   {
-    followingUserId: uuid("followingUserId")
+    followingUserId: uuid("following_user_id")
       .references(() => users.id)
       .notNull(),
-    followedUserId: uuid("followedUserId")
+    followedUserId: uuid("followed_user_id")
       .references(() => users.id)
       .notNull(),
-    createdAt: timestamp("created_at", { withTimezone: false }).defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: false })
+      .notNull()
+      .defaultNow(),
   },
   (follows) => ({
     uniqueFollow: primaryKey(follows.followingUserId, follows.followedUserId),

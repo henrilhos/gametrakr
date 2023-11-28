@@ -11,8 +11,12 @@ export const tokens = pgTable("tokens", {
   valid: boolean("valid").notNull().default(true),
   userId: uuid("user_id").notNull(),
 
-  createdAt: timestamp("created_at", { withTimezone: false }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: false }).defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: false })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: false })
+    .notNull()
+    .defaultNow(),
 });
 
 export const tokensRelations = relations(tokens, ({ one }) => ({

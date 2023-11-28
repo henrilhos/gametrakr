@@ -1,15 +1,12 @@
 "use client";
 
-import { forwardRef, type ButtonHTMLAttributes } from "react";
-import {
-  faHeart,
-  faPlay,
-  faPlus,
-  faStar,
-} from "@fortawesome/free-solid-svg-icons";
+import { forwardRef, useState, type ButtonHTMLAttributes } from "react";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { cva, type VariantProps } from "class-variance-authority";
 import { type User } from "next-auth";
+import { type Game } from "~/app/games/_components/game";
+import { ReviewModal } from "~/app/games/_components/modals/review";
 import { cn } from "~/lib/utils";
 
 const buttonVariants = cva(
@@ -49,18 +46,22 @@ Button.displayName = "Button";
 
 type Props = {
   user?: User;
+  game: Game;
 };
 
-export default function ActionButtons({ user }: Props) {
+export default function ActionButtons({ user, game }: Props) {
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
   if (!user) return null;
 
   return (
-    <div className="flex w-full flex-col gap-0.5 rounded-2xl" role="group">
-      <Button>
-        <FontAwesomeIcon className="me-4" icon={faStar} />
-        Review
-      </Button>
-      <Button variant="secondary">
+    <>
+      <div className="flex w-full flex-col gap-0.5 rounded-2xl" role="group">
+        <Button onClick={() => setIsReviewModalOpen(true)}>
+          <FontAwesomeIcon className="me-4" icon={faStar} />
+          Review
+        </Button>
+        {/* <Button variant="secondary">
         <FontAwesomeIcon className="me-4" icon={faHeart} />
         Playlist
       </Button>
@@ -71,7 +72,13 @@ export default function ActionButtons({ user }: Props) {
       <Button variant="secondary">
         <FontAwesomeIcon className="me-4 text-yellow-600" icon={faPlus} />
         List
-      </Button>
-    </div>
+      </Button> */}
+      </div>
+      <ReviewModal
+        game={game}
+        open={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+      />
+    </>
   );
 }

@@ -2,12 +2,16 @@
 
 import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
+import { type inferProcedureOutput } from "@trpc/server";
 import { type User } from "next-auth";
-import GameCard from "~/app/games/_components/game-card";
 import Metadata from "~/app/games/_components/metadata";
+import Sidebar from "~/app/games/_components/sidebar";
 import Tags from "~/app/games/_components/tags";
 import Heading from "~/components/heading";
+import { type AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
+
+export type Game = inferProcedureOutput<AppRouter["game"]["findFirstBySlug"]>;
 
 type Props = {
   user?: User;
@@ -54,7 +58,7 @@ export default function GameContainer({ user }: Props) {
         </div>
 
         <div className="col-span-12 w-full md:col-span-3 2xl:col-span-2">
-          <GameCard user={user} criticRating={game.criticRating} />
+          <Sidebar user={user} game={game} />
         </div>
 
         <div className="col-span-12 md:hidden">

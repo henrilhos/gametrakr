@@ -61,7 +61,7 @@ export default function UserContainer({ user: currentUser }: Props) {
             alt={`${user.username}'s cover picture`}
             src={user.coverImage}
             objectFit="cover"
-            className=" rounded-t-lg md:rounded-4xl"
+            className="rounded-t-lg md:rounded-4xl"
             fill
           />
         )}
