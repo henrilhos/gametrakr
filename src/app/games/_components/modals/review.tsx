@@ -222,7 +222,7 @@ export function ReviewModal({ game, open, onClose }: Props) {
       try {
         await createReview({ gameId: game.id, review: { ...data } });
         await utils.game.findFirstBySlug.invalidate({ slug: game.slug });
-        toast.success("Game successfully reviewd");
+        toast.success("Game successfully reviewed");
         setIsLoading(false);
         handleClose();
       } catch (err) {
