@@ -8,6 +8,7 @@ import * as igdb from "~/server/igdb";
 vi.mock("~/server/auth");
 vi.mock("~/server/db");
 vi.mock("~/server/igdb");
+vi.mock("resend");
 
 describe("game router", async () => {
   const req = new NextRequest("https://gametra.kr");

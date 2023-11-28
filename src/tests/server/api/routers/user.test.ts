@@ -8,6 +8,7 @@ import * as db from "~/server/db";
 
 vi.mock("~/server/auth");
 vi.mock("~/server/db");
+vi.mock("resend");
 
 describe("user router", () => {
   describe("public procedures", async () => {
