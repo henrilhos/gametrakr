@@ -52,7 +52,7 @@ export default function GameContainer({ user }: Props) {
             developers={game.developers ?? []}
             releaseDate={game.releaseDate}
           />
-          <div className="hidden dark:text-neutral-600 md:block">
+          <div className="hidden text-neutral-700 dark:text-neutral-600 md:block">
             {game.summary}
           </div>
         </div>

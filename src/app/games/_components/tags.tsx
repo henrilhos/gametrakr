@@ -11,7 +11,7 @@ function Tag({ children, onClick }: TagProps) {
   return (
     <button
       className={cn(
-        "flex cursor-default select-none items-center rounded-2xl px-3 py-2 text-sm/none capitalize dark:bg-yellow-950 dark:text-yellow-500",
+        "flex cursor-default select-none items-center rounded-2xl bg-yellow-50 px-3 py-2 text-sm/none capitalize text-yellow-600 dark:bg-yellow-950 dark:text-yellow-500",
         onClick && "cursor-pointer",
       )}
       onClick={onClick}

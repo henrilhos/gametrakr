@@ -11,7 +11,7 @@ type Props = {
 
 export default function Sidebar({ user, game }: Props) {
   return (
-    <div className="flex flex-col gap-4 rounded-4xl bg-yellow-50 p-4 dark:bg-neutral-950 dark:text-neutral-600">
+    <div className="flex flex-col gap-4 rounded-4xl bg-neutral-100 p-4 dark:bg-neutral-950 dark:text-neutral-600">
       {/* TODO: enable actions after finish user page and add modals */}
       <ActionButtons user={user} game={game} />
 

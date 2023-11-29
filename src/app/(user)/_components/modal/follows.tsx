@@ -4,46 +4,8 @@ import Link from "next/link";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Tab, Transition } from "@headlessui/react";
-import { track } from "@vercel/analytics";
+import ToggleFollow from "~/app/(user)/_components/toggle-follow-button";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
-
-type ToggleFollowButtonProps = {
-  userId: string;
-  username: string;
-  following: boolean;
-};
-
-function ToggleFollowButton({
-  userId,
-  following,
-  username,
-}: ToggleFollowButtonProps) {
-  const { mutateAsync: toggleFollow } = api.user.toggleFollow.useMutation();
-  const utils = api.useUtils();
-
-  const onClick = async () => {
-    track("(Un)Follow user", { id: userId });
-    await toggleFollow({ userId });
-    await utils.user.findFirstByUsername.invalidate({ username });
-  };
-
-  return (
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        void onClick();
-      }}
-      className={cn(
-        "inline-flex h-8 w-24 items-center justify-center rounded-xl px-3 py-1 text-base/none font-bold transition-all hover:scale-105 hover:inner-border-2 active:scale-95",
-        following
-          ? "text-neutral-600 inner-border-2 inner-border-neutral-600 before:content-['Following'] hover:bg-transparent hover:text-red-500 hover:inner-border-red-500 hover:before:content-['Unfollow'] dark:text-neutral-600 dark:inner-border-neutral-600 dark:hover:bg-transparent dark:hover:text-red-400 dark:hover:inner-border-red-400"
-          : "bg-yellow-500 text-white before:content-['Follow'] hover:bg-transparent hover:text-black hover:inner-border-black active:bg-yellow-200 active:text-yellow-500 active:inner-border-0 dark:bg-yellow-400 dark:text-black dark:hover:bg-transparent dark:hover:text-white dark:hover:inner-border-white dark:active:bg-yellow-800 dark:active:text-yellow-400",
-      )}
-    />
-  );
-}
 
 type CardProps = {
   user: Follow;
@@ -76,10 +38,11 @@ function Card({ user, username, currentUserId }: CardProps) {
 
       <div className="flex pr-2 pt-2">
         {currentUserId && currentUserId !== user.id && (
-          <ToggleFollowButton
-            userId={user.id}
+          <ToggleFollow
             username={username}
-            following={user.isFollowing!}
+            id={user.id}
+            size="sm"
+            variant={user.isFollowing ? "secondary" : "primary"}
           />
         )}
       </div>

@@ -7,7 +7,7 @@ import { type User } from "next-auth";
 import { filterXSS } from "xss";
 import EditProfile from "~/app/(user)/_components/edit-profile";
 import Follows from "~/app/(user)/_components/follows";
-import ToggleFollowButton from "~/app/(user)/_components/toggle-follow-button";
+import ToggleFollow from "~/app/(user)/_components/toggle-follow-button";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -89,9 +89,10 @@ export default function UserContainer({ user: currentUser }: Props) {
               )}
 
               {currentUser && currentUser.id !== user.id && (
-                <ToggleFollowButton
-                  userId={user.id}
-                  isFollowing={user.isFollowing}
+                <ToggleFollow
+                  id={user.id}
+                  username={user.username}
+                  variant={user.isFollowing ? "secondary" : "primary"}
                 />
               )}
             </div>
@@ -115,16 +116,16 @@ export default function UserContainer({ user: currentUser }: Props) {
         </div>
 
         {user.reviews.length > 0 && (
-          <div className="col-span-5 flex h-fit flex-col gap-4 rounded-2xl p-4 dark:bg-neutral-950">
+          <div className="col-span-5 flex h-fit flex-col gap-4 rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-950">
             {user.reviews.map((review, i) => (
               <div
                 key={i}
                 className={
-                  "space-y-4 rounded-2xl py-2 pl-2 pr-4 dark:bg-neutral-900"
+                  "space-y-4 rounded-2xl bg-white py-2 pl-2 pr-4 dark:bg-neutral-900"
                 }
               >
                 <div className="flex items-center">
-                  <div className="relative mr-2 h-8 w-8 rounded-full p-[1px] dark:bg-neutral-950">
+                  <div className="relative mr-2 h-8 w-8 rounded-full bg-neutral-100 p-[1px] dark:bg-neutral-950">
                     <Image
                       alt={`${user.username}'s profile picture`}
                       src={user.profileImage ?? "/images/not-found-square.png"}
@@ -134,14 +135,12 @@ export default function UserContainer({ user: currentUser }: Props) {
                     />
                   </div>
 
-                  <span className="font-bold dark:text-white">
-                    {user.username}
-                  </span>
-                  <span className="dark:text-neutral-500">
+                  <span className="font-bold">{user.username}</span>
+                  <span className="text-neutral-700 dark:text-neutral-500">
                     &nbsp;logged a new game
                   </span>
 
-                  <div className="grow text-right dark:text-neutral-500">
+                  <div className="grow text-right text-neutral-700 dark:text-neutral-500">
                     {formatDistanceToNow(review.createdAt, {
                       addSuffix: false,
                     })}
@@ -159,11 +158,9 @@ export default function UserContainer({ user: currentUser }: Props) {
                   </div>
 
                   <div>
-                    <div className="text-xl font-bold dark:text-white">
-                      {review.game.name}
-                    </div>
+                    <div className="text-xl font-bold">{review.game.name}</div>
                     {review.game.releaseDate && (
-                      <div className="dark:text-neutral-500">
+                      <div className="text-neutral-700 dark:text-neutral-500">
                         {getYear(review.game.releaseDate)}
                       </div>
                     )}

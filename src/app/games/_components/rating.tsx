@@ -51,7 +51,7 @@ const getRatingLabel = (rating?: number) => {
 };
 
 const ratingCardVariants = cva(
-  "flex h-full flex-col items-center justify-center rounded-3xl bg-neutral-200 p-4 text-center dark:bg-neutral-900",
+  "flex h-full flex-col items-center justify-center rounded-3xl bg-white p-4 text-center dark:bg-neutral-900",
   {
     variants: {
       color: {

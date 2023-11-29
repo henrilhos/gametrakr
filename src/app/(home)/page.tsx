@@ -67,7 +67,7 @@ function GameInfo({
 }) {
   return (
     <Link href={`/games/${slug}`}>
-      <div className="px-8 text-center uppercase text-neutral-100/60  hover:underline md:inline-flex md:gap-1 md:px-0 md:text-left">
+      <div className="px-8 text-center uppercase text-neutral-100/80  hover:underline md:inline-flex md:gap-1 md:px-0 md:text-left">
         <div>{`${name} (${releaseYear})`}&nbsp;</div>
         <div className="inline-flex gap-1">
           <div>©</div>
@@ -91,7 +91,7 @@ export default async function Page() {
       <Card
         className="flex max-w-full grow flex-col justify-between rounded-3xl bg-cover bg-center bg-no-repeat px-2 pb-2 pt-4 md:rounded-4xl md:p-6"
         style={{
-          backgroundImage: `url(${game.imageUrl})`,
+          backgroundImage: `linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.00) 50%), url(${game.imageUrl})`,
         }}
       >
         <GameInfo {...game} />
