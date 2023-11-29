@@ -25,3 +25,16 @@ export const createOrUpdateReview = async (
     .where(eq(reviews.id, exists.id))
     .returning();
 };
+
+export const getReviewsByUser = async (id: string) =>
+  db.query.reviews.findMany({
+    where: (review, { eq, and }) =>
+      and(eq(review.userId, id), eq(review.active, true)),
+    with: {
+      game: {
+        columns: { cover: true, name: true, releaseDate: true, slug: true },
+      },
+    },
+    columns: { content: true, createdAt: true, isSpoiler: true, rating: true },
+    orderBy: (review, { desc }) => [desc(review.createdAt)],
+  });

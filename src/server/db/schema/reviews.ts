@@ -36,7 +36,7 @@ export const reviewsRelations = relations(reviews, ({ one }) => ({
     references: [users.id],
   }),
   game: one(games, {
-    fields: [reviews.userId],
+    fields: [reviews.gameId],
     references: [games.id],
   }),
 }));

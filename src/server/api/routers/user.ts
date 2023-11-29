@@ -11,6 +11,7 @@ import {
   findManyUsersByQuery,
   getFollowersById,
   getFollowsById,
+  getReviewsByUser,
   isFollowing,
   removeFollow,
   updateUserPersonalInformation,
@@ -79,9 +80,11 @@ export const userRouter = createTRPCRouter({
 
       const followers = await getFollowersById(user.id, currentUserId);
       const following = await getFollowsById(user.id, currentUserId);
+      const reviews = await getReviewsByUser(user.id);
 
       return {
         ...user,
+        reviews,
         following,
         followers,
         isFollowing:
