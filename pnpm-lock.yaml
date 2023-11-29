@@ -152,8 +152,8 @@ devDependencies:
     specifier: ^4.1.1
     version: 4.1.1(prettier@3.0.3)
   '@next/bundle-analyzer':
-    specifier: ^14.0.2
-    version: 14.0.2
+    specifier: ^14.0.3
+    version: 14.0.3
   '@next/eslint-plugin-next':
     specifier: ^14.0.3
     version: 14.0.3
@@ -1559,8 +1559,8 @@ packages:
       - supports-color
     dev: false
 
-  /@next/bundle-analyzer@14.0.2:
-    resolution: {integrity: sha512-EsFpYsXUq0oj3LnTCCWQ6bH8D2M1MWVJJCQ7hn4g+rP4/ksfOMjfsHpsOUscaAadLwdXoupmRqsQ23Y/7NlpDg==}
+  /@next/bundle-analyzer@14.0.3:
+    resolution: {integrity: sha512-+UriXNEn2vGR2IxTiiuen45G7lXUbtMh0hgS/UH2o2E4TnScwjEEepqT76pY8fdpa5JEZ+gvBy6aSnrw4G2P2w==}
     dependencies:
       webpack-bundle-analyzer: 4.7.0
     transitivePeerDependencies:
