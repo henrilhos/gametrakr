@@ -2,17 +2,15 @@
 
 ## Context diagram
 
-<!-- To update these diagrams, use Miro (https://miro.com/app/board/uXjVMmnYwUY=/?share_link_id=727142855013) -->
-
-![C4 Architecture - Context](assets/c4-context.jpg)
+![C4 Architecture - Context](assets/c4-diagrams/01-context.jpg)
 
 ## Container diagram
 
-![C4 Architecture - Container](assets/c4-container.jpg)
+![C4 Architecture - Container](assets/c4-diagrams/02-container.jpg)
 
 ## Component diagram
 
-![C4 Architecture - Components](assets/c4-components.jpg)
+![C4 Architecture - Components](assets/c4-diagrams/03-component.jpg)
 
 ## Code diagram
 
