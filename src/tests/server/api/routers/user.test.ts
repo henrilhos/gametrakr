@@ -90,6 +90,7 @@ describe("user router", () => {
         vi.mocked(db.findFirstUserByUsername).mockResolvedValue(user);
         vi.mocked(db.getFollowersById).mockResolvedValue([]);
         vi.mocked(db.getFollowsById).mockResolvedValue([]);
+        vi.mocked(db.getReviewsByUser).mockResolvedValue([]);
       });
 
       it("should return undefined if not found any user", async () => {
@@ -110,10 +111,12 @@ describe("user router", () => {
           following: [],
           followers: [],
           isFollowing: false,
+          reviews: [],
         });
         expect(db.findFirstUserByUsername).toBeCalledWith("gametrakr");
         expect(db.getFollowersById).toBeCalledWith("42", undefined);
         expect(db.getFollowsById).toBeCalledWith("42", undefined);
+        expect(db.getReviewsByUser).toBeCalledWith("42");
       });
     });
 
