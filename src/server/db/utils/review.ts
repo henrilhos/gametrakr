@@ -36,4 +36,5 @@ export const getReviewsByUser = async (id: string) =>
       },
     },
     columns: { content: true, createdAt: true, isSpoiler: true, rating: true },
+    orderBy: (review, { desc }) => [desc(review.createdAt)],
   });
