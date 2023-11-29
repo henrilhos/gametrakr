@@ -216,7 +216,6 @@ export function ReviewModal({ game, open, onClose }: Props) {
 
   const onSubmit = form.handleSubmit(
     async (data) => {
-      console.log(data);
       setIsLoading(true);
 
       try {
