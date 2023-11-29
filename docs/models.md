@@ -4,7 +4,7 @@
 
 <!-- To update these diagrams, use Miro (https://miro.com/app/board/uXjVMmnYwUY=/?share_link_id=727142855013) -->
 
-![C4 Architecture - Context](assets/c4-context.jpg)
+![C4 Architecture - Context](assets/c4-diagrams/01-context.png)
 
 ## Container diagram
 
