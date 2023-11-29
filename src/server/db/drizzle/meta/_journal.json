@@ -43,6 +43,13 @@
       "when": 1701023979777,
       "tag": "0005_first_corsair",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1701225738804,
+      "tag": "0006_same_malcolm_colcord",
+      "breakpoints": true
     }
   ]
 }

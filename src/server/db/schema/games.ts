@@ -15,6 +15,8 @@ export const games = pgTable(
 
     slug: text("slug").unique().notNull(),
     name: text("name").notNull(),
+    cover: text("cover"),
+    releaseDate: timestamp("release_date", { withTimezone: false }),
 
     createdAt: timestamp("created_at", { withTimezone: false })
       .notNull()
