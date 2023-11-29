@@ -4,6 +4,7 @@ import Link from "next/link";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Tab, Transition } from "@headlessui/react";
+import { track } from "@vercel/analytics";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -22,6 +23,7 @@ function ToggleFollowButton({
   const utils = api.useUtils();
 
   const onClick = async () => {
+    track("(Un)Follow user", { id: userId });
     await toggleFollow({ userId });
     await utils.user.findFirstByUsername.invalidate({ username });
   };

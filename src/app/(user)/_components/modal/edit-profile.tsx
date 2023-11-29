@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { type FileWithPath } from "@uploadthing/react";
+import { track } from "@vercel/analytics";
 import CoverPictureUploader from "~/app/(user)/_components/upload/cover-picture";
 import ProfilePictureUploader from "~/app/(user)/_components/upload/profile-picture";
 import BackButton from "~/components/ui/back-button";
@@ -68,13 +69,16 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
     setIsLoading(true);
 
     if (profileFile) {
+      track("Upload profile picture");
       await startUploadProfile([profileFile]);
     }
 
     if (coverFile) {
+      track("Upload cover picture");
       await startUploadCover([coverFile]);
     }
 
+    track("Update personal information");
     await updatePersonalInformation({ ...input });
 
     setIsLoading(false);

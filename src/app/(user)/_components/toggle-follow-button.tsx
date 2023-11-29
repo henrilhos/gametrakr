@@ -1,5 +1,6 @@
 "use client";
 
+import { track } from "@vercel/analytics";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -13,6 +14,7 @@ export default function ToggleFollowButton({ userId, isFollowing }: Props) {
   const utils = api.useUtils();
 
   const onClick = async () => {
+    track("(Un)Follow user", { id: userId });
     await toggleFollow({ userId });
     await utils.user.findFirstByUsername.invalidate();
   };

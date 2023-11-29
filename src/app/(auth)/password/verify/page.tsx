@@ -1,6 +1,7 @@
 "use client";
 
 import { notFound, useSearchParams } from "next/navigation";
+import { track } from "@vercel/analytics";
 import BackButton from "~/components/ui/back-button";
 import { CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import toast from "~/components/ui/toast";
@@ -46,7 +47,10 @@ export default function Page() {
         <button
           type="button"
           className="text-lg/5 text-black hover:underline dark:text-white"
-          onClick={() => void handleResendEmail()}
+          onClick={() => {
+            track("Resend reset password email", { credential });
+            void handleResendEmail();
+          }}
         >
           RESEND EMAIL
         </button>
