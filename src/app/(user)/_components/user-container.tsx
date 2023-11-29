@@ -7,7 +7,7 @@ import { type User } from "next-auth";
 import { filterXSS } from "xss";
 import EditProfile from "~/app/(user)/_components/edit-profile";
 import Follows from "~/app/(user)/_components/follows";
-import ToggleFollowButton from "~/app/(user)/_components/toggle-follow-button";
+import ToggleFollow from "~/app/(user)/_components/toggle-follow-button";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -89,9 +89,10 @@ export default function UserContainer({ user: currentUser }: Props) {
               )}
 
               {currentUser && currentUser.id !== user.id && (
-                <ToggleFollowButton
-                  userId={user.id}
-                  isFollowing={user.isFollowing}
+                <ToggleFollow
+                  id={user.id}
+                  username={user.username}
+                  variant={user.isFollowing ? "secondary" : "primary"}
                 />
               )}
             </div>
