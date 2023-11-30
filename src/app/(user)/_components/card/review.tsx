@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { formatDistanceToNow, getYear } from "date-fns";
 import { filterXSS } from "xss";
 import { cn } from "~/lib/utils";
@@ -128,7 +129,12 @@ export default function Review({ game, review, user }: Props) {
         </div>
 
         <div className="grow">
-          <div className="text-xl font-bold">{game.name}</div>
+          <Link
+            href={`/games/${game.slug}`}
+            className="text-xl font-bold hover:underline"
+          >
+            {game.name}
+          </Link>
           {game.releaseDate && (
             <div className="text-neutral-700 dark:text-neutral-500">
               {getYear(game.releaseDate)}
