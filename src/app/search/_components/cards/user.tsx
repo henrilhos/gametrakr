@@ -25,8 +25,7 @@ export default function UserCard({ user }: Props) {
           <Image
             alt={`${user.username}'s cover picture`}
             src={user.coverImage}
-            objectFit="cover"
-            className="rounded-lg"
+            className="rounded-lg object-cover"
             fill
           />
         )}
