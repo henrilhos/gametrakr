@@ -114,7 +114,7 @@ export default function UserContainer({ user: currentUser }: Props) {
         </div>
 
         {user.reviews.length > 0 && (
-          <div className="col-span-10 flex h-fit flex-col gap-4 rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-950 xl:col-span-5">
+          <div className="col-span-10 flex h-fit flex-col gap-4 rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-950 md:col-span-5">
             {user.reviews.map((review, i) => (
               <Review
                 key={i}
