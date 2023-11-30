@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { formatDistanceToNow, getYear } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { filterXSS } from "xss";
 import { cn } from "~/lib/utils";
 
@@ -38,23 +38,9 @@ const getRatingStyle = (
 };
 
 function Rating({ rating }: { rating: number }) {
-  const left =
-    rating === 0
-      ? `0%`
-      : rating < 10
-      ? `calc(${rating * 10}% - 19px)`
-      : `calc(${rating * 10}% - 24px)`;
-
   return (
-    <div className="relative w-fit">
-      <span
-        className={cn("absolute left-0 font-bold", getRatingStyle(rating))}
-        style={{ left }}
-      >
-        {rating * 10}
-      </span>
-
-      <div className="flex gap-0.5 pt-6">
+    <div className="flex w-fit items-center">
+      <div className="flex gap-0.5">
         {Array.from({ length: 10 }).map((_, i) => (
           <div
             key={i}
@@ -65,30 +51,25 @@ function Rating({ rating }: { rating: number }) {
           />
         ))}
       </div>
+
+      <span className={cn("ml-2 font-bold", getRatingStyle(rating))}>
+        {rating * 10}
+      </span>
     </div>
   );
 }
 
 type Props = {
-  game: {
-    name: string;
-    slug: string;
-    cover: string | null;
-    releaseDate: Date | null;
-  };
   review: {
     createdAt: Date;
-    rating: number | null;
     content: string | null;
+    rating: number | null;
     isSpoiler: boolean;
   };
-  user: {
-    username: string;
-    profileImage: string | null;
-  };
+  user: { username: string; profileImage: string | null };
 };
 
-export default function Review({ game, review, user }: Props) {
+export default function Review({ review, user }: Props) {
   const [showMore, setShowMore] = useState(false);
 
   const preview = review.content
@@ -97,28 +78,33 @@ export default function Review({ game, review, user }: Props) {
     .filter((c) => !!c);
 
   return (
-    <div
-      className={
-        "space-y-4 rounded-2xl bg-white py-2 pl-2 pr-4 dark:bg-neutral-900"
-      }
-    >
+    <div className="space-y-6 rounded-2xl bg-white pb-6 pl-2 pr-4 pt-2 dark:bg-neutral-900">
       <div className="flex items-center">
-        <div className="relative mr-2 h-8 w-8 rounded-full bg-neutral-100 p-[1px] dark:bg-neutral-950">
+        <div className="first-letter relative mr-2 h-12 w-12 rounded-full bg-neutral-100 p-[1px] dark:bg-neutral-950">
           <Image
             alt={`${user.username}'s profile picture`}
             src={user.profileImage ?? "/images/not-found-square.png"}
-            width={32}
-            height={32}
+            width={48}
+            height={48}
             className="h-full w-full rounded-full"
           />
         </div>
 
         <div className="flex grow flex-col md:flex-row">
           <div>
-            <span className="font-bold">{user.username}</span>
-            <span className="text-neutral-700 dark:text-neutral-500">
-              &nbsp;logged a new game
-            </span>
+            <div>
+              <Link
+                href={`/${user.username}`}
+                className="font-bold hover:underline"
+              >
+                {user.username}
+              </Link>
+              <span className="text-neutral-700 dark:text-neutral-500">
+                &nbsp;logged a new game
+              </span>
+            </div>
+
+            {review.rating && <Rating rating={review.rating} />}
           </div>
 
           <div className="grow text-neutral-700 dark:text-neutral-500 md:text-right">
@@ -129,41 +115,9 @@ export default function Review({ game, review, user }: Props) {
         </div>
       </div>
 
-      <div className="ml-2 flex gap-4">
-        <div className="relative aspect-game-cover h-36 min-w-fit rounded-md">
-          <Image
-            src={game.cover ?? "/images/not-found.png"}
-            alt={game.name}
-            sizes="108px"
-            fill
-            className="h-auto rounded-md"
-          />
-        </div>
-
-        <div className="grow">
-          <Link
-            href={`/games/${game.slug}`}
-            className="text-xl font-bold hover:underline"
-          >
-            {game.name}
-          </Link>
-          {game.releaseDate && (
-            <div className="text-neutral-700 dark:text-neutral-500">
-              {getYear(game.releaseDate)}
-            </div>
-          )}
-
-          {review.rating && (
-            <div className="mt-2">
-              <Rating rating={review.rating} />
-            </div>
-          )}
-        </div>
-      </div>
-
       {review.content && preview?.[0] && (
         <div
-          className="prose px-2 dark:prose-invert"
+          className="prose px-2 dark:prose-invert md:pl-14"
           dangerouslySetInnerHTML={{
             __html: filterXSS(showMore ? review.content : preview[0]),
           }}
@@ -171,7 +125,7 @@ export default function Review({ game, review, user }: Props) {
       )}
 
       {preview && preview.length > 1 && (
-        <div className="px-2 pb-2">
+        <div className="px-2 pb-2 md:pl-14">
           <button
             type="button"
             className="font-bold hover:underline"

@@ -1,44 +1,43 @@
-import { eq } from "drizzle-orm";
 import { db } from "~/server/db/db";
 import { games } from "~/server/db/schema";
 
-export const gameExists = (slug: string) =>
-  db.query.games.findFirst({
-    where: (game, { eq }) => eq(game.slug, slug),
-  });
-
-export const createGame = ({
-  slug,
-  name,
-  cover,
-  releaseDate,
-}: {
+type CreateGameProps = {
   slug: string;
   name: string;
   cover: string;
   releaseDate: Date;
-}) =>
-  db
-    .insert(games)
-    .values({
-      slug,
-      name,
-      cover,
-      releaseDate,
-    })
-    .returning();
+};
 
-export const updateGame = ({
-  id,
-  cover,
-  releaseDate,
-}: {
-  id: string;
-  cover: string;
-  releaseDate: Date;
-}) =>
-  db
-    .update(games)
-    .set({ releaseDate, cover })
-    .where(eq(games.id, id))
-    .returning();
+export const isGameOnDb = async (slug: string) => {
+  const data = await db.query.games.findFirst({
+    where: (game, { eq }) => eq(game.slug, slug),
+    columns: { id: true },
+  });
+
+  return Boolean(data);
+};
+
+export const getGameBySlug = (slug: string) => {
+  return db.query.games.findFirst({
+    where: (game, { eq }) => eq(game.slug, slug),
+    with: {
+      reviews: {
+        columns: {
+          content: true,
+          isSpoiler: true,
+          rating: true,
+          createdAt: true,
+        },
+        with: {
+          user: { columns: { username: true, profileImage: true } },
+        },
+        where: (review, { eq }) => eq(review.active, true),
+        orderBy: (review, { desc }) => desc(review.createdAt),
+      },
+    },
+  });
+};
+
+export const createGame = (data: CreateGameProps) => {
+  return db.insert(games).values(data);
+};

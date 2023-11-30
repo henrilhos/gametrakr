@@ -72,6 +72,7 @@ describe("game router", async () => {
       id: "super-amazing-id",
       slug: "crash-bandicoot",
       updatedAt: new Date(),
+      reviews: [],
     };
 
     beforeEach(() => {
