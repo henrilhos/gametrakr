@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 
 type Props = {
-  releaseDate: Date | null;
+  releaseDate?: Date | null;
   developers: string[];
 };
 

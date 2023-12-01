@@ -15,7 +15,6 @@ import {
 } from "ts-igdb-client";
 import { env } from "~/env.mjs";
 import { unixTimestampToYear } from "~/lib/utils";
-import * as db from "~/server/db";
 
 const TWITCH_SECRETS = {
   client_id: env.TWITCH_CLIENT_ID,
@@ -105,7 +104,7 @@ export const getGameBySlug = async ({ slug }: { slug: string }) => {
     )
     .execute();
 
-  const [igdbData] = response.map((game) => {
+  const [game] = response.map((game) => {
     const themes =
       game.themes?.map((t) => t.name ?? "").filter((t) => !!t) ?? [];
 
@@ -149,26 +148,5 @@ export const getGameBySlug = async ({ slug }: { slug: string }) => {
     };
   });
 
-  if (!igdbData?.name) {
-    throw Error("Game not created at local db");
-  }
-
-  const isGameOnDb = await db.isGameOnDb(slug);
-
-  if (!isGameOnDb) {
-    await db.createGame({
-      slug,
-      cover: igdbData.cover,
-      name: igdbData.name,
-      releaseDate: igdbData.releaseDate,
-    });
-  }
-
-  const gameOnDb = await db.getGameBySlug(slug);
-
-  if (!gameOnDb) {
-    throw Error("Game not found");
-  }
-
-  return { ...igdbData, ...gameOnDb };
+  return { ...game };
 };
