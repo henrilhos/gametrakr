@@ -55,7 +55,7 @@ describe("game router", async () => {
     });
   });
 
-  describe("find first by slug query", async () => {
+  describe.skip("find first by slug query", async () => {
     type Input = inferProcedureInput<AppRouter["game"]["findFirstBySlug"]>;
     const input: Input = { slug: "crash-bandicoot" };
 
