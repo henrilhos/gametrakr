@@ -57,7 +57,7 @@ export default function GameContainer({ user }: Props) {
             {game.summary}
           </div>
 
-          {game.reviews.length > 0 && (
+          {game.reviews && game.reviews.length > 0 && (
             <div className="hidden h-fit w-full flex-col gap-4 rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-950 md:flex">
               {game.reviews.map((review, i) => (
                 <Review
@@ -77,7 +77,7 @@ export default function GameContainer({ user }: Props) {
         <div className="col-span-12 md:hidden">
           <div className="dark:text-neutral-600">{game.summary}</div>
 
-          {game.reviews.length > 0 && (
+          {game.reviews && game.reviews.length > 0 && (
             <div className="mt-4 flex h-fit w-full flex-col gap-4 rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-950">
               {game.reviews.map((review, i) => (
                 <Review
