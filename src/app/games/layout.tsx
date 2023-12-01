@@ -3,7 +3,7 @@ import Navbar from "~/components/navbar";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <div className="flex min-h-screen w-full flex-col pb-4 md:pb-6">
+    <div className="md:max-auto flex min-h-screen w-full flex-col px-3 md:container">
       <Navbar />
 
       {children}

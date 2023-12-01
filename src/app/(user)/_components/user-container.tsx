@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
-import { formatDistanceToNow, getYear } from "date-fns";
 import { type User } from "next-auth";
-import { filterXSS } from "xss";
+import Review from "~/app/(user)/_components/card/review";
 import EditProfile from "~/app/(user)/_components/edit-profile";
 import Follows from "~/app/(user)/_components/follows";
 import ToggleFollow from "~/app/(user)/_components/toggle-follow-button";
@@ -62,14 +61,13 @@ export default function UserContainer({ user: currentUser }: Props) {
           <Image
             alt={`${user.username}'s cover picture`}
             src={user.coverImage}
-            objectFit="cover"
-            className="rounded-t-lg md:rounded-4xl"
+            className="rounded-t-lg object-cover md:rounded-4xl"
             fill
           />
         )}
       </div>
 
-      <div className="z-0 -mt-8 grid grid-cols-10 gap-4 md:-mt-20 md:px-8 md:pb-8">
+      <div className="z-0 -mt-8 grid grid-cols-10 gap-4 pb-3 md:-mt-20 md:px-8 md:pb-8">
         <div className="col-span-10 flex h-fit flex-col rounded-b-lg bg-neutral-50 p-4 dark:bg-neutral-950 md:col-span-3 md:rounded-2xl">
           <div className="grid grid-cols-2 gap-4">
             <div className="relative col-span-1 -mt-14 flex aspect-square w-1/2 md:-mt-24 md:w-full">
@@ -83,6 +81,7 @@ export default function UserContainer({ user: currentUser }: Props) {
                 />
               </div>
             </div>
+
             <div className="col-span-1 flex justify-end">
               {currentUser && currentUser.id === user.id && (
                 <EditProfile user={{ ...user }} />
@@ -116,66 +115,14 @@ export default function UserContainer({ user: currentUser }: Props) {
         </div>
 
         {user.reviews.length > 0 && (
-          <div className="col-span-5 flex h-fit flex-col gap-4 rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-950">
+          <div className="col-span-10 flex h-fit flex-col gap-4 rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-950 md:col-span-5">
             {user.reviews.map((review, i) => (
-              <div
+              <Review
                 key={i}
-                className={
-                  "space-y-4 rounded-2xl bg-white py-2 pl-2 pr-4 dark:bg-neutral-900"
-                }
-              >
-                <div className="flex items-center">
-                  <div className="relative mr-2 h-8 w-8 rounded-full bg-neutral-100 p-[1px] dark:bg-neutral-950">
-                    <Image
-                      alt={`${user.username}'s profile picture`}
-                      src={user.profileImage ?? "/images/not-found-square.png"}
-                      width={32}
-                      height={32}
-                      className="h-full w-full rounded-full"
-                    />
-                  </div>
-
-                  <span className="font-bold">{user.username}</span>
-                  <span className="text-neutral-700 dark:text-neutral-500">
-                    &nbsp;logged a new game
-                  </span>
-
-                  <div className="grow text-right text-neutral-700 dark:text-neutral-500">
-                    {formatDistanceToNow(review.createdAt, {
-                      addSuffix: false,
-                    })}
-                  </div>
-                </div>
-
-                <div className="ml-2 flex gap-4">
-                  <div className="relative aspect-game-cover h-36 min-w-fit rounded-md">
-                    <Image
-                      src={review.game.cover ?? "/images/not-found.png"}
-                      alt={review.game.name}
-                      fill
-                      className="h-auto rounded-md"
-                    />
-                  </div>
-
-                  <div>
-                    <div className="text-xl font-bold">{review.game.name}</div>
-                    {review.game.releaseDate && (
-                      <div className="text-neutral-700 dark:text-neutral-500">
-                        {getYear(review.game.releaseDate)}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {review.content && (
-                  <div
-                    className="prose px-2 pb-2 dark:prose-invert"
-                    dangerouslySetInnerHTML={{
-                      __html: filterXSS(review.content),
-                    }}
-                  />
-                )}
-              </div>
+                game={{ ...review.game }}
+                review={{ ...review }}
+                user={{ ...user }}
+              />
             ))}
           </div>
         )}
