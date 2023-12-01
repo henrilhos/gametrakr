@@ -16,7 +16,7 @@ export default function Sidebar({ user, game }: Props) {
       <ActionButtons user={user} game={game} />
 
       <div className={cn("flex flex-col gap-4 px-2 pb-2", !user && "pt-2")}>
-        <Rating criticRating={game.criticRating} />
+        <Rating criticRating={game.criticRating} userRating={game.userRating} />
       </div>
     </div>
   );

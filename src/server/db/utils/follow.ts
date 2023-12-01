@@ -1,4 +1,4 @@
-import { and, eq, exists } from "drizzle-orm";
+import { and, desc, eq, exists } from "drizzle-orm";
 import { db } from "~/server/db/db";
 import { follows, users } from "~/server/db/schema";
 
@@ -66,7 +66,8 @@ export const getFollowsById = (id: string, currentUserId?: string) => {
     })
     .from(users)
     .leftJoin(follows, eq(follows.followingUserId, id))
-    .where(eq(follows.followedUserId, users.id));
+    .where(eq(follows.followedUserId, users.id))
+    .orderBy(desc(follows.createdAt));
 };
 
 export const getFollowersById = (id: string, currentUserId?: string) => {
@@ -94,5 +95,6 @@ export const getFollowersById = (id: string, currentUserId?: string) => {
     })
     .from(users)
     .leftJoin(follows, eq(follows.followedUserId, id))
-    .where(eq(follows.followingUserId, users.id));
+    .where(eq(follows.followingUserId, users.id))
+    .orderBy(desc(follows.createdAt));
 };
