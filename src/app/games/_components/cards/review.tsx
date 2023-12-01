@@ -80,7 +80,10 @@ export default function Review({ review, user }: Props) {
   return (
     <div className="space-y-6 rounded-2xl bg-white pb-6 pl-2 pr-4 pt-2 dark:bg-neutral-900">
       <div className="flex items-center">
-        <div className="first-letter relative mr-2 h-12 w-12 rounded-full bg-neutral-100 p-[1px] dark:bg-neutral-950">
+        <Link
+          href={`/${user.username}`}
+          className="first-letter relative mr-2 h-12 w-12 rounded-full bg-neutral-100 p-[1px] dark:bg-neutral-950"
+        >
           <Image
             alt={`${user.username}'s profile picture`}
             src={user.profileImage ?? "/images/not-found-square.png"}
@@ -88,7 +91,7 @@ export default function Review({ review, user }: Props) {
             height={48}
             className="aspect-square h-full w-full rounded-full"
           />
-        </div>
+        </Link>
 
         <div className="flex grow flex-col md:flex-row">
           <div>
