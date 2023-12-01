@@ -77,7 +77,7 @@ export default function UserContainer({ user: currentUser }: Props) {
                   src={user.profileImage ?? "/images/not-found-square.png"}
                   width={200}
                   height={200}
-                  className="h-full w-full rounded-[28px] object-cover"
+                  className="aspect-square h-full w-full rounded-[28px] object-cover"
                 />
               </div>
             </div>

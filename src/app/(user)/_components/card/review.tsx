@@ -109,7 +109,7 @@ export default function Review({ game, review, user }: Props) {
             src={user.profileImage ?? "/images/not-found-square.png"}
             width={32}
             height={32}
-            className="h-full w-full rounded-full"
+            className="aspect-square h-full w-full rounded-full"
           />
         </div>
 

@@ -42,7 +42,7 @@ export default function UserCard({ user }: Props) {
             src={user.profileImage ?? "/images/not-found-square.png"}
             width={96}
             height={96}
-            className="h-full w-full rounded-[20px] object-cover"
+            className="aspect-square h-full w-full rounded-[20px] object-cover"
           />
         </div>
 

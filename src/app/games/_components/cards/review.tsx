@@ -86,7 +86,7 @@ export default function Review({ review, user }: Props) {
             src={user.profileImage ?? "/images/not-found-square.png"}
             width={48}
             height={48}
-            className="h-full w-full rounded-full"
+            className="aspect-square h-full w-full rounded-full"
           />
         </div>
 
