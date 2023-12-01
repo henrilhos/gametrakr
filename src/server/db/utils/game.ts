@@ -54,6 +54,6 @@ export const getGameBySlug = async (slug: string) => {
   };
 };
 
-export const createGame = (data: NewGame) => {
-  return db.insert(games).values(data);
+export const createGame = async (data: NewGame) => {
+  await db.insert(games).values(data);
 };

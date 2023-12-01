@@ -81,6 +81,7 @@ describe("game router", async () => {
       vi.resetAllMocks();
       vi.mocked(igdb.getGameBySlug).mockResolvedValue(game);
       vi.mocked(db.isGameOnDb).mockResolvedValue(true);
+      vi.mocked(db.createGame).mockResolvedValue();
       vi.mocked(db.getGameBySlug).mockResolvedValue({ ...game });
     });
 
