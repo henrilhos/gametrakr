@@ -1,37 +1,31 @@
 import { and, desc, eq, exists } from "drizzle-orm";
-import { db } from "~/server/db/db";
+import { db } from "~/server/db";
 import { follows, users } from "~/server/db/schema";
 
-export const isFollowing = async (
+type NewFollow = typeof follows.$inferInsert;
+
+export const createFollow = async (data: NewFollow) => {
+  return await db.insert(follows).values(data);
+};
+
+export const getFollow = async (
   currentUserId: string,
   targetUserId: string,
 ) => {
-  const follow = await db.query.follows.findFirst({
+  return await db.query.follows.findFirst({
     where: (follows, { eq, and }) =>
       and(
         eq(follows.followingUserId, currentUserId),
         eq(follows.followedUserId, targetUserId),
       ),
   });
-
-  return Boolean(follow);
 };
 
-export const addFollow = async (
+export const deleteFollow = async (
   currentUserId: string,
   targetUserId: string,
 ) => {
-  await db.insert(follows).values({
-    followingUserId: currentUserId,
-    followedUserId: targetUserId,
-  });
-};
-
-export const removeFollow = async (
-  currentUserId: string,
-  targetUserId: string,
-) => {
-  await db
+  return await db
     .delete(follows)
     .where(
       and(
@@ -41,8 +35,8 @@ export const removeFollow = async (
     );
 };
 
-export const getFollowsById = (id: string, currentUserId?: string) => {
-  return db
+export const getFollowing = async (id: string, currentUserId?: string) => {
+  return await db
     .select({
       id: users.id,
       username: users.username,
@@ -70,8 +64,8 @@ export const getFollowsById = (id: string, currentUserId?: string) => {
     .orderBy(desc(follows.createdAt));
 };
 
-export const getFollowersById = (id: string, currentUserId?: string) => {
-  return db
+export const getFollowers = async (id: string, currentUserId?: string) => {
+  return await db
     .select({
       id: users.id,
       username: users.username,

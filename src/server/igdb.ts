@@ -153,7 +153,7 @@ export const getGameBySlug = async ({ slug }: { slug: string }) => {
     throw Error("Game not created at local db");
   }
 
-  const isGameOnDb = await db.isGameOnDb(slug);
+  const isGameOnDb = await db.getGameIdBySlug(slug);
 
   if (!isGameOnDb) {
     await db.createGame({

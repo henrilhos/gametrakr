@@ -9,20 +9,7 @@ import {
   SignUpSchema,
 } from "~/server/api/schemas/auth";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import {
-  canCreateUser,
-  createAccountToken,
-  createPasswordToken,
-  createUser,
-  getAccountTokenByIdAndUserId,
-  getPasswordTokenByIdAndUserId,
-  getUserByCredential,
-  getUserByEmail,
-  getUserIdByEmail,
-  invalidateTokens,
-  updateUserPassword,
-  verifyUser,
-} from "~/server/db";
+import * as dbUtils from "~/server/db/utils";
 import { sendEmail } from "~/server/emails";
 
 export const authRouter = createTRPCRouter({
@@ -33,17 +20,22 @@ export const authRouter = createTRPCRouter({
       throw Error("Passwords don't match");
     }
 
-    const canCreate = await canCreateUser({ email, username });
+    const canCreate = Boolean(
+      await dbUtils.getUserIdByEmailOrUsername({
+        email,
+        username,
+      }),
+    );
     if (!canCreate) {
       throw Error("User already exists");
     }
 
-    const [user] = await createUser({ email, password, username });
+    const [user] = await dbUtils.createUser({ email, password, username });
     if (!user?.id) {
       throw Error("User not created");
     }
 
-    const [token] = await createAccountToken({ userId: user.id });
+    const [token] = await dbUtils.createAccountToken({ userId: user.id });
     if (!token) {
       throw Error("Token not created");
     }
@@ -64,12 +56,12 @@ export const authRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const { email } = input;
 
-      const userId = await getUserIdByEmail({ email });
+      const userId = await dbUtils.getUserIdByEmail({ email });
       if (!userId) {
         throw Error("User not exists");
       }
 
-      const [token] = await createAccountToken({ userId });
+      const [token] = await dbUtils.createAccountToken({ userId });
       if (!token) {
         throw Error("Token not created");
       }
@@ -90,7 +82,7 @@ export const authRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const { email, tokenId } = input;
 
-      const user = await getUserByEmail({ email });
+      const user = await dbUtils.getUserByEmail({ email });
       if (!user) {
         throw Error("User not found");
       }
@@ -99,16 +91,19 @@ export const authRouter = createTRPCRouter({
         throw Error("User already verified");
       }
 
-      const token = await getAccountTokenByIdAndUserId({
-        tokenId,
+      const token = await dbUtils.getAccountTokenByIdAndUserId({
+        id: tokenId,
         userId: user.id,
       });
       if (!token) {
         throw new Error("Token not found");
       }
 
-      await invalidateTokens({ userId: user.id, tokenType: "account" });
-      await verifyUser({ id: user.id });
+      await dbUtils.setTokensAsInvalid({
+        userId: user.id,
+        tokenType: "account",
+      });
+      await dbUtils.verifyUser({ id: user.id });
 
       return { message: "Account verified successfully" };
     }),
@@ -118,12 +113,12 @@ export const authRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const { credential } = input;
 
-      const user = await getUserByCredential({ credential });
+      const user = await dbUtils.getUserByCredential({ credential });
       if (!user) {
         throw Error("User not exists");
       }
 
-      const [token] = await createPasswordToken({ userId: user.id });
+      const [token] = await dbUtils.createPasswordToken({ userId: user.id });
       if (!token) {
         throw Error("Token not created");
       }
@@ -150,21 +145,24 @@ export const authRouter = createTRPCRouter({
         throw Error("Passwords don't match");
       }
 
-      const user = await getUserByEmail({ email });
+      const user = await dbUtils.getUserByEmail({ email });
       if (!user) {
         throw new Error("User not found");
       }
 
-      const token = await getPasswordTokenByIdAndUserId({
-        tokenId,
+      const token = await dbUtils.getPasswordTokenByIdAndUserId({
+        id: tokenId,
         userId: user.id,
       });
       if (!token) {
         throw Error("Token not found");
       }
 
-      await invalidateTokens({ userId: user.id, tokenType: "password" });
-      await updateUserPassword({ userId: user.id, password });
+      await dbUtils.setTokensAsInvalid({
+        userId: user.id,
+        tokenType: "password",
+      });
+      await dbUtils.updateUserPassword({ userId: user.id, password });
 
       return { message: "Email sent successfully" };
     }),

@@ -1,24 +1,17 @@
-import { db } from "~/server/db/db";
+import { db } from "~/server/db";
 import { games } from "~/server/db/schema";
 
-type CreateGameProps = {
-  slug: string;
-  name: string;
-  cover: string;
-  releaseDate: Date;
-};
+type NewGame = typeof games.$inferInsert;
 
-export const isGameOnDb = async (slug: string) => {
-  const data = await db.query.games.findFirst({
+export const getGameIdBySlug = async (slug: string) => {
+  return await db.query.games.findFirst({
     where: (game, { eq }) => eq(game.slug, slug),
     columns: { id: true },
   });
-
-  return Boolean(data);
 };
 
-export const getGameBySlug = (slug: string) => {
-  return db.query.games.findFirst({
+export const getGameBySlug = async (slug: string) => {
+  return await db.query.games.findFirst({
     where: (game, { eq }) => eq(game.slug, slug),
     with: {
       reviews: {
@@ -38,6 +31,6 @@ export const getGameBySlug = (slug: string) => {
   });
 };
 
-export const createGame = (data: CreateGameProps) => {
-  return db.insert(games).values(data);
+export const createGame = async (data: NewGame) => {
+  return await db.insert(games).values(data);
 };

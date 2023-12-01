@@ -13,7 +13,6 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { type TRPCError } from "@trpc/server";
-import { z } from "zod";
 import { type Game } from "~/app/games/_components/game";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
@@ -23,18 +22,8 @@ import toast from "~/components/ui/toast";
 import { Toggle } from "~/components/ui/toggle";
 import { useZodForm } from "~/hooks/use-zod-form";
 import { cn, getKeys } from "~/lib/utils";
+import { ReviewSchema } from "~/server/api/schemas/review";
 import { api } from "~/trpc/react";
-
-const reviewSchema = z.object({
-  rating: z
-    .number()
-    .int()
-    .gte(0, { message: "Rating is too low" })
-    .lte(10, { message: "Rating is to high" })
-    .optional(),
-  isSpoiler: z.boolean().default(false),
-  content: z.string().optional(),
-});
 
 function Dialog(
   props: PropsWithChildren<{ open: boolean; onClose: () => void }>,
@@ -198,7 +187,7 @@ export function ReviewModal({ game, open, onClose }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useZodForm({
-    schema: reviewSchema,
+    schema: ReviewSchema,
     mode: "onChange",
     defaultValues: {
       content: "",

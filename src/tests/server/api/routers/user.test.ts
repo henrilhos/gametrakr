@@ -88,9 +88,9 @@ describe("user router", () => {
       beforeEach(() => {
         vi.clearAllMocks();
         vi.mocked(db.findFirstUserByUsername).mockResolvedValue(user);
-        vi.mocked(db.getFollowersById).mockResolvedValue([]);
-        vi.mocked(db.getFollowsById).mockResolvedValue([]);
-        vi.mocked(db.getReviewsByUser).mockResolvedValue([]);
+        vi.mocked(db.getFollowers).mockResolvedValue([]);
+        vi.mocked(db.getFollowers).mockResolvedValue([]);
+        vi.mocked(db.getReviewsByUserId).mockResolvedValue([]);
       });
 
       it("should return undefined if not found any user", async () => {
@@ -99,8 +99,8 @@ describe("user router", () => {
 
         expect(response).toBeUndefined();
         expect(db.findFirstUserByUsername).toBeCalledWith("gametrakr");
-        expect(db.getFollowersById).toBeCalledTimes(0);
-        expect(db.getFollowsById).toBeCalledTimes(0);
+        expect(db.getFollowers).toBeCalledTimes(0);
+        expect(db.getFollowers).toBeCalledTimes(0);
       });
 
       it("should return an user", async () => {
@@ -114,9 +114,9 @@ describe("user router", () => {
           reviews: [],
         });
         expect(db.findFirstUserByUsername).toBeCalledWith("gametrakr");
-        expect(db.getFollowersById).toBeCalledWith("42", undefined);
-        expect(db.getFollowsById).toBeCalledWith("42", undefined);
-        expect(db.getReviewsByUser).toBeCalledWith("42");
+        expect(db.getFollowers).toBeCalledWith("42", undefined);
+        expect(db.getFollowers).toBeCalledWith("42", undefined);
+        expect(db.getReviewsByUserId).toBeCalledWith("42");
       });
     });
 
@@ -157,25 +157,29 @@ describe("user router", () => {
       });
 
       it("should remove follow", async () => {
-        vi.mocked(db.isFollowing).mockResolvedValue(true);
+        vi.mocked(db.getFollow).mockResolvedValue({
+          createdAt: new Date(),
+          followingUserId: "42",
+          followedUserId: "21",
+        });
 
         const response = await caller.user.toggleFollow({ userId: "21" });
 
         expect(response).toStrictEqual({ addedFollow: false });
-        expect(db.isFollowing).toBeCalledWith("42", "21");
-        expect(db.removeFollow).toBeCalledWith("42", "21");
-        expect(db.addFollow).toBeCalledTimes(0);
+        expect(db.getFollow).toBeCalledWith("42", "21");
+        expect(db.deleteFollow).toBeCalledWith("42", "21");
+        expect(db.createFollow).toBeCalledTimes(0);
       });
 
       it("should add follow", async () => {
-        vi.mocked(db.isFollowing).mockResolvedValue(false);
+        vi.mocked(db.getFollow).mockResolvedValue(undefined);
 
         const response = await caller.user.toggleFollow({ userId: "21" });
 
         expect(response).toStrictEqual({ addedFollow: true });
-        expect(db.isFollowing).toBeCalledWith("42", "21");
-        expect(db.addFollow).toBeCalledWith("42", "21");
-        expect(db.removeFollow).toBeCalledTimes(0);
+        expect(db.getFollow).toBeCalledWith("42", "21");
+        expect(db.createFollow).toBeCalledWith("42", "21");
+        expect(db.deleteFollow).toBeCalledTimes(0);
       });
     });
 

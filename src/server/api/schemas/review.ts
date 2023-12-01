@@ -11,4 +11,4 @@ export const ReviewSchema = z.object({
   content: z.string().optional(),
 });
 
-export type ReviewSchemaType = z.infer<typeof ReviewSchema>;
+export type Review = z.infer<typeof ReviewSchema>;

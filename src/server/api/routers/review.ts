@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { ReviewSchema } from "~/server/api/schemas/review";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { createOrUpdateReview } from "~/server/db";
+import * as dbUtils from "~/server/db/utils";
 
 export const reviewRouter = createTRPCRouter({
   createOrUpdate: protectedProcedure
@@ -15,7 +15,20 @@ export const reviewRouter = createTRPCRouter({
       const userId = ctx.session.user.id;
       const { gameId, review } = input;
 
-      const [response] = await createOrUpdateReview({
+      const reviewAlreadyExist = await dbUtils.getReviewIdByGameAndUserId(
+        gameId,
+        userId,
+      );
+
+      if (reviewAlreadyExist) {
+        const [response] = await dbUtils.updateReview(reviewAlreadyExist.id, {
+          ...review,
+        });
+
+        return response;
+      }
+
+      const [response] = await dbUtils.createReview({
         ...review,
         userId,
         gameId,

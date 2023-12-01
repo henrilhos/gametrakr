@@ -42,18 +42,25 @@ describe("review router", async () => {
 
     beforeEach(() => {
       vi.resetAllMocks();
-      vi.mocked(db.createOrUpdateReview).mockResolvedValue([review]);
+      vi.mocked(db.getReviewIdByGameAndUserId).mockResolvedValue(undefined);
+      vi.mocked(db.updateReview).mockResolvedValue([review]);
+      vi.mocked(db.createReview).mockResolvedValue([review]);
     });
 
-    it("should create or update a review", async () => {
+    it("should create a review", async () => {
       const response = await caller.review.createOrUpdate(input);
 
       expect(response).toStrictEqual(review);
-      expect(db.createOrUpdateReview).toHaveBeenLastCalledWith({
+      expect(db.getReviewIdByGameAndUserId).toHaveBeenLastCalledWith(
+        "2000",
+        "42",
+      );
+      expect(db.createReview).toHaveBeenLastCalledWith({
         ...inputReview,
         userId: "42",
         gameId: "2000",
       });
+      expect(db.updateReview).toHaveBeenCalledTimes(0);
     });
   });
 });

@@ -5,17 +5,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import {
-  addFollow,
-  findFirstUserByUsername,
-  findManyUsersByQuery,
-  getFollowersById,
-  getFollowsById,
-  getReviewsByUser,
-  isFollowing,
-  removeFollow,
-  updateUserPersonalInformation,
-} from "~/server/db";
+import * as dbUtils from "~/server/db/utils";
 
 export const userRouter = createTRPCRouter({
   findManyByQuery: publicProcedure
@@ -31,7 +21,7 @@ export const userRouter = createTRPCRouter({
       const decodedQuery = decodeURI(query).trim();
 
       const users = (
-        await findManyUsersByQuery({
+        await dbUtils.findManyUsersByQuery({
           query: decodedQuery,
           offset: cursor,
           limit,
@@ -54,13 +44,18 @@ export const userRouter = createTRPCRouter({
       const { userId } = input;
       const currentUserId = ctx.session.user.id;
 
-      const isUserFollowing = await isFollowing(currentUserId, userId);
+      const isUserFollowing = Boolean(
+        await dbUtils.getFollow(currentUserId, userId),
+      );
 
       if (isUserFollowing) {
-        await removeFollow(currentUserId, userId);
+        await dbUtils.deleteFollow(currentUserId, userId);
         return { addedFollow: false };
       } else {
-        await addFollow(currentUserId, userId);
+        await dbUtils.createFollow({
+          followedUserId: userId,
+          followingUserId: currentUserId,
+        });
         return { addedFollow: true };
       }
     }),
@@ -74,13 +69,13 @@ export const userRouter = createTRPCRouter({
       const { username } = input;
       const currentUserId = ctx.session?.user.id;
 
-      const user = await findFirstUserByUsername(username);
+      const user = await dbUtils.findFirstUserByUsername(username);
 
       if (!user) return;
 
-      const followers = await getFollowersById(user.id, currentUserId);
-      const following = await getFollowsById(user.id, currentUserId);
-      const reviews = await getReviewsByUser(user.id);
+      const followers = await dbUtils.getFollowers(user.id, currentUserId);
+      const following = await dbUtils.getFollowing(user.id, currentUserId);
+      const reviews = await dbUtils.getReviewsByUserId(user.id);
 
       return {
         ...user,
@@ -97,7 +92,10 @@ export const userRouter = createTRPCRouter({
     .input(UserPersonalInfoSchema)
     .mutation(async ({ ctx, input }) => {
       const currentUserId = ctx.session.user.id;
-      const user = await updateUserPersonalInformation(currentUserId, input);
+      const user = await dbUtils.updateUserPersonalInformation(
+        currentUserId,
+        input,
+      );
 
       return { ...user };
     }),

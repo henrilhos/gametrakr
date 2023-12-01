@@ -109,6 +109,15 @@ export default function UserContainer({ user: currentUser }: Props) {
                 username={user.username}
                 currentUserId={currentUser?.id}
               />
+
+              {/* <div className="col-span-1 flex flex-col items-center justify-center rounded-2xl p-2 dark:bg-neutral-900">
+               <div className="text-xl font-bold">4</div>
+               <div className="text-sm dark:text-neutral-600">Playing</div>
+             </div>
+             <div className="col-span-1 flex flex-col items-center justify-center rounded-2xl p-2 dark:bg-neutral-900">
+               <div className="text-xl font-bold">74</div>
+               <div className="text-sm dark:text-neutral-600">Played</div>
+             </div> */}
             </div>
           </div>
         </div>
@@ -121,10 +130,14 @@ export default function UserContainer({ user: currentUser }: Props) {
                 game={{ ...review.game }}
                 review={{ ...review }}
                 user={{ ...user }}
-                  />
+              />
             ))}
           </div>
         )}
+
+        {/* <div className="col-span-2 h-fit rounded-2xl p-4 dark:bg-neutral-950">
+          {JSON.stringify(user, null, 2)}
+        </div> */}
       </div>
     </div>
   );

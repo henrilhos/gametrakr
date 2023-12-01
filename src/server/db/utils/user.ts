@@ -3,40 +3,36 @@ import { type z } from "zod";
 import { type UserPersonalInfoSchema } from "~/server/api/schemas/user";
 import { db, eq, users } from "~/server/db";
 
-export const canCreateUser = async ({
+type NewUser = typeof users.$inferInsert;
+
+export const getUserIdByEmailOrUsername = async ({
   email,
   username,
 }: {
   email: string;
   username: string;
 }) => {
-  const result = await db.query.users.findFirst({
+  return await db.query.users.findFirst({
     where: (user, { ilike, or }) =>
       or(ilike(user.email, email), ilike(user.username, username)),
+    columns: { id: true },
   });
-
-  return !result;
 };
 
-export const createUser = async ({
-  email,
-  username,
-  password,
-}: typeof users.$inferInsert) => {
-  const hashPassword = await hash(password);
+export const createUser = async (data: NewUser) => {
+  const hashPassword = await hash(data.password);
 
   return await db
     .insert(users)
     .values({
-      email,
-      username,
+      ...data,
       password: hashPassword,
     })
     .returning({ id: users.id });
 };
 
 export const verifyUser = async ({ id }: { id: string }) => {
-  await db.update(users).set({ verified: true }).where(eq(users.id, id));
+  return await db.update(users).set({ verified: true }).where(eq(users.id, id));
 };
 
 export const getUserIdByEmail = async ({ email }: { email: string }) => {

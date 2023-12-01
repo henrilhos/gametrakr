@@ -1,35 +1,40 @@
 import { eq } from "drizzle-orm";
-import { type ReviewSchemaType } from "~/server/api/schemas/review";
-import { db } from "~/server/db/db";
+import { type Review } from "~/server/api/schemas/review";
+import { db } from "~/server/db";
 import { reviews } from "~/server/db/schema";
 
-export const createOrUpdateReview = async (
-  data: { gameId: string; userId: string } & ReviewSchemaType,
+export const getReviewIdByGameAndUserId = async (
+  gameId: string,
+  userId: string,
 ) => {
-  const exists = await db.query.reviews.findFirst({
-    where: (reviews, { eq, and }) =>
-      and(eq(reviews.gameId, data.gameId), eq(reviews.userId, data.userId)),
+  return await db.query.reviews.findFirst({
+    where: (review, { eq, and }) =>
+      and(eq(review.gameId, gameId), eq(review.userId, userId)),
     columns: { id: true },
   });
+};
 
-  if (!exists) {
-    return db
-      .insert(reviews)
-      .values({ ...data })
-      .returning();
-  }
-
-  return db
+export const updateReview = async (id: string, data: Review) => {
+  return await db
     .update(reviews)
     .set({ ...data })
-    .where(eq(reviews.id, exists.id))
+    .where(eq(reviews.id, id))
     .returning();
 };
 
-export const getReviewsByUser = async (id: string) =>
-  db.query.reviews.findMany({
+export const createReview = async (
+  data: Review & { userId: string; gameId: string },
+) => {
+  return await db
+    .insert(reviews)
+    .values({ ...data })
+    .returning();
+};
+
+export const getReviewsByUserId = async (userId: string) => {
+  return await db.query.reviews.findMany({
     where: (review, { eq, and }) =>
-      and(eq(review.userId, id), eq(review.active, true)),
+      and(eq(review.userId, userId), eq(review.active, true)),
     with: {
       game: {
         columns: { cover: true, name: true, releaseDate: true, slug: true },
@@ -38,3 +43,4 @@ export const getReviewsByUser = async (id: string) =>
     columns: { content: true, createdAt: true, isSpoiler: true, rating: true },
     orderBy: (review, { desc }) => [desc(review.createdAt)],
   });
+};

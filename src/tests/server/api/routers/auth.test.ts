@@ -31,7 +31,7 @@ describe("auth router", async () => {
     beforeEach(() => {
       vi.resetAllMocks();
       vi.mocked(utils.passwordMatches).mockReturnValue(true);
-      vi.mocked(db.canCreateUser).mockResolvedValue(true);
+      vi.mocked(db.getUserIdByEmailOrUsername).mockResolvedValue(undefined);
       vi.mocked(db.createUser).mockResolvedValue([user]);
       vi.mocked(db.createAccountToken).mockResolvedValue([
         {
@@ -60,7 +60,7 @@ describe("auth router", async () => {
 
     it("should throw user already exists error", async () => {
       let message;
-      vi.mocked(db.canCreateUser).mockResolvedValue(false);
+      vi.mocked(db.getUserIdByEmailOrUsername).mockResolvedValue({ id: "42" });
 
       try {
         await caller.auth.signUp(input);
@@ -105,7 +105,7 @@ describe("auth router", async () => {
         "1234@asdf",
         "1234@asdf",
       );
-      expect(db.canCreateUser).toHaveBeenLastCalledWith({
+      expect(db.getUserIdByEmailOrUsername).toHaveBeenLastCalledWith({
         email: input.email,
         username: input.username,
       });
@@ -268,7 +268,7 @@ describe("auth router", async () => {
         tokenId: "21",
         userId: "42",
       });
-      expect(db.invalidateTokens).toHaveBeenLastCalledWith({
+      expect(db.setTokensAsInvalid).toHaveBeenLastCalledWith({
         userId: "42",
         tokenType: "account",
       });
@@ -437,7 +437,7 @@ describe("auth router", async () => {
         tokenId: "12",
         userId: "42",
       });
-      expect(db.invalidateTokens).toHaveBeenLastCalledWith({
+      expect(db.setTokensAsInvalid).toHaveBeenLastCalledWith({
         userId: "42",
         tokenType: "password",
       });
