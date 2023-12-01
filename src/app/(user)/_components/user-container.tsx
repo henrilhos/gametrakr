@@ -81,6 +81,7 @@ export default function UserContainer({ user: currentUser }: Props) {
                 />
               </div>
             </div>
+
             <div className="col-span-1 flex justify-end">
               {currentUser && currentUser.id === user.id && (
                 <EditProfile user={{ ...user }} />
@@ -121,7 +122,7 @@ export default function UserContainer({ user: currentUser }: Props) {
                 game={{ ...review.game }}
                 review={{ ...review }}
                 user={{ ...user }}
-                  />
+              />
             ))}
           </div>
         )}
