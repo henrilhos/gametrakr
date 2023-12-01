@@ -15,7 +15,7 @@ const getUserRating = (ratings: (number | null)[] | undefined) => {
       return (sum ?? 0) + rating;
     }, 0) ?? 0;
 
-  return (sumOfRatings / validRatings.length) * 10;
+  return Math.round((sumOfRatings / validRatings.length) * 10);
 };
 
 export const isGameOnDb = async (slug: string) => {
