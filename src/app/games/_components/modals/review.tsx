@@ -249,7 +249,7 @@ export function ReviewModal({ game, open, onClose }: Props) {
         <div className="md:col-span-1">
           <div className="relative flex w-full min-w-fit justify-center ">
             <Image
-              src={game.cover ?? "/images/not-found.png"}
+              src={game.cover ? game.cover : "/images/not-found.png"}
               alt={game.name ?? "Name not found"}
               sizes="100vw"
               width={200}

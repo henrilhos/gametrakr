@@ -132,7 +132,7 @@ export default function Review({ game, review, user }: Props) {
       <div className="ml-2 flex gap-4">
         <div className="relative aspect-game-cover h-36 min-w-fit rounded-md">
           <Image
-            src={game.cover ?? "/images/not-found.png"}
+            src={game.cover ? game.cover : "/images/not-found.png"}
             alt={game.name}
             sizes="108px"
             fill

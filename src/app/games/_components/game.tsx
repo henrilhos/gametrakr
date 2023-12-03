@@ -9,6 +9,7 @@ import Metadata from "~/app/games/_components/metadata";
 import Sidebar from "~/app/games/_components/sidebar";
 import Tags from "~/app/games/_components/tags";
 import Heading from "~/components/heading";
+import { cn } from "~/lib/utils";
 import { type AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
@@ -25,19 +26,22 @@ export default function GameContainer({ user }: Props) {
   if (!game) return notFound();
 
   const backgroundImage = game.images?.[0];
-  const coverImage = game.cover;
+  const coverImage = game.cover ? game.cover : "/images/not-found.png";
 
   return (
     <>
       <div
-        className="hidden h-56 w-full rounded-4xl bg-cover bg-center md:block"
+        className={cn(
+          "hidden h-56 w-full rounded-4xl bg-cover bg-center md:block",
+          !backgroundImage && "bg-yellow-500 dark:bg-yellow-400",
+        )}
         style={{ backgroundImage: `url(${backgroundImage})` }}
       />
 
       <div className="grid grid-cols-12 gap-6 px-3 pb-3 md:px-8 md:pb-8">
         <div className="relative col-span-12 flex w-full min-w-fit justify-center md:col-span-3 md:-mt-56 md:block">
           <Image
-            src={coverImage ?? "/images/not-found.png"}
+            src={coverImage}
             alt={game.name ?? "Name not found"}
             sizes="100vw"
             width={400}
