@@ -12,9 +12,9 @@
 
 ![C4 Architecture - Components](assets/c4-diagrams/03-component.jpg)
 
-## Code diagram
+## Code diagram - Entity-relationship Model
 
-![C4 Architecture - Code](assets/c4-code.png)
+![C4 Architecture - Code](assets/c4-diagrams/04-code.png)
 
 ---
 
