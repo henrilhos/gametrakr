@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { type ReviewSchemaType } from "~/server/api/schemas/review";
 import { db } from "~/server/db/db";
 import { reviews } from "~/server/db/schema";
@@ -26,8 +26,8 @@ export const createOrUpdateReview = async (
     .returning();
 };
 
-export const getReviewsByUser = async (id: string) =>
-  db.query.reviews.findMany({
+export const getReviewsByUser = async (id: string) => {
+  return await db.query.reviews.findMany({
     where: (review, { eq, and }) =>
       and(eq(review.userId, id), eq(review.active, true)),
     with: {
@@ -35,6 +35,22 @@ export const getReviewsByUser = async (id: string) =>
         columns: { cover: true, name: true, releaseDate: true, slug: true },
       },
     },
-    columns: { content: true, createdAt: true, isSpoiler: true, rating: true },
+    columns: {
+      content: true,
+      createdAt: true,
+      isSpoiler: true,
+      rating: true,
+      id: true,
+    },
     orderBy: (review, { desc }) => [desc(review.createdAt)],
   });
+};
+
+export const deleteReview = async (id: string, userId: string) => {
+  return await db
+    .update(reviews)
+    .set({
+      active: false,
+    })
+    .where(and(eq(reviews.id, id), eq(reviews.userId, userId)));
+};
