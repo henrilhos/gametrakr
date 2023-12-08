@@ -31,7 +31,7 @@
     "@radix-ui/react-slider": "^1.1.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toggle": "^1.0.3",
-    "@react-email/components": "^0.0.11",
+    "@react-email/components": "^0.0.12",
     "@t3-oss/env-nextjs": "^0.7.0",
     "@tanstack/react-query": "^4.32.6",
     "@tanstack/react-query-next-experimental": "^5.8.4",
