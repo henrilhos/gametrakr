@@ -9,6 +9,7 @@ const config = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "utfs.io", pathname: "**" },
       { protocol: "https", hostname: "uploadthing.com", pathname: "**" },
