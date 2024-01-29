@@ -50,7 +50,7 @@
     "date-fns": "^2.30.0",
     "drizzle-orm": "^0.29.1",
     "drizzle-zod": "^0.5.1",
-    "lucide-react": "^0.292.0",
+    "lucide-react": "^0.316.0",
     "next": "^14.0.3",
     "next-auth": "^4.24.5",
     "next-themes": "^0.2.1",
