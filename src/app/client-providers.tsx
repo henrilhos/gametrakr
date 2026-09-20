@@ -2,7 +2,7 @@
 
 import { useState, type PropsWithChildren } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
+import { httpBatchStreamLink, loggerLink } from "@trpc/client";
 import { ThemeProvider } from "~/components/theme-provider";
 import { api } from "~/trpc/react";
 import { getUrl, transformer } from "~/trpc/shared";
@@ -25,15 +25,15 @@ export default function ClientProviders(
 
   const [trpcClient] = useState(() =>
     api.createClient({
-      transformer,
       links: [
         loggerLink({
           enabled: (op) =>
             process.env.NODE_ENV === "development" ||
             (op.direction === "down" && op.result instanceof Error),
         }),
-        unstable_httpBatchStreamLink({
+        httpBatchStreamLink({
           url: getUrl(),
+          transformer,
           headers() {
             return {
               cookie: props.cookies,
