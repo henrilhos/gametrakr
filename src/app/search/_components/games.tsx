@@ -20,13 +20,14 @@ export default function Games() {
 
   if (!bestResult || !games) return null;
 
-  bestResult.image = bestResult.image.replace("small", "big");
-
   return (
     <div className="grid gap-4 md:grid-cols-3">
       <div className="col-span-1 flex flex-col gap-2">
         <Heading>Best result</Heading>
-        <BestResultCard {...bestResult} />
+        <BestResultCard
+          {...bestResult}
+          image={bestResult.image.replace("small", "big")}
+        />
       </div>
 
       {games.length > 0 && (

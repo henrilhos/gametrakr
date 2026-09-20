@@ -1,7 +1,12 @@
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
+import tailwindcssAnimate from "tailwindcss-animate";
+import tailwindcssTypography from "@tailwindcss/typography";
 import { withUt } from "uploadthing/tw";
 import colors from "./src/styles/colors";
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment -- tailwindcss-inner-border ships no type declarations.
+const tailwindcssInnerBorder = require("tailwindcss-inner-border");
 
 export default withUt({
   darkMode: "class",
@@ -60,9 +65,5 @@ export default withUt({
       },
     },
   },
-  plugins: [
-    require("tailwindcss-animate"),
-    require("@tailwindcss/typography"),
-    require("tailwindcss-inner-border"),
-  ],
+  plugins: [tailwindcssAnimate, tailwindcssTypography, tailwindcssInnerBorder],
 }) satisfies Config;

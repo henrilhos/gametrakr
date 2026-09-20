@@ -21,7 +21,7 @@ export const getMetadata = async (url: string) => {
       cached = data;
 
       return data;
-    } catch (e) {
+    } catch {
       await kv.set(url, null, {
         ex: 60 * 60,
       });
