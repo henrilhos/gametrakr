@@ -7,6 +7,12 @@
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
+  serverExternalPackages: [
+    "resend",
+    "@react-email/render",
+    "@react-email/components",
+    "@react-email/tailwind",
+  ],
   images: {
     unoptimized: true,
     remotePatterns: [
