@@ -8,7 +8,12 @@ import {
   faQuoteRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dialog as PrimitiveDialog, Transition } from "@headlessui/react";
+import {
+  DialogPanel,
+  Dialog as PrimitiveDialog,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -42,7 +47,7 @@ function Dialog(
   return (
     <Transition appear show={props.open} as={Fragment}>
       <PrimitiveDialog onClose={props.onClose} as="div" className="z-50">
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -52,11 +57,11 @@ function Dialog(
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm dark:bg-white/20" />
-        </Transition.Child>
+        </TransitionChild>
 
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
-          <PrimitiveDialog.Panel>
-            <Transition.Child
+          <DialogPanel>
+            <TransitionChild
               as={Fragment}
               enter="ease-out duration-300"
               enterFrom="opacity-0"
@@ -66,8 +71,8 @@ function Dialog(
               leaveTo="opacity-0"
             >
               {props.children}
-            </Transition.Child>
-          </PrimitiveDialog.Panel>
+            </TransitionChild>
+          </DialogPanel>
         </div>
       </PrimitiveDialog>
     </Transition>

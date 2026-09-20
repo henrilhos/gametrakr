@@ -1,5 +1,10 @@
 import { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import {
+  Dialog,
+  DialogPanel,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react";
 import { type FileWithPath } from "@uploadthing/react";
 import { track } from "@vercel/analytics";
 import CoverPictureUploader from "~/app/(user)/_components/upload/cover-picture";
@@ -112,7 +117,7 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog onClose={handleOnClose} as="div" className="z-50">
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -122,11 +127,11 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm dark:bg-white/20" />
-        </Transition.Child>
+        </TransitionChild>
 
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
-          <Dialog.Panel>
-            <Transition.Child
+          <DialogPanel>
+            <TransitionChild
               as={Fragment}
               enter="ease-out duration-300"
               enterFrom="opacity-0"
@@ -203,8 +208,8 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
                   </Form>
                 </div>
               </Card>
-            </Transition.Child>
-          </Dialog.Panel>
+            </TransitionChild>
+          </DialogPanel>
         </div>
       </Dialog>
     </Transition>
