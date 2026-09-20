@@ -76,13 +76,15 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default async function RootLayout({ children }: PropsWithChildren) {
+  const cookieStore = await cookies();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${apfelGrotezk.variable} ${atkinsonHyperlegible.variable} font-sans`}
       >
-        <ClientProviders cookies={cookies().toString()}>
+        <ClientProviders cookies={cookieStore.toString()}>
           {children}
         </ClientProviders>
 

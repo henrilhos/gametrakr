@@ -17,9 +17,9 @@ export const api = experimental_createTRPCNextAppDirServer<AppRouter>({
         }),
         unstable_httpBatchStreamLink({
           url: getUrl(),
-          headers() {
+          async headers() {
             return {
-              cookie: cookies().toString(),
+              cookie: (await cookies()).toString(),
               "x-trpc-source": "rsc",
             };
           },
