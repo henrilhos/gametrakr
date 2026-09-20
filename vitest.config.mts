@@ -1,7 +1,9 @@
+import react from "@vitejs/plugin-react";
 import { join } from "path";
 import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
+  plugins: [react()],
   test: {
     exclude: [...configDefaults.exclude, "**/e2e/**"],
     coverage: {
@@ -18,7 +20,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "~/": join(__dirname, "./src/"),
+      "~/": join(import.meta.dirname, "./src/"),
     },
   },
 });

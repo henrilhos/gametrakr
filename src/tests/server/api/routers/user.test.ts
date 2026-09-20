@@ -121,25 +121,15 @@ describe("user router", () => {
     });
 
     it("should throw error when calling toggle follow mutation", async () => {
-      let error;
-      try {
-        await caller.user.toggleFollow({ userId: "21" });
-      } catch (err) {
-        error = err;
-      }
-
-      expect(error).toContain(/UNAUTHORIZED/);
+      await expect(
+        caller.user.toggleFollow({ userId: "21" }),
+      ).rejects.toMatchObject({ code: "UNAUTHORIZED" });
     });
 
     it("should throw error when calling toggle follow mutation", async () => {
-      let error;
-      try {
-        await caller.user.updatePersonalInformation({});
-      } catch (err) {
-        error = err;
-      }
-
-      expect(error).toContain(/UNAUTHORIZED/);
+      await expect(
+        caller.user.updatePersonalInformation({}),
+      ).rejects.toMatchObject({ code: "UNAUTHORIZED" });
     });
   });
 
