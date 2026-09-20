@@ -2,7 +2,7 @@
 
 ## Setup
 
-For development we use [Node.js](https://nodejs.org) as our runtime and [pnpm](https://pnpm.io) as our package manager, to check out the versions we're using, please check the [`.tool-versions`](.tool-versions) file.
+For development we use [Node.js](https://nodejs.org) as our runtime and [npm](https://npmjs.com) as our package manager, to check out the versions we're using, please check the [`.tool-versions`](.tool-versions) file.
 
 ### Getting started
 
@@ -15,27 +15,27 @@ cd gametrakr
 
 2. Install deps
 
-```badh
-pnpm install
+```bash
+npm install
 ```
 
 3. Update `.env` and push the schema to the db
 
 ```bash
 cp .env.example .env
-pnpm prisma db push
+npm run prisma db push
 ```
 
 4. Start the dev server
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
 5. Run the tests
 
 ```bash
-pnpm test
+npm test
 ```
 
 ## Stack

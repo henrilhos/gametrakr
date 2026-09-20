@@ -31,19 +31,16 @@ jobs:
   #     - name: Checkout repository
   #       uses: actions/checkout@v4
 
-  #     - name: Install pnpm
-  #       uses: pnpm/action-setup@v2
-
   #     - uses: actions/setup-node@v4
   #       with:
   #         node-version: 24
-  #         cache: "pnpm"
+  #         cache: "npm"
 
   #     - name: Install dependencies
-  #       run: pnpm install
+  #       run: npm ci
 
   #     - name: Install Playwright Browsers
-  #       run: pnpm exec playwright install --with-deps
+  #       run: npx playwright install --with-deps
 
   #     - name: Setup environment variables
   #       run: |
@@ -58,10 +55,10 @@ jobs:
   #         echo "UPLOADTHING_APP_ID=supersecret" >> .env
 
   #     - name: Build application
-  #       run: pnpm build
+  #       run: npm run build
 
   #     - name: Run Playwright tests
-  #       run: pnpm test:e2e
+  #       run: npm run test:e2e
 
   #     - uses: actions/upload-artifact@v3
   #       if: always()
@@ -77,19 +74,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: "pnpm"
+          cache: "npm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
       - name: Run linter
-        run: pnpm lint
+        run: npm run lint
         env:
           SKIP_ENV_VALIDATION: true
 
@@ -100,19 +94,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: "pnpm"
+          cache: "npm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
       - name: Run typecheck
-        run: pnpm typecheck
+        run: npm run typecheck
 
   unit:
     name: "Unit tests"
@@ -121,16 +112,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: "pnpm"
+          cache: "npm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
       - name: Run unit tests
         run: npx vitest --coverage
