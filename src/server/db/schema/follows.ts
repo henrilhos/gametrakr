@@ -16,7 +16,9 @@ export const follows = pgTable(
       .defaultNow(),
   },
   (follows) => ({
-    uniqueFollow: primaryKey(follows.followingUserId, follows.followedUserId),
+    uniqueFollow: primaryKey({
+      columns: [follows.followingUserId, follows.followedUserId],
+    }),
   }),
 );
 
