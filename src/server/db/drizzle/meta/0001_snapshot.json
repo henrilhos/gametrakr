@@ -1,10 +1,8 @@
 {
-  "version": "5",
-  "dialect": "pg",
-  "id": "7a8df03a-0bb4-4d90-b357-96b252c9343d",
-  "prevId": "4f433b39-8d43-4606-bef5-d13b2cc8173f",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "follows": {
+    "public.follows": {
       "name": "follows",
       "schema": "",
       "columns": {
@@ -33,28 +31,28 @@
         "follows_followingUserId_users_id_fk": {
           "name": "follows_followingUserId_users_id_fk",
           "tableFrom": "follows",
-          "tableTo": "users",
           "columnsFrom": [
             "followingUserId"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "follows_followedUserId_users_id_fk": {
           "name": "follows_followedUserId_users_id_fk",
           "tableFrom": "follows",
-          "tableTo": "users",
           "columnsFrom": [
             "followedUserId"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -66,9 +64,12 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "tokens": {
+    "public.tokens": {
       "name": "tokens",
       "schema": "",
       "columns": {
@@ -116,9 +117,12 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -202,18 +206,34 @@
       },
       "indexes": {
         "email_idx": {
-          "name": "email_idx",
           "columns": [
-            "email"
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "email_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         },
         "username_idx": {
-          "name": "username_idx",
           "columns": [
-            "username"
+            {
+              "expression": "username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "username_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {},
@@ -221,28 +241,32 @@
       "uniqueConstraints": {
         "users_email_unique": {
           "name": "users_email_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ]
+          ],
+          "nullsNotDistinct": false
         },
         "users_username_unique": {
           "name": "users_username_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "username"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     }
   },
   "enums": {
-    "type": {
+    "public.type": {
       "name": "type",
-      "values": {
-        "account": "account",
-        "password": "password"
-      }
+      "schema": "public",
+      "values": [
+        "account",
+        "password"
+      ]
     }
   },
   "schemas": {},
@@ -250,5 +274,11 @@
     "schemas": {},
     "tables": {},
     "columns": {}
-  }
+  },
+  "id": "7a8df03a-0bb4-4d90-b357-96b252c9343d",
+  "prevId": "4f433b39-8d43-4606-bef5-d13b2cc8173f",
+  "sequences": {},
+  "policies": {},
+  "views": {},
+  "roles": {}
 }

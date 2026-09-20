@@ -1,4 +1,6 @@
 {
+  "id": "1503dc7a-fab9-4108-a89d-2431601ed78b",
+  "prevId": "77e821a9-0e5e-42f0-98f1-b268abf1fb33",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -31,33 +33,33 @@
         "follows_following_user_id_users_id_fk": {
           "name": "follows_following_user_id_users_id_fk",
           "tableFrom": "follows",
+          "tableTo": "users",
           "columnsFrom": [
             "following_user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "follows_followed_user_id_users_id_fk": {
           "name": "follows_followed_user_id_users_id_fk",
           "tableFrom": "follows",
+          "tableTo": "users",
           "columnsFrom": [
             "followed_user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
-        "follows_following_user_id_followed_user_id": {
-          "name": "follows_following_user_id_followed_user_id",
+        "follows_following_user_id_followed_user_id_pk": {
+          "name": "follows_following_user_id_followed_user_id_pk",
           "columns": [
             "following_user_id",
             "followed_user_id"
@@ -66,8 +68,8 @@
       },
       "uniqueConstraints": {},
       "policies": {},
-      "isRLSEnabled": false,
-      "checkConstraints": {}
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.games": {
       "name": "games",
@@ -92,6 +94,18 @@
           "primaryKey": false,
           "notNull": true
         },
+        "cover": {
+          "name": "cover",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "release_date": {
+          "name": "release_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -109,6 +123,7 @@
       },
       "indexes": {
         "slug_idx": {
+          "name": "slug_idx",
           "columns": [
             {
               "expression": "slug",
@@ -117,11 +132,10 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "slug_idx",
           "isUnique": true,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {},
@@ -129,15 +143,15 @@
       "uniqueConstraints": {
         "games_slug_unique": {
           "name": "games_slug_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "slug"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       },
       "policies": {},
-      "isRLSEnabled": false,
-      "checkConstraints": {}
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.reviews": {
       "name": "reviews",
@@ -208,8 +222,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
-      "isRLSEnabled": false,
-      "checkConstraints": {}
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.tokens": {
       "name": "tokens",
@@ -225,6 +239,7 @@
         "type": {
           "name": "type",
           "type": "type",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -261,8 +276,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
-      "isRLSEnabled": false,
-      "checkConstraints": {}
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.users": {
       "name": "users",
@@ -348,6 +363,7 @@
       },
       "indexes": {
         "email_idx": {
+          "name": "email_idx",
           "columns": [
             {
               "expression": "email",
@@ -356,13 +372,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "email_idx",
           "isUnique": true,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "username_idx": {
+          "name": "username_idx",
           "columns": [
             {
               "expression": "username",
@@ -371,11 +387,10 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "username_idx",
           "isUnique": true,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {},
@@ -383,22 +398,22 @@
       "uniqueConstraints": {
         "users_email_unique": {
           "name": "users_email_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ],
-          "nullsNotDistinct": false
+          ]
         },
         "users_username_unique": {
           "name": "users_username_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "username"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       },
       "policies": {},
-      "isRLSEnabled": false,
-      "checkConstraints": {}
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {
@@ -412,15 +427,13 @@
     }
   },
   "schemas": {},
-  "_meta": {
-    "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "59c96eff-beda-426f-92b8-73b792e60f48",
-  "prevId": "9f982a7a-5e08-487e-bb57-267149e23663",
   "sequences": {},
+  "roles": {},
   "policies": {},
   "views": {},
-  "roles": {}
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
 }

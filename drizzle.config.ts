@@ -4,9 +4,9 @@ import "dotenv/config";
 
 export default {
   schema: "./src/server/db/schema/index.ts",
-  driver: "pg",
+  dialect: "postgresql",
   dbCredentials: {
-    connectionString: env.DATABASE_URL,
+    url: env.DATABASE_URL,
   },
   tablesFilter: ["gametrakr-app_*"],
   out: "./src/server/db/drizzle",

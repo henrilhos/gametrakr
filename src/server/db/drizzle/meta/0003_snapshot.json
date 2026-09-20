@@ -1,10 +1,8 @@
 {
-  "version": "5",
-  "dialect": "pg",
-  "id": "2601d9dc-c9a6-4213-9d0f-1f3e4ad777dd",
-  "prevId": "9e72e832-4b9a-4d3b-9280-525bed3084b1",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "follows": {
+    "public.follows": {
       "name": "follows",
       "schema": "",
       "columns": {
@@ -33,28 +31,28 @@
         "follows_following_user_id_users_id_fk": {
           "name": "follows_following_user_id_users_id_fk",
           "tableFrom": "follows",
-          "tableTo": "users",
           "columnsFrom": [
             "following_user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "follows_followed_user_id_users_id_fk": {
           "name": "follows_followed_user_id_users_id_fk",
           "tableFrom": "follows",
-          "tableTo": "users",
           "columnsFrom": [
             "followed_user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -66,9 +64,12 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "tokens": {
+    "public.tokens": {
       "name": "tokens",
       "schema": "",
       "columns": {
@@ -116,9 +117,12 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -202,18 +206,34 @@
       },
       "indexes": {
         "email_idx": {
-          "name": "email_idx",
           "columns": [
-            "email"
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "email_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         },
         "username_idx": {
-          "name": "username_idx",
           "columns": [
-            "username"
+            {
+              "expression": "username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "username_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {},
@@ -221,28 +241,32 @@
       "uniqueConstraints": {
         "users_email_unique": {
           "name": "users_email_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ]
+          ],
+          "nullsNotDistinct": false
         },
         "users_username_unique": {
           "name": "users_username_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "username"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     }
   },
   "enums": {
-    "type": {
+    "public.type": {
       "name": "type",
-      "values": {
-        "account": "account",
-        "password": "password"
-      }
+      "schema": "public",
+      "values": [
+        "account",
+        "password"
+      ]
     }
   },
   "schemas": {},
@@ -250,5 +274,11 @@
     "schemas": {},
     "tables": {},
     "columns": {}
-  }
+  },
+  "id": "2601d9dc-c9a6-4213-9d0f-1f3e4ad777dd",
+  "prevId": "9e72e832-4b9a-4d3b-9280-525bed3084b1",
+  "sequences": {},
+  "policies": {},
+  "views": {},
+  "roles": {}
 }

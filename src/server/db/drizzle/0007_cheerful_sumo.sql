@@ -1,0 +1,2 @@
+ALTER TABLE "follows" DROP CONSTRAINT "follows_following_user_id_followed_user_id";--> statement-breakpoint
+ALTER TABLE "follows" ADD CONSTRAINT "follows_following_user_id_followed_user_id_pk" PRIMARY KEY("following_user_id","followed_user_id");
