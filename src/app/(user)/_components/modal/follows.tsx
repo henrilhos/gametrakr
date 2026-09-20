@@ -3,7 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dialog, Tab, Transition } from "@headlessui/react";
+import {
+  Dialog,
+  DialogPanel,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react";
 import ToggleFollow from "~/app/(user)/_components/toggle-follow-button";
 import { cn } from "~/lib/utils";
 
@@ -87,7 +97,7 @@ export default function FollowsModal({
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog onClose={onClose} as="div" className="z-50">
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -97,11 +107,11 @@ export default function FollowsModal({
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm dark:bg-white/20" />
-        </Transition.Child>
+        </TransitionChild>
 
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
-          <Dialog.Panel>
-            <Transition.Child
+          <DialogPanel>
+            <TransitionChild
               as={Fragment}
               enter="ease-out duration-300"
               enterFrom="opacity-0"
@@ -111,11 +121,11 @@ export default function FollowsModal({
               leaveTo="opacity-0"
             >
               <div className="h-screen w-screen bg-neutral-50 dark:bg-neutral-950 md:h-fit md:max-w-lg md:rounded-3xl">
-                <Tab.Group
+                <TabGroup
                   selectedIndex={selectedIndex}
                   onChange={setSelectedIndex}
                 >
-                  <Tab.List className="flex items-center justify-center bg-neutral-200 dark:bg-black md:rounded-t-3xl">
+                  <TabList className="flex items-center justify-center bg-neutral-200 dark:bg-black md:rounded-t-3xl">
                     <Tab
                       className={({ selected }) =>
                         cn(
@@ -147,9 +157,9 @@ export default function FollowsModal({
                         icon={faXmark}
                       />
                     </button>
-                  </Tab.List>
-                  <Tab.Panels className="bg-neutral-50 pt-2 dark:bg-neutral-950 md:rounded-b-3xl">
-                    <Tab.Panel
+                  </TabList>
+                  <TabPanels className="bg-neutral-50 pt-2 dark:bg-neutral-950 md:rounded-b-3xl">
+                    <TabPanel
                       className={cn(
                         "flex flex-col gap-2 overflow-y-auto p-4 md:h-[480px] md:p-6",
                       )}
@@ -162,8 +172,8 @@ export default function FollowsModal({
                           currentUserId={currentUserId}
                         />
                       ))}
-                    </Tab.Panel>
-                    <Tab.Panel
+                    </TabPanel>
+                    <TabPanel
                       className={cn(
                         "flex flex-col gap-2 overflow-y-auto p-4 md:h-[480px] md:p-6",
                       )}
@@ -176,12 +186,12 @@ export default function FollowsModal({
                           currentUserId={currentUserId}
                         />
                       ))}
-                    </Tab.Panel>
-                  </Tab.Panels>
-                </Tab.Group>
+                    </TabPanel>
+                  </TabPanels>
+                </TabGroup>
               </div>
-            </Transition.Child>
-          </Dialog.Panel>
+            </TransitionChild>
+          </DialogPanel>
         </div>
       </Dialog>
     </Transition>
