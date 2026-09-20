@@ -47,7 +47,7 @@
     "@trpc/react-query": "^10.37.1",
     "@trpc/server": "^10.37.1",
     "@uploadthing/react": "^7.3.3",
-    "@vercel/analytics": "^1.1.1",
+    "@vercel/analytics": "^2.0.1",
     "@vercel/kv": "^1.0.0",
     "argon2": "^0.45.1",
     "date-fns": "^2.30.0",
