@@ -20,7 +20,8 @@
     "db:generate": "dotenv drizzle-kit generate",
     "db:push": "dotenv drizzle-kit push",
     "db:migrate": "node --loader ts-node/esm src/server/db/migrate.mts",
-    "db:studio": "dotenv drizzle-kit studio"
+    "db:studio": "dotenv drizzle-kit studio",
+    "email:dev": "email dev --dir src/components/emails --port 3001"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
@@ -72,6 +73,7 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@next/bundle-analyzer": "^15.5.25",
     "@next/eslint-plugin-next": "^15.5.25",
+    "@react-email/ui": "^6.9.5",
     "@tailwindcss/typography": "^0.5.10",
     "@types/eslint": "^8.44.7",
     "@types/node": "^24.13.6",
@@ -92,6 +94,7 @@
     "postcss": "^8.4.27",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.5.1",
+    "react-email": "^6.9.5",
     "tailwind-merge": "^2.0.0",
     "tailwindcss": "^3.3.6",
     "tailwindcss-animate": "^1.0.7",
