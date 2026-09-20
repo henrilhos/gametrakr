@@ -2,7 +2,6 @@
 
 import { useState, type PropsWithChildren } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
 import { ThemeProvider } from "~/components/theme-provider";
 import { api } from "~/trpc/react";
@@ -48,11 +47,9 @@ export default function ClientProviders(
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryStreamedHydration transformer={transformer}>
-        <api.Provider client={trpcClient} queryClient={queryClient}>
-          <ThemeProvider>{props.children}</ThemeProvider>
-        </api.Provider>
-      </ReactQueryStreamedHydration>
+      <api.Provider client={trpcClient} queryClient={queryClient}>
+        <ThemeProvider>{props.children}</ThemeProvider>
+      </api.Provider>
     </QueryClientProvider>
   );
 }
