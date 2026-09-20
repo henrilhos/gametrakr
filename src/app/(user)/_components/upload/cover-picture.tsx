@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type FileWithPath } from "@uploadthing/react";
-import { useDropzone } from "@uploadthing/react/hooks";
+import { useDropzone } from "@uploadthing/react";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 
 type Props = {
   currentImage?: string;
-  handleFileChange: (file: FileWithPath) => void;
+  handleFileChange: (file: File) => void;
 };
 
 export default function CoverPictureUploader({
@@ -23,7 +22,7 @@ export default function CoverPictureUploader({
     }
   }, [currentImage]);
 
-  const onDrop = (acceptedFiles: FileWithPath[]) => {
+  const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0]!;
 
     handleFileChange(file);

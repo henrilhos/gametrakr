@@ -30,7 +30,7 @@ export const appFileRouter = {
       await db
         .update(users)
         .set({
-          profileImage: file.url,
+          profileImage: file.ufsUrl,
         })
         .where(eq(users.id, metadata.userId));
     }),
@@ -57,7 +57,7 @@ export const appFileRouter = {
       await db
         .update(users)
         .set({
-          coverImage: file.url,
+          coverImage: file.ufsUrl,
         })
         .where(eq(users.id, metadata.userId));
     }),

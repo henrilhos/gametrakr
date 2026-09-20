@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { DESCRIPTION, TITLE } from "~/app/shared-metadata";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export async function GET(req: Request) {
   const apfelGrotezk = await fetch(

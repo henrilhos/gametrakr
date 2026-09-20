@@ -26,7 +26,7 @@ export default function GameContainer({ user }: Props) {
   if (!game) return notFound();
 
   const backgroundImage = game.images?.[0];
-  const coverImage = game.cover ? game.cover : "/images/not-found.png";
+  const coverImage = game.cover ?? "/images/not-found.png";
 
   return (
     <>

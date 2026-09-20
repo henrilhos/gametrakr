@@ -5,7 +5,6 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { type FileWithPath } from "@uploadthing/react";
 import { track } from "@vercel/analytics";
 import CoverPictureUploader from "~/app/(user)/_components/upload/cover-picture";
 import ProfilePictureUploader from "~/app/(user)/_components/upload/profile-picture";
@@ -40,8 +39,8 @@ type Props = {
 
 export default function EditProfileModal({ open, onClose, user }: Props) {
   const [isLoading, setIsLoading] = useState(false);
-  const [profileFile, setProfileFile] = useState<FileWithPath>();
-  const [coverFile, setCoverFile] = useState<FileWithPath>();
+  const [profileFile, setProfileFile] = useState<File>();
+  const [coverFile, setCoverFile] = useState<File>();
 
   const form = useZodForm({
     schema: UserPersonalInfoSchema,
@@ -61,11 +60,11 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
       },
     });
 
-  const handleProfileFileChange = (file: FileWithPath) => {
+  const handleProfileFileChange = (file: File) => {
     setProfileFile(file);
   };
 
-  const handleCoverFileChange = (file: FileWithPath) => {
+  const handleCoverFileChange = (file: File) => {
     setCoverFile(file);
   };
 

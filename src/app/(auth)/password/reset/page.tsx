@@ -53,7 +53,7 @@ export default function Page() {
 
       for (const key of keys) {
         const err = data[key];
-        if (err && err.message) {
+        if (err?.message) {
           toast.error(err.message);
           return;
         }

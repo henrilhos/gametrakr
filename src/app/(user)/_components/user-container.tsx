@@ -83,7 +83,7 @@ export default function UserContainer({ user: currentUser }: Props) {
             </div>
 
             <div className="col-span-1 flex justify-end">
-              {currentUser && currentUser.id === user.id && (
+              {currentUser?.id === user.id && (
                 <EditProfile user={{ ...user }} />
               )}
 

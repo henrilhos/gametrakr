@@ -51,8 +51,7 @@ jobs:
   #         echo "RESEND_EMAIL=ci@gametra.kr" >> .env
   #         echo "TWITCH_CLIENT_ID=supersecret" >> .env
   #         echo "TWITCH_SECRET_ID=supersecret" >> .env
-  #         echo "UPLOADTHING_SECRET=supersecret" >> .env
-  #         echo "UPLOADTHING_APP_ID=supersecret" >> .env
+  #         echo "UPLOADTHING_TOKEN=supersecret" >> .env
 
   #     - name: Build application
   #       run: npm run build

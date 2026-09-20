@@ -5,7 +5,8 @@ import { type ReactElement } from "react";
 import { env } from "~/env.mjs";
 
 export interface Email {
-  react: ReactElement;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Resend's email templates accept any element props.
+  react: ReactElement<any>;
   subject: string;
   to: string[];
   from?: string;
