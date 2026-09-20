@@ -38,7 +38,7 @@
     "@react-email/components": "^1.0.12",
     "@react-email/render": "^2.1.0",
     "@t3-oss/env-nextjs": "^0.13.11",
-    "@tanstack/react-query": "^4.32.6",
+    "@tanstack/react-query": "^5.103.1",
     "@tiptap/extension-placeholder": "^3.31.3",
     "@tiptap/pm": "^3.31.3",
     "@tiptap/react": "^3.31.3",
