@@ -36,7 +36,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toggle": "^1.0.3",
     "@react-email/components": "^1.0.12",
-    "@t3-oss/env-nextjs": "^0.7.0",
+    "@t3-oss/env-nextjs": "^0.13.11",
     "@tanstack/react-query": "^4.32.6",
     "@tiptap/extension-placeholder": "^3.31.3",
     "@tiptap/pm": "^3.31.3",
