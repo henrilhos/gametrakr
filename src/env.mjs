@@ -8,6 +8,27 @@ const toggle = z
 
 config();
 
+const localDev =
+  process.env.LOCAL_DEV === "true" || process.env.LOCAL_DEV === "1";
+const skipExternalServiceValidation =
+  localDev || process.env.NODE_ENV === "test";
+
+/** @param {string} placeholder @param {string} label */
+const requiredCloudValue = (placeholder, label) =>
+  z
+    .string()
+    .min(1)
+    .refine(
+      (value) => !value.includes(placeholder),
+      `You forgot to change the default ${label}`,
+    );
+
+/** @param {string} placeholder @param {string} label */
+const optionalInLocalDev = (placeholder, label) =>
+  skipExternalServiceValidation
+    ? z.string().optional()
+    : requiredCloudValue(placeholder, label);
+
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -15,6 +36,8 @@ export const env = createEnv({
    */
   server: {
     ANALYZE: toggle.default(false),
+    LOCAL_DEV: toggle.default("false"),
+    LOCAL_REDIS_URL: z.string().url().default("redis://localhost:6379"),
     DATABASE_URL: z
       .string()
       .url()
@@ -22,42 +45,24 @@ export const env = createEnv({
         (str) => !str.includes("YOUR_POSTGRESQL_URL_HERE"),
         "You forgot to change the default URL",
       ),
-    RESEND_API_KEY: z
-      .string()
-      .min(1)
-      .refine(
-        (str) => !str.includes("YOUR_RESEND_API_KEY_HERE"),
-        "You forgot to change the default API key",
-      ),
-    RESEND_EMAIL: z
-      .string()
-      .email()
-      .min(1)
-      .refine(
-        (str) => !str.includes("YOUR_RESEND_EMAIL_HERE"),
-        "You forgot to change the default email",
-      ),
-    TWITCH_CLIENT_ID: z
-      .string()
-      .min(1)
-      .refine(
-        (str) => !str.includes("YOUR_TWITCH_CLIENT_ID_HERE"),
-        "You forgot to change the default client ID",
-      ),
-    TWITCH_SECRET_ID: z
-      .string()
-      .min(1)
-      .refine(
-        (str) => !str.includes("YOUR_TWITCH_SECRET_ID_HERE"),
-        "You forgot to change the default secret ID",
-      ),
-    UPLOADTHING_TOKEN: z
-      .string()
-      .min(1)
-      .refine(
-        (str) => !str.includes("YOUR_UPLOADTHING_TOKEN_HERE"),
-        "You forgot to change the default token",
-      ),
+    RESEND_API_KEY: optionalInLocalDev("YOUR_RESEND_API_KEY_HERE", "API key"),
+    RESEND_EMAIL: skipExternalServiceValidation
+      ? z.string().optional()
+      : requiredCloudValue("YOUR_RESEND_EMAIL_HERE", "email").pipe(
+          z.string().email(),
+        ),
+    TWITCH_CLIENT_ID: requiredCloudValue(
+      "YOUR_TWITCH_CLIENT_ID_HERE",
+      "client ID",
+    ),
+    TWITCH_SECRET_ID: requiredCloudValue(
+      "YOUR_TWITCH_SECRET_ID_HERE",
+      "secret",
+    ),
+    UPLOADTHING_TOKEN: optionalInLocalDev(
+      "YOUR_UPLOADTHING_TOKEN_HERE",
+      "token",
+    ),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -81,7 +86,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    NEXT_PUBLIC_LOCAL_DEV: toggle.default("false"),
   },
 
   /**
@@ -90,6 +95,8 @@ export const env = createEnv({
    */
   runtimeEnv: {
     ANALYZE: process.env.ANALYZE,
+    LOCAL_DEV: process.env.LOCAL_DEV,
+    LOCAL_REDIS_URL: process.env.LOCAL_REDIS_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_EMAIL: process.env.RESEND_EMAIL,
@@ -99,6 +106,7 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    NEXT_PUBLIC_LOCAL_DEV: process.env.NEXT_PUBLIC_LOCAL_DEV,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

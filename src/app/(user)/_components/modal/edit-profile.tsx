@@ -5,7 +5,6 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { track } from "@vercel/analytics";
 import CoverPictureUploader from "~/app/(user)/_components/upload/cover-picture";
 import ProfilePictureUploader from "~/app/(user)/_components/upload/profile-picture";
 import BackButton from "~/components/ui/back-button";
@@ -15,6 +14,7 @@ import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import toast from "~/components/ui/toast";
 import { useZodForm } from "~/hooks/use-zod-form";
+import { track } from "~/lib/analytics";
 import { useUploadThing } from "~/lib/uploadthing";
 import { cn } from "~/lib/utils";
 import { UserPersonalInfoSchema } from "~/server/api/schemas/user";

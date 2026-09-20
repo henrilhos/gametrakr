@@ -1,8 +1,8 @@
 "use client";
 
 import { type MouseEvent } from "react";
-import { track } from "@vercel/analytics";
 import { cva, type VariantProps } from "class-variance-authority";
+import { track } from "~/lib/analytics";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -29,7 +29,8 @@ const toggleFollowVariants = cva(
 );
 
 export interface ToggleFollowProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof toggleFollowVariants> {
   id: string;
   username: string;

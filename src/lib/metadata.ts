@@ -1,7 +1,5 @@
-import { Redis } from "@upstash/redis";
 import z from "zod";
-
-const redis = Redis.fromEnv();
+import { cache } from "~/lib/cache";
 
 const metadataSchema = z.object({
   title: z.string(),
@@ -10,21 +8,21 @@ const metadataSchema = z.object({
 });
 
 export const getMetadata = async (url: string) => {
-  let cached = await redis.get<z.infer<typeof metadataSchema> | null>(url);
+  let cached = await cache.get<z.infer<typeof metadataSchema> | null>(url);
 
   if (!cached) {
     try {
       const res = await fetch(`https://api.dub.co/metatags?url=${url}`);
       const data = metadataSchema.parse(await res.json());
 
-      await redis.set(url, data, {
+      await cache.set(url, data, {
         ex: 60 * 60,
       });
       cached = data;
 
       return data;
     } catch {
-      await redis.set(url, null, {
+      await cache.set(url, null, {
         ex: 60 * 60,
       });
       return null;

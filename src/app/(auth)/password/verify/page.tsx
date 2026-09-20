@@ -1,10 +1,10 @@
 "use client";
 
 import { notFound, useSearchParams } from "next/navigation";
-import { track } from "@vercel/analytics";
 import BackButton from "~/components/ui/back-button";
 import { CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import toast from "~/components/ui/toast";
+import { track } from "~/lib/analytics";
 import { api } from "~/trpc/react";
 
 export default function Page() {

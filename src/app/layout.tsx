@@ -13,6 +13,7 @@ import {
   twitterMetadata,
 } from "~/app/shared-metadata";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
+import { env } from "~/env.mjs";
 import "~/styles/globals.css";
 
 config.autoAddCss = false;
@@ -89,7 +90,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         </ClientProviders>
 
         <TailwindIndicator />
-        <Analytics />
+        {!env.LOCAL_DEV && <Analytics />}
         <Toaster position="bottom-center" />
       </body>
     </html>
