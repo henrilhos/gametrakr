@@ -3,17 +3,17 @@ import { z } from "zod";
 const AuthSchema = z.object({
   username: z
     .string()
-    .min(3, { message: "Nickname must be at least 3 characters" })
-    .max(24, { message: "Nickname must be not exceed 24 characters" })
+    .min(3, { error: "Nickname must be at least 3 characters" })
+    .max(24, { error: "Nickname must be not exceed 24 characters" })
     .regex(
       new RegExp(/^[a-zA-Z0-9._]+$/),
       "Nickname can only have alphanumeric characters, underscores, and dots",
     )
     .describe("Username"),
-  email: z.string().email({ message: "Invalid email" }).describe("Email"),
+  email: z.string().email({ error: "Invalid email" }).describe("Email"),
   password: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters" })
+    .min(8, { error: "Password must be at least 8 characters" })
     .describe("Password"),
   confirmPassword: z
     .string()
@@ -29,7 +29,7 @@ export const SignInSchema = z.object({
 export const SignUpSchema = AuthSchema.refine(
   (data) => data.password === data.confirmPassword,
   {
-    message: "Passwords don't match",
+    error: "Passwords don't match",
     path: ["confirmPassword"],
   },
 );
@@ -54,6 +54,6 @@ export const ResetPasswordSchema = AuthSchema.pick({
     token: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    error: "Passwords don't match",
     path: ["confirmPassword"],
   });

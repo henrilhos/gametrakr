@@ -14,7 +14,7 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    ANALYZE: toggle.default("false"),
+    ANALYZE: toggle.default(false),
     DATABASE_URL: z
       .string()
       .url()
