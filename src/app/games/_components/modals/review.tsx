@@ -34,8 +34,8 @@ const reviewSchema = z.object({
   rating: z
     .number()
     .int()
-    .gte(0, { message: "Rating is too low" })
-    .lte(10, { message: "Rating is to high" })
+    .gte(0, { error: "Rating is too low" })
+    .lte(10, { error: "Rating is to high" })
     .optional(),
   isSpoiler: z.boolean().default(false),
   content: z.string().optional(),

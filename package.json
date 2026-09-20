@@ -68,7 +68,7 @@
     "ts-igdb-client": "^0.4.2",
     "uploadthing": "^7.7.4",
     "xss": "^1.0.14",
-    "zod": "^3.22.4"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
