@@ -1,6 +1,6 @@
 # Infrastructure
 
-For infrastructure, we will be using [Vercel](https://vercel.com/), and GitHub Actions for CI and code scanning.
+See [ADR-0001](./adr/0001-vercel-hosting-github-actions-ci.md) for why we use Vercel and GitHub Actions. This page covers the Vercel tooling we rely on day to day.
 
 ## Vercel
 
