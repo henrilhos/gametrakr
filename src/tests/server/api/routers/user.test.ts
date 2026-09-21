@@ -69,57 +69,6 @@ describe("user router", () => {
       });
     });
 
-    describe("find first by username query", () => {
-      type Input = inferProcedureInput<
-        AppRouter["user"]["findFirstByUsername"]
-      >;
-      const input: Input = { username: "gametrakr" };
-
-      const user = {
-        bio: null,
-        coverImage: null,
-        createdAt: new Date(),
-        id: "42",
-        location: null,
-        profileImage: null,
-        username: "gametrakr",
-      };
-
-      beforeEach(() => {
-        vi.clearAllMocks();
-        vi.mocked(db.findFirstUserByUsername).mockResolvedValue(user);
-        vi.mocked(db.getFollowersById).mockResolvedValue([]);
-        vi.mocked(db.getFollowsById).mockResolvedValue([]);
-        vi.mocked(db.getReviewsByUser).mockResolvedValue([]);
-      });
-
-      it("should return undefined if not found any user", async () => {
-        vi.mocked(db.findFirstUserByUsername).mockResolvedValue(undefined);
-        const response = await caller.user.findFirstByUsername(input);
-
-        expect(response).toBeUndefined();
-        expect(db.findFirstUserByUsername).toBeCalledWith("gametrakr");
-        expect(db.getFollowersById).toBeCalledTimes(0);
-        expect(db.getFollowsById).toBeCalledTimes(0);
-      });
-
-      it("should return an user", async () => {
-        const response = await caller.user.findFirstByUsername(input);
-
-        expect(response).toStrictEqual({
-          ...user,
-          following: [],
-          followers: [],
-          isFollowing: false,
-          reviews: [],
-        });
-        expect(db.findFirstUserByUsername).toBeCalledWith("gametrakr");
-        expect(db.getFollowersById).toBeCalledWith("42", undefined);
-        expect(db.getFollowsById).toBeCalledWith("42", undefined);
-        expect(db.getReviewsByUser).toBeCalledWith("42");
-      });
-    });
-
     it("should throw error when calling toggle follow mutation", async () => {
       await expect(
         caller.user.toggleFollow({ userId: "21" }),

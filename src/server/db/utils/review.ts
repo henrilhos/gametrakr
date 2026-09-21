@@ -26,26 +26,6 @@ export const createOrUpdateReview = async (
     .returning();
 };
 
-export const getReviewsByUser = async (id: string) => {
-  return await db.query.reviews.findMany({
-    where: (review, { eq, and }) =>
-      and(eq(review.userId, id), eq(review.active, true)),
-    with: {
-      game: {
-        columns: { cover: true, name: true, releaseDate: true, slug: true },
-      },
-    },
-    columns: {
-      content: true,
-      createdAt: true,
-      isSpoiler: true,
-      rating: true,
-      id: true,
-    },
-    orderBy: (review, { desc }) => [desc(review.createdAt)],
-  });
-};
-
 export const deleteReview = async (id: string, userId: string) => {
   return await db
     .update(reviews)
