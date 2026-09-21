@@ -31,6 +31,10 @@ A game suggested to a registered user based on their genre, platform, and intere
 A player who has created an account and can write reviews, follow others, and manage a library and wishlist.
 _Avoid_: Member, account
 
+**Public profile**:
+The publicly visible representation of a registered user, including their identity details, reviews, follow relationships, and viewer-relative follow state.
+_Avoid_: User record, account page
+
 **Visitor**:
 An unauthenticated user who can browse public game pages and reviews but cannot write reviews, follow, or manage a library.
 _Avoid_: Guest, anonymous user
