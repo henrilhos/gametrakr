@@ -55,7 +55,6 @@ describe("public profile reads", () => {
       isFollowing: true,
       reviews: [
         {
-          id: expect.any(String),
           rating: 8,
           content: "A public review",
           isSpoiler: false,

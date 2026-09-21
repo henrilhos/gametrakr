@@ -6,8 +6,8 @@ import {
   exists,
   or,
   sql,
-  type AnyColumn,
 } from "drizzle-orm";
+import type { AnyColumn } from "drizzle-orm";
 import { db } from "~/server/db/db";
 import { follows, games, reviews, users } from "~/server/db/schema";
 
@@ -219,7 +219,7 @@ export const createPublicProfileReader = (database: Database) => {
                 eq(follows.followedUserId, users.id),
               ),
             ),
-        )
+        ).mapWith(Boolean)
       : sql<boolean>`false`;
 
     const rows = await database
@@ -244,7 +244,9 @@ export const createPublicProfileReader = (database: Database) => {
       .limit(PAGE_SIZE + 1);
 
     const hasNextPage = rows.length > PAGE_SIZE;
-    const items = rows.slice(0, PAGE_SIZE).map(({ createdAt, ...item }) => item);
+    const items = rows
+      .slice(0, PAGE_SIZE)
+      .map(({ createdAt: _createdAt, ...item }) => item);
     const last = rows.at(PAGE_SIZE - 1);
 
     return {
@@ -337,7 +339,7 @@ export const createPublicProfileReader = (database: Database) => {
     if (!profile) return undefined;
 
     if (section === "reviews") {
-      return getReviewsPage({ profileId: profile.id, viewerId, cursor });
+      return getReviewsPage({ profileId: profile.id, cursor });
     }
 
     return getFollowsPage({ profileId: profile.id, viewerId, section, cursor });
@@ -346,4 +348,4 @@ export const createPublicProfileReader = (database: Database) => {
   return { getOverview, getPage };
 };
 
-export const publicProfile = createPublicProfileReader(database);
+export const publicProfile = createPublicProfileReader(db);
