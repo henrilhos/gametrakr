@@ -38,6 +38,14 @@ npm run dev
 npm test
 ```
 
+Database integration tests require Docker. They start an isolated PostgreSQL
+container, apply the checked-in migrations, and reset its tables between
+tests:
+
+```bash
+npm run test:integration
+```
+
 ## Stack
 
 This project follows the [T3 Stack](https://create.t3.gg) and was bootstrapped with `create-t3-app`.
