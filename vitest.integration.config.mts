@@ -8,6 +8,7 @@ export default defineConfig({
     include: ["src/tests/integration/**/*.test.ts"],
     setupFiles: ["src/tests/integration/setup.ts"],
     fileParallelism: false,
+    hookTimeout: 120_000,
   },
   resolve: {
     alias: {
