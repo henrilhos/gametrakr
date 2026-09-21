@@ -38,7 +38,7 @@ export async function resetTestDatabase() {
   }
 
   await client.unsafe(
-    `TRUNCATE TABLE "follows", "reviews", "tokens", "games", "users" CASCADE`,
+    `TRUNCATE TABLE "follows", "reviews", "tokens", "profile_imagery", "games", "users" CASCADE`,
   );
 }
 
