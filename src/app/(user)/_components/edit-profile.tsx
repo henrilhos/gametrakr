@@ -4,14 +4,12 @@ import { cn } from "~/lib/utils";
 
 type Props = {
   user: {
-    isFollowing: boolean;
     username: string;
     id: string;
     profileImage: string | null;
     coverImage: string | null;
     location: string | null;
     bio: string | null;
-    createdAt: Date | null;
   };
 };
 

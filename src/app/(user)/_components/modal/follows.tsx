@@ -15,15 +15,15 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import ToggleFollow from "~/app/(user)/_components/toggle-follow-button";
+import { InfiniteScroller } from "~/components/infinite-scroller";
 import { cn } from "~/lib/utils";
 
 type CardProps = {
   user: Follow;
   username: string;
-  currentUserId?: string;
 };
 
-function Card({ user, username, currentUserId }: CardProps) {
+function Card({ user, username }: CardProps) {
   return (
     <Link
       href={`/${user.username}`}
@@ -47,25 +47,30 @@ function Card({ user, username, currentUserId }: CardProps) {
       </div>
 
       <div className="flex pr-2 pt-2">
-        {currentUserId && currentUserId !== user.id && (
-          <ToggleFollow
-            username={username}
-            id={user.id}
-            size="sm"
-            variant={user.isFollowing ? "secondary" : "primary"}
-          />
-        )}
+        {user.viewerRelationship !== "owner" &&
+          user.viewerRelationship !== "visitor" && (
+            <ToggleFollow
+              username={username}
+              id={user.id}
+              size="sm"
+              variant={
+                user.viewerRelationship === "following"
+                  ? "secondary"
+                  : "primary"
+              }
+            />
+          )}
       </div>
     </Link>
   );
 }
 
 export type Follow = {
-  isFollowing?: boolean;
   id: string;
   username: string;
   profileImage: string | null;
   bio: string | null;
+  viewerRelationship: "owner" | "following" | "not-following" | "visitor";
 };
 
 type Props = {
@@ -73,7 +78,8 @@ type Props = {
   following: Follow[];
   followers: Follow[];
   username: string;
-  currentUserId?: string;
+  fetchNextPage: () => void;
+  hasNextPage: boolean;
 
   open: boolean;
   onClose: () => void;
@@ -83,10 +89,11 @@ export default function FollowsModal({
   tab,
   following,
   followers,
-  currentUserId,
   username,
   open,
   onClose,
+  fetchNextPage,
+  hasNextPage,
 }: Props) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -164,28 +171,40 @@ export default function FollowsModal({
                         "flex flex-col gap-2 overflow-y-auto p-4 md:h-[480px] md:p-6",
                       )}
                     >
-                      {following.map((follow) => (
-                        <Card
-                          key={follow.id}
-                          user={follow}
-                          username={username}
-                          currentUserId={currentUserId}
-                        />
-                      ))}
+                      <InfiniteScroller
+                        fetchNextPage={fetchNextPage}
+                        hasNextPage={hasNextPage}
+                        loadingMessage="Loading…"
+                        endingMessage=""
+                      >
+                        {following.map((follow) => (
+                          <Card
+                            key={follow.id}
+                            user={follow}
+                            username={username}
+                          />
+                        ))}
+                      </InfiniteScroller>
                     </TabPanel>
                     <TabPanel
                       className={cn(
                         "flex flex-col gap-2 overflow-y-auto p-4 md:h-[480px] md:p-6",
                       )}
                     >
-                      {followers.map((follow) => (
-                        <Card
-                          key={follow.id}
-                          user={follow}
-                          username={username}
-                          currentUserId={currentUserId}
-                        />
-                      ))}
+                      <InfiniteScroller
+                        fetchNextPage={fetchNextPage}
+                        hasNextPage={hasNextPage}
+                        loadingMessage="Loading…"
+                        endingMessage=""
+                      >
+                        {followers.map((follow) => (
+                          <Card
+                            key={follow.id}
+                            user={follow}
+                            username={username}
+                          />
+                        ))}
+                      </InfiniteScroller>
                     </TabPanel>
                   </TabPanels>
                 </TabGroup>
