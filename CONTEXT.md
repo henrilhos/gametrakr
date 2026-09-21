@@ -4,9 +4,29 @@ A social platform for game enthusiasts to track, rate, and review the games they
 
 ## Language
 
+**Game entry**:
+A registered user's record of a particular play experience or written review. It contains a dated or recurring play period, a review, or both, and may include a score and replay marker. A registered user may have multiple game entries for the same game.
+_Avoid_: Game log, diary entry, activity
+
+**Play period**:
+The span represented by a game entry. A dated play period has an inclusive start date and an optional inclusive finish date; a recurring play period intentionally has no dates.
+_Avoid_: Watched date, session
+
 **Review**:
-A registered user's star rating and written comments about a game they've played.
-_Avoid_: Rating (a rating is a component of a review, not the whole thing)
+A written assessment contained in a game entry. A score is separate and does not make a game entry a review by itself.
+_Avoid_: Rating, score
+
+**Score**:
+A registered user's current 1–10 evaluation of a game. A score may be set independently or through a game entry; the user's latest score is the one included in the community aggregate.
+_Avoid_: Review, rating
+
+**Played status**:
+The user–game relationship recording that a registered user has played a game. Creating a game entry establishes played status, while removing an entry does not implicitly clear it.
+_Avoid_: Game entry, playthrough
+
+**Game details**:
+The combined public representation of a game's descriptive facts and GameTrakr community data, including reviews and aggregate user score.
+_Avoid_: IGDB game, database game
 
 **Library**:
 The collection of games a registered user has added to track as played, playing, or owned.
@@ -34,6 +54,10 @@ _Avoid_: Member, account
 **Public profile**:
 The publicly visible representation of a registered user, including their identity details, reviews, follow relationships, and viewer-relative follow state.
 _Avoid_: User record, account page
+
+**Profile imagery**:
+The pair of public images a registered user controls on their public profile: a square profile image and a wide cover image.
+_Avoid_: Avatar, user media
 
 **Visitor**:
 An unauthenticated user who can browse public game pages and reviews but cannot write reviews, follow, or manage a library.
