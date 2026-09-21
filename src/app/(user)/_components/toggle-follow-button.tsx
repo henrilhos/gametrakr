@@ -51,7 +51,6 @@ export default function ToggleFollow({
 
     track("(Un)Follow user", { id });
     await toggleFollow({ userId: id });
-    await utils.user.findFirstByUsername.invalidate({ username });
     await utils.publicProfile.overview.invalidate({ username });
     await utils.publicProfile.followers.invalidate({ username });
     await utils.publicProfile.following.invalidate({ username });

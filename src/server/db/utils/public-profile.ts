@@ -121,12 +121,32 @@ export type PublicProfileFollow = {
   username: string;
   bio: string | null;
   profileImage: string | null;
-  isFollowing: boolean;
+  viewerRelationship: PublicProfileViewerRelationship;
 };
+
+export type PublicProfileViewerRelationship =
+  | "owner"
+  | "following"
+  | "not-following"
+  | "visitor";
 
 export type PublicProfilePage<T> = {
   items: T[];
   nextCursor: string | null;
+};
+
+const getViewerRelationship = ({
+  viewerId,
+  profileId,
+  isFollowing,
+}: {
+  viewerId?: string;
+  profileId: string;
+  isFollowing: boolean;
+}): PublicProfileViewerRelationship => {
+  if (!viewerId) return "visitor";
+  if (viewerId === profileId) return "owner";
+  return isFollowing ? "following" : "not-following";
 };
 
 export const createPublicProfileReader = (database: Database) => {
@@ -208,7 +228,7 @@ export const createPublicProfileReader = (database: Database) => {
       section === "followers" ? follows.followedUserId : follows.followingUserId;
     const listedUserColumn =
       section === "followers" ? follows.followingUserId : follows.followedUserId;
-    const viewerRelationship = viewerId
+    const viewerFollowsListedUser = viewerId
       ? exists(
           database
             .select({ id: follows.followingUserId })
@@ -228,7 +248,7 @@ export const createPublicProfileReader = (database: Database) => {
         username: users.username,
         bio: users.bio,
         profileImage: users.profileImage,
-        isFollowing: viewerRelationship,
+        viewerFollowsListedUser,
         createdAt: follows.createdAt,
       })
       .from(follows)
@@ -244,9 +264,17 @@ export const createPublicProfileReader = (database: Database) => {
       .limit(PAGE_SIZE + 1);
 
     const hasNextPage = rows.length > PAGE_SIZE;
-    const items = rows
-      .slice(0, PAGE_SIZE)
-      .map(({ createdAt: _createdAt, ...item }) => item);
+    const items = rows.slice(0, PAGE_SIZE).map(
+      ({ createdAt: _createdAt, viewerFollowsListedUser, id, ...item }) => ({
+        id,
+        ...item,
+        viewerRelationship: getViewerRelationship({
+          viewerId,
+          profileId: id,
+          isFollowing: viewerFollowsListedUser,
+        }),
+      }),
+    );
     const last = rows.at(PAGE_SIZE - 1);
 
     return {
@@ -268,7 +296,7 @@ export const createPublicProfileReader = (database: Database) => {
     const profile = await findProfile(username);
     if (!profile) return undefined;
 
-    const viewerRelationship = viewerId
+    const viewerFollowsProfile = viewerId
       ? exists(
           database
             .select({ id: follows.followingUserId })
@@ -309,7 +337,7 @@ export const createPublicProfileReader = (database: Database) => {
         .where(eq(users.active, true)),
       getReviewsPage({ profileId: profile.id }),
       database
-        .select({ isFollowing: viewerRelationship })
+        .select({ viewerFollowsProfile })
         .from(users)
         .where(eq(users.id, profile.id)),
     ]);
@@ -318,7 +346,11 @@ export const createPublicProfileReader = (database: Database) => {
       ...profile,
       followersCount: counts[0]?.followersCount ?? 0,
       followingCount: counts[0]?.followingCount ?? 0,
-      isFollowing: relationship[0]?.isFollowing ?? false,
+      viewerRelationship: getViewerRelationship({
+        viewerId,
+        profileId: profile.id,
+        isFollowing: relationship[0]?.viewerFollowsProfile ?? false,
+      }),
       reviews: reviewsPage.items,
       nextCursor: reviewsPage.nextCursor,
     };

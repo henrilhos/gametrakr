@@ -52,7 +52,7 @@ describe("public profile reads", () => {
       username: "profile-owner",
       followersCount: 1,
       followingCount: 1,
-      isFollowing: true,
+      viewerRelationship: "following",
       reviews: [
         {
           rating: 8,

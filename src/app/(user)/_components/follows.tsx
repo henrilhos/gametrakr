@@ -1,7 +1,6 @@
 import { useState } from "react";
-import FollowsModal, {
-  type Follow,
-} from "~/app/(user)/_components/modal/follows";
+import FollowsModal from "~/app/(user)/_components/modal/follows";
+import { api } from "~/trpc/react";
 
 type FollowCardProps = {
   count: number;
@@ -25,16 +24,35 @@ function FollowCard(props: FollowCardProps) {
 }
 
 type Props = {
-  following: Follow[];
-  followers: Follow[];
-  userId: string;
+  followingCount: number;
+  followersCount: number;
   username: string;
-  currentUserId?: string;
 };
 
 export default function Follows(props: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [tab, setTab] = useState<"following" | "followers">("following");
+  const followingQuery = api.publicProfile.following.useInfiniteQuery(
+    { username: props.username },
+    {
+      enabled: isOpen && tab === "following",
+      getNextPageParam: (lastPage) => lastPage?.nextCursor ?? undefined,
+    },
+  );
+  const followersQuery = api.publicProfile.followers.useInfiniteQuery(
+    { username: props.username },
+    {
+      enabled: isOpen && tab === "followers",
+      getNextPageParam: (lastPage) => lastPage?.nextCursor ?? undefined,
+    },
+  );
+
+  const following = followingQuery.data?.pages.flatMap(
+    (page) => page?.following ?? [],
+  ) ?? [];
+  const followers = followersQuery.data?.pages.flatMap(
+    (page) => page?.followers ?? [],
+  ) ?? [];
 
   const handleOpen = (t: "following" | "followers") => {
     setTab(t);
@@ -45,23 +63,32 @@ export default function Follows(props: Props) {
   return (
     <>
       <FollowCard
-        count={props.following.length}
+        count={props.followingCount}
         tab="following"
         onClick={handleOpen}
       />
       <FollowCard
-        count={props.followers.length}
+        count={props.followersCount}
         tab="followers"
         onClick={handleOpen}
       />
       <FollowsModal
         tab={tab}
-        following={props.following}
-        followers={props.followers}
-        currentUserId={props.currentUserId}
         username={props.username}
         open={isOpen}
         onClose={handleClose}
+        following={following}
+        followers={followers}
+        fetchNextPage={
+          tab === "following"
+            ? () => void followingQuery.fetchNextPage()
+            : () => void followersQuery.fetchNextPage()
+        }
+        hasNextPage={Boolean(
+          tab === "following"
+            ? followingQuery.hasNextPage
+            : followersQuery.hasNextPage,
+        )}
       />
     </>
   );

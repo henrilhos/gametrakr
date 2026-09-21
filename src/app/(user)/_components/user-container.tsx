@@ -3,10 +3,14 @@
 import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
 import { type User } from "next-auth";
+import { type inferRouterOutputs } from "@trpc/server";
+import { type AppRouter } from "~/server/api/root";
 import Review from "~/app/(user)/_components/card/review";
 import EditProfile from "~/app/(user)/_components/edit-profile";
 import Follows from "~/app/(user)/_components/follows";
 import ToggleFollow from "~/app/(user)/_components/toggle-follow-button";
+import { InfiniteScroller } from "~/components/infinite-scroller";
+import { Icons } from "~/components/icons";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -42,7 +46,7 @@ type Props = { user?: User };
 
 export default function UserContainer({ user: currentUser }: Props) {
   const { username } = useParams<{ username: string }>();
-  const [user] = api.user.findFirstByUsername.useSuspenseQuery(
+  const [user] = api.publicProfile.overview.useSuspenseQuery(
     { username },
     { refetchOnWindowFocus: false },
   );
@@ -83,15 +87,20 @@ export default function UserContainer({ user: currentUser }: Props) {
             </div>
 
             <div className="col-span-1 flex justify-end">
-              {currentUser?.id === user.id && (
+              {user.viewerRelationship === "owner" && currentUser && (
                 <EditProfile user={{ ...user }} />
               )}
 
-              {currentUser && currentUser.id !== user.id && (
+              {user.viewerRelationship !== "owner" &&
+                user.viewerRelationship !== "visitor" && (
                 <ToggleFollow
                   id={user.id}
                   username={user.username}
-                  variant={user.isFollowing ? "secondary" : "primary"}
+                  variant={
+                    user.viewerRelationship === "following"
+                      ? "secondary"
+                      : "primary"
+                  }
                 />
               )}
             </div>
@@ -104,29 +113,63 @@ export default function UserContainer({ user: currentUser }: Props) {
               <div className="col-span-1 hidden xl:block" />
 
               <Follows
-                followers={user.followers}
-                following={user.following}
-                userId={user.id}
+                followersCount={user.followersCount}
+                followingCount={user.followingCount}
                 username={user.username}
-                currentUserId={currentUser?.id}
               />
             </div>
           </div>
         </div>
 
-        {user.reviews.length > 0 && (
-          <div className="col-span-10 flex h-fit flex-col gap-4 rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-950 md:col-span-5">
-            {user.reviews.map((review, i) => (
-              <Review
-                key={i}
-                game={{ ...review.game }}
-                review={{ ...review }}
-                user={{ ...user }}
-              />
-            ))}
-          </div>
-        )}
+        <ProfileReviews user={user} />
       </div>
+    </div>
+  );
+}
+
+type PublicProfile = Exclude<
+  inferRouterOutputs<AppRouter>["publicProfile"]["overview"],
+  undefined
+>;
+
+function ProfileReviews({ user }: { user: PublicProfile }) {
+  const [data, reviewsQuery] = api.publicProfile.reviews.useInfiniteQuery(
+    { username: user.username },
+    {
+      initialData: {
+        pages: [{ reviews: user.reviews, nextCursor: user.nextCursor }],
+        pageParams: [undefined],
+      },
+      getNextPageParam: (lastPage) => lastPage?.nextCursor ?? undefined,
+      staleTime: Infinity,
+    },
+  );
+  const reviews = data.pages.flatMap((page) => page?.reviews ?? []);
+
+  if (reviews.length === 0) return null;
+
+  return (
+    <div className="col-span-10 flex h-fit flex-col gap-4 rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-950 md:col-span-5">
+      <InfiniteScroller
+        fetchNextPage={() => void reviewsQuery.fetchNextPage()}
+        hasNextPage={Boolean(reviewsQuery.hasNextPage)}
+        loadingMessage={
+          <Icons.loading
+            aria-label="Loading"
+            className="mx-auto h-5 w-5 animate-spin"
+          />
+        }
+        endingMessage=""
+      >
+        {reviews.map((review) => (
+          <Review
+            key={review.id}
+            game={{ ...review.game }}
+            review={{ ...review }}
+            user={{ ...user }}
+          />
+        ))}
+      </InfiniteScroller>
     </div>
   );
 }

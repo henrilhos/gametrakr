@@ -21,14 +21,12 @@ import { UserPersonalInfoSchema } from "~/server/api/schemas/user";
 import { api } from "~/trpc/react";
 
 type User = {
-  isFollowing: boolean;
   username: string;
   id: string;
   profileImage: string | null;
   coverImage: string | null;
   location: string | null;
   bio: string | null;
-  createdAt: Date | null;
 };
 
 type Props = {
@@ -54,7 +52,7 @@ export default function EditProfileModal({ open, onClose, user }: Props) {
   const { mutateAsync: updatePersonalInformation } =
     api.user.updatePersonalInformation.useMutation({
       onSuccess: async () => {
-        await utils.user.findFirstByUsername.invalidate({
+        await utils.publicProfile.overview.invalidate({
           username: user.username,
         });
       },
