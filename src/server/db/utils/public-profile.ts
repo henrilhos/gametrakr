@@ -91,9 +91,9 @@ const afterCursor = (
   if (!cursor) return undefined;
 
   return or(
-    sql`${createdAtColumn} < ${cursor.createdAt}`,
+    sql`${createdAtColumn} < ${cursor.createdAt.toISOString()}`,
     and(
-      eq(createdAtColumn, cursor.createdAt),
+      sql`${createdAtColumn} = ${cursor.createdAt.toISOString()}`,
       sql`${idColumn} < ${cursor.id}`,
     ),
   );
@@ -286,10 +286,10 @@ export const createPublicProfileReader = (database: Database) => {
       database
         .select({
           followersCount: count(
-            sql`case when ${users.active} then ${follows.followingUserId} end`,
+            sql`case when ${users.active} and ${follows.followedUserId} = ${profile.id} then ${follows.followingUserId} end`,
           ).mapWith(Number),
           followingCount: count(
-            sql`case when ${users.active} then ${follows.followedUserId} end`,
+            sql`case when ${users.active} and ${follows.followingUserId} = ${profile.id} then ${follows.followedUserId} end`,
           ).mapWith(Number),
         })
         .from(users)
