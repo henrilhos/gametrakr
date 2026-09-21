@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -83,6 +83,7 @@ type Props = {
 
   open: boolean;
   onClose: () => void;
+  onTabChange: (index: number) => void;
 };
 
 export default function FollowsModal({
@@ -92,15 +93,10 @@ export default function FollowsModal({
   username,
   open,
   onClose,
+  onTabChange,
   fetchNextPage,
   hasNextPage,
 }: Props) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
-  useEffect(() => {
-    setSelectedIndex(tab === "following" ? 0 : 1);
-  }, [tab]);
-
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog onClose={onClose} as="div" className="z-50">
@@ -129,8 +125,8 @@ export default function FollowsModal({
             >
               <div className="h-screen w-screen bg-neutral-50 dark:bg-neutral-950 md:h-fit md:max-w-lg md:rounded-3xl">
                 <TabGroup
-                  selectedIndex={selectedIndex}
-                  onChange={setSelectedIndex}
+                  selectedIndex={tab === "following" ? 0 : 1}
+                  onChange={onTabChange}
                 >
                   <TabList className="flex items-center justify-center bg-neutral-200 dark:bg-black md:rounded-t-3xl">
                     <Tab
