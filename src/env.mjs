@@ -35,8 +35,8 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    ANALYZE: toggle.default("false"),
-    LOCAL_DEV: toggle.default("false"),
+    ANALYZE: toggle.default(false),
+    LOCAL_DEV: toggle.default(false),
     LOCAL_REDIS_URL: z.string().url().default("redis://localhost:6379"),
     DATABASE_URL: z
       .string()
@@ -86,7 +86,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_LOCAL_DEV: toggle.default("false"),
+    NEXT_PUBLIC_LOCAL_DEV: toggle.default(false),
   },
 
   /**
