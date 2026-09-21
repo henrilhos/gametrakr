@@ -57,6 +57,20 @@
       "when": 1789925848680,
       "tag": "0007_cheerful_sumo",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1789955351810,
+      "tag": "0008_rapid_meggan",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1789955463161,
+      "tag": "0009_backfill_profile_imagery",
+      "breakpoints": true
     }
   ]
 }
