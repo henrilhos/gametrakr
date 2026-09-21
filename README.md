@@ -26,6 +26,21 @@ Mailpit is available at [localhost:8025](http://localhost:8025). The local
 services use their standard ports: PostgreSQL `5432`, Redis `6379`, and
 Mailpit SMTP `1025`.
 
+### Database integration tests
+
+Database-backed tests use Testcontainers to start a disposable PostgreSQL
+instance, apply the checked-in Drizzle migrations, and remove the container
+when the suite finishes. They never connect to the development database.
+
+Docker must be running locally before invoking the integration suite:
+
+```bash
+npm run test:integration
+```
+
+The regular `npm test` and `npm run test:run` commands remain unit-test-only
+and do not require Docker.
+
 ## Use cases, requirements and models
 
 You can check out the use cases, requirements and models in their respective locations:
