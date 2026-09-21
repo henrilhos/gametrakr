@@ -2,6 +2,7 @@ import { authRouter } from "~/server/api/routers/auth";
 import { gameRouter } from "~/server/api/routers/game";
 import { reviewRouter } from "~/server/api/routers/review";
 import { userRouter } from "~/server/api/routers/user";
+import { publicProfileRouter } from "~/server/api/routers/public-profile";
 import { createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   auth: authRouter,
   game: gameRouter,
   user: userRouter,
+  publicProfile: publicProfileRouter,
   review: reviewRouter,
 });
 
