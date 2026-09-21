@@ -101,19 +101,6 @@ export const findManyUsersByQuery = async ({
   });
 };
 
-export const findFirstUserByUsername = (username: string) =>
-  db.query.users.findFirst({
-    where: (user, { and, ilike, eq }) =>
-      and(ilike(user.username, username), eq(user.active, true)),
-    columns: {
-      active: false,
-      email: false,
-      password: false,
-      updatedAt: false,
-      verified: false,
-    },
-  });
-
 export const updateUserPersonalInformation = async (
   id: string,
   input: z.infer<typeof UserPersonalInfoSchema>,

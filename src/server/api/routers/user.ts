@@ -7,11 +7,7 @@ import {
 } from "~/server/api/trpc";
 import {
   addFollow,
-  findFirstUserByUsername,
   findManyUsersByQuery,
-  getFollowersById,
-  getFollowsById,
-  getReviewsByUser,
   isFollowing,
   removeFollow,
   updateUserPersonalInformation,
@@ -63,33 +59,6 @@ export const userRouter = createTRPCRouter({
         await addFollow(currentUserId, userId);
         return { addedFollow: true };
       }
-    }),
-
-  findFirstByUsername: publicProcedure
-    .meta({
-      description: "Find user by username",
-    })
-    .input(z.object({ username: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const { username } = input;
-      const currentUserId = ctx.session?.user.id;
-
-      const user = await findFirstUserByUsername(username);
-
-      if (!user) return;
-
-      const followers = await getFollowersById(user.id, currentUserId);
-      const following = await getFollowsById(user.id, currentUserId);
-      const reviews = await getReviewsByUser(user.id);
-
-      return {
-        ...user,
-        reviews,
-        following,
-        followers,
-        isFollowing:
-          followers.filter(({ id }) => id === currentUserId).length > 0,
-      };
     }),
 
   updatePersonalInformation: protectedProcedure
