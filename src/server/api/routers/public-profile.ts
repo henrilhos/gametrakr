@@ -1,7 +1,12 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { PublicProfileCursorError, publicProfile } from "~/server/db";
+import {
+  PublicProfileCursorError,
+  publicProfile,
+  type PublicProfileFollow,
+  type PublicProfileReview,
+} from "~/server/db";
 
 const pageInput = z.object({
   username: z.string(),
@@ -39,7 +44,12 @@ export const publicProfileRouter = createTRPCRouter({
       viewerId: viewerId(ctx.session),
     });
 
-    return page && { reviews: page.items, nextCursor: page.nextCursor };
+    return (
+      page && {
+        reviews: page.items as PublicProfileReview[],
+        nextCursor: page.nextCursor,
+      }
+    );
   }),
 
   followers: publicProcedure.input(pageInput).query(async ({ ctx, input }) => {
@@ -49,7 +59,12 @@ export const publicProfileRouter = createTRPCRouter({
       viewerId: viewerId(ctx.session),
     });
 
-    return page && { followers: page.items, nextCursor: page.nextCursor };
+    return (
+      page && {
+        followers: page.items as PublicProfileFollow[],
+        nextCursor: page.nextCursor,
+      }
+    );
   }),
 
   following: publicProcedure.input(pageInput).query(async ({ ctx, input }) => {
@@ -59,6 +74,11 @@ export const publicProfileRouter = createTRPCRouter({
       viewerId: viewerId(ctx.session),
     });
 
-    return page && { following: page.items, nextCursor: page.nextCursor };
+    return (
+      page && {
+        following: page.items as PublicProfileFollow[],
+        nextCursor: page.nextCursor,
+      }
+    );
   }),
 });

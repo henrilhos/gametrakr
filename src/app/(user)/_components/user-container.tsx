@@ -133,7 +133,7 @@ type PublicProfile = Exclude<
 >;
 
 function ProfileReviews({ user }: { user: PublicProfile }) {
-  const [data, reviewsQuery] = api.publicProfile.reviews.useInfiniteQuery(
+  const reviewsQuery = api.publicProfile.reviews.useInfiniteQuery(
     { username: user.username },
     {
       initialData: {
@@ -144,7 +144,9 @@ function ProfileReviews({ user }: { user: PublicProfile }) {
       staleTime: Infinity,
     },
   );
-  const reviews = data.pages.flatMap((page) => page?.reviews ?? []);
+  const reviews = reviewsQuery.data?.pages.flatMap(
+    (page) => page?.reviews ?? [],
+  ) ?? [];
 
   if (reviews.length === 0) return null;
 

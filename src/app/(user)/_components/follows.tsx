@@ -77,6 +77,7 @@ export default function Follows(props: Props) {
         username={props.username}
         open={isOpen}
         onClose={handleClose}
+        onTabChange={(index) => setTab(index === 0 ? "following" : "followers")}
         following={following}
         followers={followers}
         fetchNextPage={

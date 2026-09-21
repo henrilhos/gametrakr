@@ -307,7 +307,7 @@ export const createPublicProfileReader = (database: Database) => {
                 eq(follows.followedUserId, profile.id),
               ),
             ),
-        )
+        ).mapWith(Boolean)
       : sql<boolean>`false`;
 
     const [counts, reviewsPage, relationship] = await Promise.all([
