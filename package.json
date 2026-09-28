@@ -89,7 +89,7 @@
     "clsx": "^2.0.0",
     "dotenv": "^16.3.1",
     "dotenv-cli": "^7.3.0",
-    "drizzle-kit": "^0.31.10",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.3.5",
     "eslint-plugin-react-hooks": "^7.1.1",
